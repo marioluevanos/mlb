@@ -294,7 +294,7 @@ details {
   }
 
   h3 {
-    margin: 0;
+    margin: 0 0 1rem;
     font-weight: 700;
     font-size: 14px;
     color: var(--text);
@@ -353,6 +353,7 @@ details {
 
 .game-streams {
   margin: 0;
+  padding: 1rem;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
@@ -397,7 +398,7 @@ details {
   scrollbar-width: none; /* Firefox */
   overflow: -moz-scrollbars-none;
   scroll-padding: 0 1rem 0 1rem;
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 1rem;
 
   &::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
@@ -421,6 +422,10 @@ div.game-highlight {
   p {
     padding: 0 1rem;
     font-size: 12px;
+
+    &:empty {
+      display: none;
+    }
   }
 }
 
@@ -429,7 +434,7 @@ figure.game-highlight {
   scroll-snap-stop: always;
   margin: 0;
   position: relative;
-  padding: 1rem 0.5rem;
+  padding: 0 0.5rem;
   flex: 1;
   min-width: 30vw;
 

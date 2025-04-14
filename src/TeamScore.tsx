@@ -17,13 +17,13 @@ type TeamScoreProps = {
 };
 
 export const TeamScore: FC<TeamScoreProps> = (props) => {
-  const { score, className, status } = props;
+  const { score, className, status, startingPitcher } = props;
   const isScheduled = status === "Scheduled";
   const isPregame = status === "Pre-Game";
   const isPostponed = status === "Postponed";
 
   if (isScheduled || isPregame || isPostponed) {
-    return <StartingPitcher />;
+    return <StartingPitcher startingPitcher={startingPitcher} />;
   }
 
   if (!score) return null;

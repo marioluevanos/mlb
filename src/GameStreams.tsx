@@ -10,7 +10,7 @@ export const GameStreams: FC<GameStreamsProps> = (props) => {
 
   return (
     <div className="game-streams">
-      <h3>Game streams</h3>
+      <h3>Watch Game</h3>
       {streams?.map((link) => (
         <a
           key={link.name}
