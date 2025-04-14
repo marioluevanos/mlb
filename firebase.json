@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "mlb",
+    "site": "mlb-games",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }

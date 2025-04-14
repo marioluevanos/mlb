@@ -13,7 +13,7 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
   const id = useId();
   const [media, setMedia] = useState<Video>(highlights[0]);
 
-  return (
+  return !media ? null : (
     <>
       <h3>Highlights</h3>
       <div className="game-highlight">
