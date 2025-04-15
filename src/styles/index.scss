@@ -497,6 +497,7 @@ div.game-highlight {
   h3 {
     padding: 0 1rem;
   }
+
   video {
     width: 100%;
     height: auto;
@@ -508,6 +509,7 @@ div.game-highlight {
     font-size: 14px;
     color: var(--text);
   }
+
   p {
     padding: 0 1rem;
     font-size: 12px;
@@ -526,7 +528,7 @@ figure.game-highlight {
   position: relative;
   padding: 0 0.5rem;
   flex: 1;
-  min-width: 30vw;
+  min-width: 40vw;
 
   & figcaption {
     text-wrap: balance;

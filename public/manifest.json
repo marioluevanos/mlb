@@ -1,7 +1,7 @@
 {
-  "name": "MLB Games",
+  "name": "MLB",
   "id": "mlb-games",
-  "short_name": "MLB Games",
+  "short_name": "MLB",
   "description": "Today's MLB Games",
   "theme_color": "#020287",
   "background_color": "#020287",
