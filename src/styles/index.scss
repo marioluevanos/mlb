@@ -444,6 +444,29 @@ details {
   &:empty {
     display: none;
   }
+
+  iframe {
+    background: var(--bg1);
+    display: none;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    border: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+    &::-webkit-scrollbar {
+      width: 0 !important;
+    }
+  }
+}
+
+details[open] .game-streams iframe {
+  display: block;
 }
 
 .game-link {

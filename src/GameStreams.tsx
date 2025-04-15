@@ -6,11 +6,13 @@ type GameStreamsProps = {
 };
 
 export const GameStreams: FC<GameStreamsProps> = (props) => {
-  const { streams } = props;
+  const { streams = [] } = props;
 
   return (
     <div className="game-streams">
       <h3>Watch Game</h3>
+      {/* <iframe src={streams[0].url} seamless={true} allow="fullscreen" /> */}
+
       {streams?.map((link) => (
         <a
           key={link.name}
