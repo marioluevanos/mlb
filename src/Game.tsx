@@ -29,9 +29,16 @@ export type GameHighlights = {
   title: string;
   description: string;
   placeholder: {
-    src: string;
-    width: number;
-    height: number;
+    sm: {
+      src: string;
+      width: number;
+      height: number;
+    };
+    lg: {
+      src: string;
+      width: number;
+      height: number;
+    };
   };
   video: {
     url: string;
@@ -50,7 +57,7 @@ export type GameInnings = {
   ordinalNum: string;
 };
 
-export type Game = {
+export type GameData = {
   id: number;
   feed: string;
   status: GameStatus;
@@ -79,34 +86,42 @@ export type Player = {
   summary?: string;
 };
 
-export type GameProps = {
-  className?: string;
-  isLoading?: boolean;
-  game: Game;
-  onClick?: (event: BaseSyntheticEvent) => void;
-  ref?: Ref<HTMLDetailsElement | null> | null;
+export type CurrentMatchup = {
+  batter: {
+    bats: string;
+  } & Player;
+  pitcher: {
+    throws: string;
+  } & Player;
+};
+
+export type CurrentCount = {
+  balls: number;
+  strikes: number;
+  outs: number;
 };
 
 export type CurrentPlay = {
-  matchup: {
-    batter: {
-      bats: string;
-    } & Player;
-    pitcher: {
-      throws: string;
-    } & Player;
-  };
-  count: {
-    balls: number;
-    strikes: number;
-    outs: number;
-  };
+  matchup: CurrentMatchup;
+  count: CurrentCount;
+};
+
+export type GameProps = {
+  className?: string;
+  isLoading?: boolean;
+  game: GameData;
+  onClick?: (event: BaseSyntheticEvent) => void;
+  ref?: Ref<HTMLDetailsElement | null> | null;
 };
 
 export const Game: FC<GameProps> = (props) => {
   const { game, isLoading, ref, onClick } = props;
   const { away, home } = game;
   const isFinal = game.status === "Final";
+  const isPreGame = game.status === "Pre-Game";
+  const isPostponed = game.status === "Postponed";
+  const isScheduled = game.status === "Scheduled";
+  const isPre = isPreGame || isPostponed || isScheduled;
   const winner = isWinner(home, away);
 
   return (
@@ -154,10 +169,13 @@ export const Game: FC<GameProps> = (props) => {
       <footer className="game-footer">
         <GameDecisions decisions={game.decisions} />
         <GameMatchup matchup={game.currentPlay?.matchup} />
-        {game.topPerformers.length > 0 ? (
+        {game.topPerformers.length > 0 && !isPre ? (
           <TopPerformers players={game.topPerformers} />
         ) : null}
-        <GameHighlights highlights={game.highlights} />
+        <GameHighlights
+          title={isPre ? "Preview" : "Highlights"}
+          highlights={game.highlights}
+        />
         {!isFinal && <GameStreams streams={game.streams} />}
       </footer>
     </details>

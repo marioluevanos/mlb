@@ -1,15 +1,16 @@
 import { FC, useId, useRef, useState } from "react";
-import { Game } from "./Game";
+import { GameData } from "./Game";
 import { cssVars } from "./utils";
 
 type GameHighlightsProps = {
-  highlights?: Game["highlights"];
+  highlights?: GameData["highlights"];
+  title?: string;
 };
 
-type Video = Game["highlights"][number];
+type Video = GameData["highlights"][number];
 
 export const GameHighlights: FC<GameHighlightsProps> = (props) => {
-  const { highlights = [] } = props;
+  const { highlights = [], title } = props;
   const id = useId();
   const [media, setMedia] = useState<Video>(highlights[0]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -17,10 +18,10 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
   return !media ? null : (
     <>
       <div className="game-highlight">
-        <h3>Highlights</h3>
+        <h3>{title}</h3>
         <video
           ref={videoRef}
-          poster={media.placeholder.src}
+          poster={media.placeholder?.lg?.src}
           controls
           src={media.video.url}
         ></video>
@@ -49,11 +50,11 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
             >
               {media.title}
             </button>
-            {media.placeholder ? (
+            {media.placeholder.sm?.src ? (
               <img
-                src={media.placeholder.src}
-                width={media.placeholder.width}
-                height={media.placeholder.height}
+                src={media.placeholder.sm.src}
+                width={media.placeholder.sm.width}
+                height={media.placeholder.sm.height}
               />
             ) : (
               <div id="game-placeholder-box"></div>

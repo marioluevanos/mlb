@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Game } from "./Game";
+import { GameData } from "./Game";
 
 type GameStreamsProps = {
-  streams?: Game["streams"];
+  streams?: GameData["streams"];
 };
 
 export const GameStreams: FC<GameStreamsProps> = (props) => {
@@ -10,7 +10,7 @@ export const GameStreams: FC<GameStreamsProps> = (props) => {
 
   return (
     <div className="game-streams">
-      <h3>Watch Game</h3>
+      <h3>Game Links</h3>
       {/* <iframe src={streams[0].url} seamless={true} allow="fullscreen" /> */}
 
       {streams?.map((link) => (

@@ -12,8 +12,11 @@ export const Header: FC<{
     <header id="header" className={className}>
       <h1 data-date={date && formatDate(date)}>
         <img
+          loading="eager"
           className="logo"
-          src="https://firebasestorage.googleapis.com/v0/b/mario-luevanos.appspot.com/o/mlb%2Ffavicon.png?alt=media&token=2cda6e71-6589-4cf8-a07f-a66171d31bc5"
+          width={256}
+          height={256}
+          src="/icon.png"
         />
         MLB
       </h1>
