@@ -42,7 +42,7 @@ const divisions = [
  * Format a date.
  */
 export function timeAgo(date: string | number | undefined, locale?: string) {
-  if (!date) return "time unknown";
+  if (!date) return "";
 
   const formatter = new Intl.RelativeTimeFormat(locale, {
     numeric: "auto",
@@ -139,48 +139,39 @@ export function loadingData(cacheKey?: string): GameData {
     date: "",
     games: Array.from({ length: 8 }, (_, i) => {
       return {
-        isLoading: true,
         id: i,
         link: "",
         status: "Final",
+        innings: [],
         away: {
-          startingPitcher: "",
-          record: { wins: 7, losses: 4, pct: "XXXX" },
+          startingPitcher: {
+            name: "XXXXXXXXXXXX",
+            avatar: "",
+            id: i,
+          },
+          record: { wins: 0, losses: 0, pct: "XXXX" },
           name: "XXX XXXXXXX XXXXXXX",
-          score: { runs: 10, hits: 11, errors: 1, leftOnBase: 3 },
+          score: { runs: 0, hits: 0, errors: 0, leftOnBase: 0 },
           abbreviation: "XXX",
           logo: "",
         },
         home: {
-          startingPitcher: "",
-          record: { wins: 5, losses: 6, pct: "XXXX" },
+          startingPitcher: {
+            name: "XXXXXXXXXXXX",
+            avatar: "",
+            id: i,
+          },
+          record: { wins: 0, losses: 0, pct: "XXXX" },
           name: "XXXXX XXX XXXXX",
-          score: { runs: 10, hits: 3, errors: 1, leftOnBase: 3 },
+          score: { runs: 0, hits: 0, errors: 0, leftOnBase: 0 },
           abbreviation: "XXX",
           logo: "",
         },
         time: "XX:XX XX",
-        currentInning: "BOT 6th",
+        currentInning: "TOP 1st",
         highlights: [],
         topPerformers: [],
-        streams: [
-          {
-            name: "Link 1HD",
-            url: "",
-          },
-          {
-            name: "Link 2HD",
-            url: "",
-          },
-          {
-            name: "Link 3",
-            url: "",
-          },
-          {
-            name: "Link 4",
-            url: "",
-          },
-        ],
+        streams: [],
       };
     }),
   };

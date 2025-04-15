@@ -38,8 +38,10 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
   }
 
   return (
-    <span className={cn("current-inning", className)}>
-      {game.currentInning}
+    <span className="game-details">
+      <span className={cn("current-inning", className)}>
+        {game.currentInning}
+      </span>
     </span>
   );
 };

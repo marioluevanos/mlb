@@ -6,10 +6,14 @@ import { GameDetails } from "./GameDetails";
 import { TopPerformers } from "./TopPerformers";
 import { GameStreams } from "./GameStreams";
 import { GameHighlights } from "./GameHighlights";
+import { BoxScore } from "./BoxScore";
 
 export type GameStatus = "Final" | "Scheduled" | "Pre-Game" | "Postponed";
 
 export type GameTopPerformers = {
+  avatar: string;
+  jerseyNumber: string;
+  id: number;
   name: string;
   pos: string;
   summary: string;
@@ -34,6 +38,13 @@ export type GameStream = {
   url: string;
 };
 
+export type GameInnings = {
+  away: TeamScore;
+  home: TeamScore;
+  num: number;
+  ordinalNum: string;
+};
+
 export type Game = {
   id: number;
   status: GameStatus;
@@ -44,15 +55,17 @@ export type Game = {
   topPerformers: GameTopPerformers[];
   highlights: GameHighlights[];
   streams: GameStream[];
+  innings: GameInnings[];
 };
 
 export type GameProps = {
   className?: string;
-  game: Game & { isLoading?: boolean };
+  isLoading?: boolean;
+  game: Game;
 };
 
 export const Game: FC<GameProps> = (props) => {
-  const { game } = props;
+  const { game, isLoading } = props;
   const { away, home } = game;
   const isFinal = game.status === "Final";
   const winner = isWinner(home, away);
@@ -64,41 +77,42 @@ export const Game: FC<GameProps> = (props) => {
           <Team
             team={away}
             className={cn(
-              game.isLoading && "loading",
+              isLoading && "loading",
               winner === "away" && "winner"
             )}
           >
+            <BoxScore innings={game.innings} team="away" />
             <TeamScore
               status={game.status}
               startingPitcher={away.startingPitcher}
-              className={cn(game.isLoading && "loading")}
+              className={cn(isLoading && "loading")}
               score={away.score}
             />
           </Team>
           <Team
             team={home}
             className={cn(
-              game.isLoading && "loading",
+              isLoading && "loading",
               winner === "home" && "winner"
             )}
           >
+            <BoxScore innings={game.innings} team="home" />
             <TeamScore
               status={game.status}
               startingPitcher={home.startingPitcher}
-              className={cn(game.isLoading && "loading")}
+              className={cn(isLoading && "loading")}
               score={home.score}
             />
           </Team>
         </span>
-        <GameDetails game={game} className={cn(game.isLoading && "loading")} />
+        <GameDetails game={game} className={cn(isLoading && "loading")} />
       </summary>
       <footer className="game-footer">
         <GameHighlights highlights={game.highlights} />
         {game.topPerformers.length > 0 ? (
           <TopPerformers players={game.topPerformers} />
-        ) : (
-          <GameStreams streams={game.streams} />
-        )}
+        ) : null}
+        {!isFinal && <GameStreams streams={game.streams} />}
       </footer>
     </details>
   );

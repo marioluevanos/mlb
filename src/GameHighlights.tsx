@@ -15,8 +15,8 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
 
   return !media ? null : (
     <>
-      <h3>Highlights</h3>
       <div className="game-highlight">
+        <h3>Highlights</h3>
         <video
           poster={media.placeholder.src}
           controls
@@ -42,11 +42,15 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
             >
               {media.title}
             </button>
-            <img
-              src={media.placeholder.src}
-              width={media.placeholder.width}
-              height={media.placeholder.height}
-            />
+            {media.placeholder ? (
+              <img
+                src={media.placeholder.src}
+                width={media.placeholder.width}
+                height={media.placeholder.height}
+              />
+            ) : (
+              <div id="game-placeholder-box"></div>
+            )}
             <figcaption>{media.title}</figcaption>
           </figure>
         ))}

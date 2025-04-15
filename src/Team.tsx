@@ -11,7 +11,11 @@ export type TeamRecord = {
 export type TeamClub = {
   record: TeamRecord;
   name: string;
-  startingPitcher: string;
+  startingPitcher: {
+    name: string;
+    id: number;
+    avatar: string;
+  };
   score: TeamScore;
   abbreviation: string;
   logo: string;

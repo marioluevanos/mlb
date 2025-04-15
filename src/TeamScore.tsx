@@ -1,6 +1,7 @@
 import { FC, useMemo } from "react";
 import cn from "./utils";
 import { GameStatus } from "./Game";
+import { TeamClub } from "./Team";
 
 export type TeamScore = {
   runs: number;
@@ -13,7 +14,7 @@ type TeamScoreProps = {
   score?: TeamScore;
   className?: string;
   status: GameStatus;
-  startingPitcher?: string;
+  startingPitcher?: TeamClub["startingPitcher"];
 };
 
 export const TeamScore: FC<TeamScoreProps> = (props) => {
@@ -46,7 +47,7 @@ const StartingPitcher: FC<Pick<TeamScoreProps, "startingPitcher">> = (
     let name = "(TBD)";
 
     if (startingPitcher) {
-      const [first, last] = startingPitcher.split(" ");
+      const [first, last] = startingPitcher.name.split(" ");
       name = `${first.slice(0, 1)}. ${last}`;
     }
 
