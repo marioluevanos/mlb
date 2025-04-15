@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Game } from "./Game";
 import cn from "./utils";
+import { GameBug } from "./GameBug";
 
 export type GameDetailProps = {
   className?: string;
@@ -9,7 +10,7 @@ export type GameDetailProps = {
 
 export const GameDetails: FC<GameDetailProps> = (props) => {
   const { game, className } = props;
-  const isFinal = game.status === "Final";
+  const isFinal = game.status === "Final" || game.status === "Game Over";
   const isScheduled = game.status === "Scheduled";
   const isPregame = game.status === "Pre-Game";
   const isPostponed = game.status === "Postponed";
@@ -42,6 +43,7 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
       <span className={cn("current-inning", className)}>
         {game.currentInning}
       </span>
+      <GameBug game={game} />
     </span>
   );
 };

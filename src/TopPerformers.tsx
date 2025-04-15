@@ -13,7 +13,7 @@ export const TopPerformers: FC<TopPerformersProps> = (props) => {
       <div className="top-performers">
         <h3>Top performers</h3>
         {players?.map((player) => (
-          <div className="top-performer" key={player.name}>
+          <div className="player top-performer" key={player.fullName}>
             <img
               className="player-avatar"
               src={player.avatar}
@@ -21,7 +21,7 @@ export const TopPerformers: FC<TopPerformersProps> = (props) => {
               height={120}
             />
             <p className="player-name" data-pos={player.pos}>
-              {player.name}
+              {player.fullName}
             </p>
             <p className="player-summary">{player.summary}</p>
           </div>

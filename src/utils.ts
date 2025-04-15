@@ -1,4 +1,5 @@
 import { GameData } from "./App";
+import { Game } from "./Game";
 import { TeamClub } from "./Team";
 import { CSSProperties } from "react";
 
@@ -140,7 +141,7 @@ export function loadingData(cacheKey?: string): GameData {
     games: Array.from({ length: 8 }, (_, i) => {
       return {
         id: i,
-        link: "",
+        feed: "",
         status: "Final",
         innings: [],
         away: {
@@ -186,4 +187,35 @@ interface CSSVariables extends CSSProperties {
  */
 export function cssVars(keyValue: CSSVariables): CSSVariables {
   return keyValue;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function mapToGame(game: Game, data: any): Game {
+  const play = data.liveData?.plays?.currentPlay;
+  return {
+    ...game,
+    currentPlay: {
+      count: play?.count,
+      matchup: {
+        batter: {
+          ...play?.matchup.batter,
+          avatar: avatar(play?.matchup.batter.id),
+          bats: play?.matchup.batSide.code,
+        },
+        pitcher: {
+          ...play?.matchup.pitcher,
+          avatar: avatar(play?.matchup.pitcher.id),
+          throws: play?.matchup.pitchHand.code,
+        },
+      },
+    },
+    status: data.status.detailedState,
+    currentInning: `${
+      data.liveData?.linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""
+    } ${data.liveData?.linescore?.currentInningOrdinal || 0}`,
+  };
+}
+
+function avatar(id: string) {
+  return `https://midfield.mlbstatic.com/v1/people/${id}/spots/120`;
 }
