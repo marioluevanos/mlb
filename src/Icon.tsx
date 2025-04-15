@@ -25,3 +25,45 @@ export const RefreshIcon: FC = () => {
     </svg>
   );
 };
+
+export const LeftIcon: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="currentColor" strokeMiterlimit="10">
+        <polyline
+          fill="none"
+          points="11.5,0.5 4,8 11.5,15.5 "
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};
+
+export const RightIcon: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="currentColor" strokeMiterlimit="10">
+        <polyline
+          fill="none"
+          points="5.5,0.5 10.5,8 5.5,15.5 "
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};

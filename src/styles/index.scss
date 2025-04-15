@@ -90,9 +90,9 @@ body {
   letter-spacing: 0.05rem;
   text-transform: uppercase;
   font-weight: 600;
-  color: var(--bg);
-  background: var(--text);
-  padding: 0.5rem 1rem;
+  color: var(--text1);
+  background: var(--bg1);
+  padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   text-decoration: none;
   border: none;
@@ -110,7 +110,7 @@ body {
 }
 
 .button:hover {
-  background: var(--text1);
+  background: var(--bg2);
 }
 
 #refresh.loading svg {
@@ -146,7 +146,10 @@ body {
 }
 
 h1 {
-  font: 700 1rem/1 Sans-serif;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font: 700 0px/1 var(--font);
 
   &::after {
     content: attr(data-date);
@@ -158,8 +161,12 @@ h1 {
     font-size: 12px;
     text-transform: none;
     letter-spacing: 0;
-    margin-left: 0.5rem;
   }
+}
+
+.logo {
+  width: 2.5rem;
+  height: auto;
 }
 
 main {
@@ -741,4 +748,16 @@ details[open] {
   h3 {
     flex: 1 0 100%;
   }
+}
+
+.last-updated {
+  padding: 1rem;
+  font-size: 12px;
+  color: var(--text1);
+}
+
+.ctas {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
 }

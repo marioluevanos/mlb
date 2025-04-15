@@ -52,17 +52,13 @@ function App() {
   /**
    * Refresh data
    */
-  const onRefresh = useCallback(
-    async (event: BaseSyntheticEvent) => {
-      setData(loadingData());
-      const data = await getData();
-      if (data) {
-        event.target.dataset.timeAgo = timeAgo(data.date);
-        setData(data);
-      }
-    },
-    [getData]
-  );
+  const onRefresh = useCallback(async () => {
+    setData(loadingData());
+    const data = await getData();
+    if (data) {
+      setData(data);
+    }
+  }, [getData]);
 
   /**
    * Updates live game
@@ -81,7 +77,7 @@ function App() {
   const toggleGameOpen = useCallback((event: BaseSyntheticEvent) => {
     if (event.target.nodeName !== "SUMMARY") return;
 
-    const details = event.target.parentElement as HTMLDetailsElement | null;
+    const details = event.target.parentElement;
     if (details) {
       gameRefs.current.forEach((d) => {
         if (d.id !== details.id) {
@@ -91,7 +87,6 @@ function App() {
 
       requestAnimationFrame(() => {
         if (details.open) {
-          console.log(details.offsetTop);
           scrollTo({ behavior: "smooth", top: details.offsetTop });
         }
       });
@@ -140,10 +135,9 @@ function App() {
       if (game.status === "In Progress") {
         const id = setInterval(() => {
           updateLiveGame(game).then((updated) => {
-            console.log({ updated });
             setData((prev) => {
               return {
-                date: prev.date,
+                date: new Date().toISOString(),
                 games: prev.games.map((g) => {
                   if (updated && g.id === updated.id) {
                     return updated;
@@ -166,15 +160,35 @@ function App() {
   return (
     <>
       <Header date={data.date}>
-        <button
-          id="refresh"
-          className={cn("button", isLoading && "loading")}
-          title="Refresh content"
-          onClick={onRefresh}
-          data-time-ago={timeAgo(data.date)}
-        >
-          <RefreshIcon />
-        </button>
+        <div className="ctas">
+          {/* <button
+            id="previous-date"
+            className={cn("button", isLoading && "loading")}
+            title="Previous date"
+            onClick={onRefresh}
+            data-day={previousDay(data.date)}
+          >
+            <LeftIcon />
+          </button> */}
+          <button
+            id="refresh"
+            className={cn("button", isLoading && "loading")}
+            title="Refresh content"
+            onClick={onRefresh}
+            data-date={data.date}
+          >
+            <RefreshIcon />
+          </button>
+          {/* <button
+            id="next-date"
+            className={cn("button", isLoading && "loading")}
+            title="Next date"
+            onClick={onRefresh}
+            data-day={nextDay(data.date)}
+          >
+            <RightIcon />
+          </button> */}
+        </div>
       </Header>
       {Array.isArray(data?.games) ? (
         data.games
@@ -191,6 +205,7 @@ function App() {
       ) : (
         <p>No games today</p>
       )}
+      <p className="last-updated">Last updated {timeAgo(data.date)}</p>
     </>
   );
 }

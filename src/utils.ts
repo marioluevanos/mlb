@@ -4,19 +4,37 @@ import { TeamClub } from "./Team";
 import { CSSProperties } from "react";
 
 export function formatDate(date: string) {
-  return new Date(formatDateInput(date)).toLocaleDateString(undefined, {
+  const [d, m, y] = formatDateInput(date);
+  return new Date(d, m, y).toLocaleDateString(undefined, {
     weekday: "short",
     year: "numeric",
     month: "short",
     day: "numeric",
   });
+}
 
-  function formatDateInput(date = "") {
-    const [year, month, end] = date.split("-").map((v) => v);
-    if (!year && !month && !end) return new Date();
-    const [day = "0"] = end.split("T") || [];
-    return new Date(Number(year), Number(month) - 1, Number(day));
-  }
+export function formatDateInput(date = ""): [number, number, number] {
+  const [year, month, end] = date.split("-").map((v) => v);
+  if (!year && !month && !end) return [0, 0, 0];
+
+  const [day = "0"] = end.split("T") || [];
+  return [Number(year), Number(month) - 1, Number(day)];
+}
+
+export function previousDay(date: string): string {
+  const [year, month, end] = date.split("-").map((v) => v);
+  if (!year && !month && !end) return "";
+
+  const [day = "0"] = end.split("T") || [];
+  return [Number(year), Number(month), Number(day) - 1].join("-");
+}
+
+export function nextDay(date: string): string {
+  const [year, month, end] = date.split("-").map((v) => v);
+  if (!year && !month && !end) return "";
+
+  const [day = "0"] = end.split("T") || [];
+  return [Number(year), Number(month), Number(day) + 1].join("-");
 }
 
 type Unit =
