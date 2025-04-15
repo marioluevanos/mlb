@@ -47,7 +47,7 @@ const StartingPitcher: FC<Pick<TeamScoreProps, "startingPitcher">> = (
     let name = "(TBD)";
 
     if (startingPitcher) {
-      const [first, last] = startingPitcher.name.split(" ");
+      const [first, last] = startingPitcher.fullName.split(" ");
       name = `${first.slice(0, 1)}. ${last}`;
     }
 

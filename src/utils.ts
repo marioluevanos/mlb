@@ -146,7 +146,7 @@ export function loadingData(cacheKey?: string): GameData {
         innings: [],
         away: {
           startingPitcher: {
-            name: "XXXXXXXXXXXX",
+            fullName: "XXXXXXXXXXXX",
             avatar: "",
             id: i,
           },
@@ -158,7 +158,7 @@ export function loadingData(cacheKey?: string): GameData {
         },
         home: {
           startingPitcher: {
-            name: "XXXXXXXXXXXX",
+            fullName: "XXXXXXXXXXXX",
             avatar: "",
             id: i,
           },

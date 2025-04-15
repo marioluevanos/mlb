@@ -63,7 +63,7 @@ export type Game = {
   streams: GameStream[];
   innings: GameInnings[];
   currentPlay?: CurrentPlay;
-  decisions: GameDecision;
+  decisions?: GameDecision;
 };
 
 export type GameDecision = {
@@ -72,7 +72,7 @@ export type GameDecision = {
   save?: Player;
 };
 
-type Player = {
+export type Player = {
   id: number;
   avatar: string;
   fullName: string;

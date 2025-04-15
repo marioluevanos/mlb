@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import cn from "./utils";
 import { TeamScore } from "./TeamScore";
+import { Player } from "./Game";
 
 export type TeamRecord = {
   wins: number;
@@ -11,11 +12,7 @@ export type TeamRecord = {
 export type TeamClub = {
   record: TeamRecord;
   name: string;
-  startingPitcher: {
-    name: string;
-    id: number;
-    avatar: string;
-  };
+  startingPitcher: Player;
   score: TeamScore;
   abbreviation: string;
   logo: string;
