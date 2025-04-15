@@ -1,5 +1,5 @@
 import { GameData } from "./App";
-import { Game } from "./Game";
+import { GameToday } from "./Game";
 import { TeamClub } from "./Team";
 import { CSSProperties } from "react";
 
@@ -208,7 +208,7 @@ export function cssVars(keyValue: CSSVariables): CSSVariables {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function mapToGame(game: Game, data: any): Game {
+export function mapToGame(game: GameToday, data: any): GameToday {
   const play = data.liveData?.plays?.currentPlay;
   return {
     ...game,

@@ -6,13 +6,13 @@ import {
   useState,
 } from "react";
 import { Header } from "./Header";
-import { Game } from "./Game";
+import { Game, GameToday } from "./Game";
 import cn, { loadingData, mapToGame, timeAgo } from "./utils";
 import { RefreshIcon } from "./Icon";
 
 export type GameData = {
   date: string;
-  games: Game[];
+  games: GameToday[];
 };
 
 const CACHE_KEY = "games" as const;
@@ -63,7 +63,7 @@ function App() {
   /**
    * Updates live game
    */
-  const updateLiveGame = useCallback(async (game: Game) => {
+  const updateLiveGame = useCallback(async (game: GameToday) => {
     const response = await fetch(game.feed);
     if (response.ok) {
       const json = await response.json();

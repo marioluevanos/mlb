@@ -1,18 +1,16 @@
 import { FC, useId, useRef, useState } from "react";
-import { GameData } from "./Game";
 import { cssVars } from "./utils";
+import { GameHighlights as Highlights } from "./Game";
 
 type GameHighlightsProps = {
-  highlights?: GameData["highlights"];
+  highlights?: Highlights[];
   title?: string;
 };
-
-type Video = GameData["highlights"][number];
 
 export const GameHighlights: FC<GameHighlightsProps> = (props) => {
   const { highlights = [], title } = props;
   const id = useId();
-  const [media, setMedia] = useState<Video>(highlights[0]);
+  const [media, setMedia] = useState<Highlights>(highlights[0]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   return !media ? null : (

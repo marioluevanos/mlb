@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { GameData } from "./Game";
+import { GameStream } from "./Game";
 
 type GameStreamsProps = {
-  streams?: GameData["streams"];
+  streams?: GameStream[];
 };
 
 export const GameStreams: FC<GameStreamsProps> = (props) => {

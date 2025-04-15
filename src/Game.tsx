@@ -57,7 +57,7 @@ export type GameInnings = {
   ordinalNum: string;
 };
 
-export type GameData = {
+export type GameToday = {
   id: number;
   feed: string;
   status: GameStatus;
@@ -109,7 +109,7 @@ export type CurrentPlay = {
 export type GameProps = {
   className?: string;
   isLoading?: boolean;
-  game: GameData;
+  game: GameToday;
   onClick?: (event: BaseSyntheticEvent) => void;
   ref?: Ref<HTMLDetailsElement | null> | null;
 };

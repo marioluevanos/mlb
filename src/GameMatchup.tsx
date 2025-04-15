@@ -1,9 +1,9 @@
 import { FC, ReactNode } from "react";
-import { CurrentPlay } from "./Game";
+import { CurrentMatchup } from "./Game";
 
 export type GameMatchupProps = {
   className?: string;
-  matchup?: CurrentPlay["matchup"];
+  matchup?: CurrentMatchup;
   children?: ReactNode;
 };
 

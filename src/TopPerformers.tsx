@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Game } from "./Game";
+import { GameTopPerformers } from "./Game";
 
 type TopPerformersProps = {
-  players?: Game["topPerformers"];
+  players?: GameTopPerformers[];
 };
 
 export const TopPerformers: FC<TopPerformersProps> = (props) => {

@@ -1,7 +1,6 @@
 import { FC, useMemo } from "react";
 import cn from "./utils";
-import { GameStatus } from "./Game";
-import { TeamClub } from "./Team";
+import { GameStatus, Player } from "./Game";
 
 export type TeamScore = {
   runs: number;
@@ -14,7 +13,7 @@ type TeamScoreProps = {
   score?: TeamScore;
   className?: string;
   status: GameStatus;
-  startingPitcher?: TeamClub["startingPitcher"];
+  startingPitcher?: Player;
 };
 
 export const TeamScore: FC<TeamScoreProps> = (props) => {

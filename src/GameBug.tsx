@@ -1,10 +1,10 @@
 import { FC, ReactNode } from "react";
-import { Game } from "./Game";
+import { GameToday } from "./Game";
 import cn from "./utils";
 
 export type GameBugProps = {
   className?: string;
-  game: Game;
+  game: GameToday;
   children?: ReactNode;
 };
 

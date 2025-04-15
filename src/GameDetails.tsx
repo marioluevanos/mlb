@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { GameData } from "./Game";
 import cn from "./utils";
 import { GameBug } from "./GameBug";
+import { GameToday } from "./Game";
 
 export type GameDetailProps = {
   className?: string;
-  game: GameData;
+  game: GameToday;
 };
 
 export const GameDetails: FC<GameDetailProps> = (props) => {

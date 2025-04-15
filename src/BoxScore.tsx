@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { Game } from "./Game";
+import { GameInnings } from "./Game";
 import cn from "./utils";
 
 type BoxScoreProps = {
-  innings: Game["innings"];
+  innings: GameInnings[];
   team: "home" | "away";
 };
 
