@@ -205,7 +205,7 @@ details {
 }
 
 .team-name {
-  width: 4ch;
+  width: 3ch;
   display: block;
   font-size: 14px;
   font-weight: 600;
@@ -302,6 +302,9 @@ details {
   margin-left: auto;
   font-size: 12px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .game-details {
@@ -391,9 +394,13 @@ details {
 }
 
 .player-name {
+  line-height: 1.5;
   color: var(--text);
-  margin: 0 0 0.25rem;
   font-weight: 600;
+
+  .player:has(.player-summary) & {
+    margin: 0 0 0.25rem;
+  }
 
   &[data-pos]::after {
     content: "(" attr(data-pos) ")";
@@ -793,4 +800,30 @@ details[id][open] > summary {
   align-items: center;
   display: flex;
   gap: 1rem;
+}
+
+.game-starting-pitchers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 1rem 1.5rem;
+
+  .starting-pitcher.player {
+    flex: 1 0 40%;
+    margin: 0;
+  }
+
+  .vs {
+    text-align: center;
+    flex: 1 0 20%;
+    font-size: 12px;
+  }
+
+  .player-avatar {
+    margin: auto;
+  }
+
+  h3 {
+    flex: 1 0 100%;
+  }
 }

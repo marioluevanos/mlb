@@ -20,7 +20,7 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
         <video
           ref={videoRef}
           poster={media.placeholder?.lg?.src}
-          controls
+          // controls
           src={media.video.url}
         ></video>
         <h4>{media.title}</h4>

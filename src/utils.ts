@@ -237,3 +237,14 @@ export function mapToGame(game: GameToday, data: any): GameToday {
 function avatar(id: string) {
   return `https://midfield.mlbstatic.com/v1/people/${id}/spots/120`;
 }
+
+export function getPlayerStats(
+  playerIds: string[],
+  group: "pitching" | "hitting",
+  season: number = 2025
+) {
+  const ids = playerIds.map((id) => `personIds=${id}`).join("&");
+
+  const URL = `https://statsapi.mlb.com/api/v1/people?${ids}&season=${season}&hydrate=stats(group=${group},type=season,season=${season},gameType=[R])`;
+  console.log(encodeURIComponent(URL));
+}

@@ -9,6 +9,7 @@ import { GameHighlights } from "./GameHighlights";
 import { BoxScore } from "./BoxScore";
 import { GameMatchup } from "./GameMatchup";
 import { GameDecisions } from "./GameDecisions";
+import { GameStartingPitchers } from "./GameStartingPitchers";
 
 export type GameStatus =
   | "Final"
@@ -143,7 +144,6 @@ export const Game: FC<GameProps> = (props) => {
             <BoxScore innings={game.innings} team="away" />
             <TeamScore
               status={game.status}
-              startingPitcher={away.startingPitcher}
               className={cn(isLoading && "loading")}
               score={away.score}
             />
@@ -158,7 +158,6 @@ export const Game: FC<GameProps> = (props) => {
             <BoxScore innings={game.innings} team="home" />
             <TeamScore
               status={game.status}
-              startingPitcher={home.startingPitcher}
               className={cn(isLoading && "loading")}
               score={home.score}
             />
@@ -167,6 +166,10 @@ export const Game: FC<GameProps> = (props) => {
         <GameDetails game={game} className={cn(isLoading && "loading")} />
       </summary>
       <footer className="game-footer">
+        <GameStartingPitchers
+          home={home.startingPitcher}
+          away={away.startingPitcher}
+        />
         <GameDecisions decisions={game.decisions} />
         <GameMatchup matchup={game.currentPlay?.matchup} />
         {game.topPerformers.length > 0 && !isPre ? (

@@ -1,6 +1,6 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import cn from "./utils";
-import { GameStatus, Player } from "./Game";
+import { GameStatus } from "./Game";
 
 export type TeamScore = {
   runs: number;
@@ -13,17 +13,16 @@ type TeamScoreProps = {
   score?: TeamScore;
   className?: string;
   status: GameStatus;
-  startingPitcher?: Player;
 };
 
 export const TeamScore: FC<TeamScoreProps> = (props) => {
-  const { score, className, status, startingPitcher } = props;
+  const { score, className, status } = props;
   const isScheduled = status === "Scheduled";
   const isPregame = status === "Pre-Game";
   const isPostponed = status === "Postponed";
 
   if (isScheduled || isPregame || isPostponed) {
-    return <StartingPitcher startingPitcher={startingPitcher} />;
+    return null;
   }
 
   if (!score) return null;
@@ -35,23 +34,4 @@ export const TeamScore: FC<TeamScoreProps> = (props) => {
       <span className={className}>{score.errors}</span>
     </span>
   );
-};
-
-const StartingPitcher: FC<Pick<TeamScoreProps, "startingPitcher">> = (
-  props
-) => {
-  const { startingPitcher } = props;
-
-  const pitcher = useMemo(() => {
-    let name = "(TBD)";
-
-    if (startingPitcher) {
-      const [first, last] = (startingPitcher?.fullName || "").split(" ");
-      name = `${first.slice(0, 1)}. ${last}`;
-    }
-
-    return name;
-  }, [startingPitcher]);
-
-  return <span className="starting-pitcher">{pitcher}</span>;
 };
