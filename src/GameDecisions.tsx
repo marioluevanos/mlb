@@ -11,23 +11,27 @@ export const GameDecisions: FC<GameDecisionsProps> = (props) => {
   const { decisions } = props;
 
   return (
-    decisions && (
+    decisions?.winner && (
       <div className="game-decisions">
         <h3>Game Decisions</h3>
-        <span className="winner player">
-          <span className="player-summary">{decisions.winner?.summary}</span>
-          <img className="player-avatar" src={decisions.winner?.avatar} />
-          <span data-pos="Winner" className="player-name">
-            {decisions.winner.fullName}
+        {decisions.winner && (
+          <span className="winner player">
+            <span className="player-summary">{decisions.winner?.summary}</span>
+            <img className="player-avatar" src={decisions.winner?.avatar} />
+            <span data-pos="Winner" className="player-name">
+              {decisions.winner.fullName}
+            </span>
           </span>
-        </span>
-        <span className="loser player">
-          <span className="player-summary">{decisions.loser?.summary}</span>
-          <img className="player-avatar" src={decisions.loser?.avatar} />
-          <span data-pos="Loser" className="player-name">
-            {decisions.loser.fullName}
+        )}
+        {decisions.loser && (
+          <span className="loser player">
+            <span className="player-summary">{decisions.loser?.summary}</span>
+            <img className="player-avatar" src={decisions.loser?.avatar} />
+            <span data-pos="Loser" className="player-name">
+              {decisions.loser.fullName}
+            </span>
           </span>
-        </span>
+        )}
         {decisions.save?.fullName && (
           <span className="save player">
             <span className="player-summary">{decisions?.save?.summary}</span>

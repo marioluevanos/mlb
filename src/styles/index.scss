@@ -76,6 +76,8 @@ body {
 }
 
 #header {
+  position: sticky;
+  top: 0;
   padding: 0 1rem;
   display: flex;
   align-items: center;
@@ -83,6 +85,7 @@ body {
   height: 3rem;
   background: var(--bg);
   z-index: 100;
+  box-shadow: 0 1px 1px hsl(0deg 0% 16%/8%);
 }
 
 .button {
@@ -455,9 +458,10 @@ details {
   transition: all 0.15s ease-out;
   padding: 0.5rem 1rem;
   letter-spacing: 0.01em;
+  user-select: none;
 
   &:hover {
-    background: var(--bg);
+    background: var(--bg3);
   }
 
   .final + .game-footer & {
@@ -573,18 +577,6 @@ details summary {
   }
 }
 
-details[open] summary {
-  transition: none;
-}
-
-details summary * {
-  pointer-events: none;
-}
-
-details[id][open] > summary {
-  color: var(--text-active);
-}
-
 ol {
   padding: 0;
 }
@@ -617,9 +609,9 @@ ol {
   position: relative;
 }
 
-details[open] {
-  background: var(--bg);
-
+details[open][data-status="In Progress"],
+details[open][data-status="Final"],
+details[open][data-status="Game Over"] {
   .team-record,
   .game-details {
     display: none;
@@ -628,6 +620,22 @@ details[open] {
   .box-score {
     display: block;
   }
+}
+
+details[open] {
+  background: var(--bg);
+}
+
+details[open] summary {
+  transition: none;
+}
+
+details summary * {
+  pointer-events: none;
+}
+
+details[id][open] > summary {
+  color: var(--text-active);
 }
 
 .innings {

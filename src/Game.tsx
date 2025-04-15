@@ -110,7 +110,12 @@ export const Game: FC<GameProps> = (props) => {
   const winner = isWinner(home, away);
 
   return (
-    <details ref={ref} id={game.id.toString()} onClick={onClick}>
+    <details
+      data-status={game.status}
+      ref={ref}
+      id={game.id.toString()}
+      onClick={onClick}
+    >
       <summary className={cn(isFinal && "final")}>
         <span className="teams">
           <Team

@@ -87,7 +87,7 @@ function App() {
 
       requestAnimationFrame(() => {
         if (details.open) {
-          scrollTo({ behavior: "smooth", top: details.offsetTop });
+          scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
         }
       });
     }

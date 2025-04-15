@@ -1,4 +1,4 @@
-import { FC, useId, useState } from "react";
+import { FC, useId, useRef, useState } from "react";
 import { Game } from "./Game";
 import { cssVars } from "./utils";
 
@@ -12,12 +12,14 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
   const { highlights = [] } = props;
   const id = useId();
   const [media, setMedia] = useState<Video>(highlights[0]);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   return !media ? null : (
     <>
       <div className="game-highlight">
         <h3>Highlights</h3>
         <video
+          ref={videoRef}
           poster={media.placeholder.src}
           controls
           src={media.video.url}
@@ -38,6 +40,11 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
               title={media.title}
               onClick={() => {
                 setMedia(media);
+                requestAnimationFrame(() => {
+                  if (videoRef.current) {
+                    videoRef.current.play();
+                  }
+                });
               }}
             >
               {media.title}
