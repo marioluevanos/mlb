@@ -9,6 +9,7 @@ import { Header } from "./Header";
 import { Game, GameToday } from "./Game";
 import cn, { loadingData, mapToGame, timeAgo } from "./utils";
 import { RefreshIcon } from "./Icon";
+import { Standings } from "./Standings";
 
 export type GameData = {
   date: string;
@@ -136,7 +137,7 @@ function App() {
         const id = setInterval(() => {
           updateLiveGame(game).then((updated) => {
             setData((prev) => {
-              return {
+              const updatedData = {
                 date: new Date().toISOString(),
                 games: prev.games.map((g) => {
                   if (updated && g.id === updated.id) {
@@ -145,6 +146,8 @@ function App() {
                   return g;
                 }),
               };
+              localStorage.setItem(CACHE_KEY, JSON.stringify(updatedData));
+              return updatedData;
             });
           });
         }, 5000);
@@ -206,6 +209,7 @@ function App() {
         <p>No games today</p>
       )}
       <p className="last-updated">Last updated {timeAgo(data.date)}</p>
+      <Standings />
     </>
   );
 }

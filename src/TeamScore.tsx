@@ -20,8 +20,9 @@ export const TeamScore: FC<TeamScoreProps> = (props) => {
   const isScheduled = status === "Scheduled";
   const isPregame = status === "Pre-Game";
   const isPostponed = status === "Postponed";
+  const isWarmup = status === "Warmup";
 
-  if (isScheduled || isPregame || isPostponed) {
+  if (isScheduled || isPregame || isPostponed || isWarmup) {
     return null;
   }
 

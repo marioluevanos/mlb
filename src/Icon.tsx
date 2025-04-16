@@ -67,3 +67,35 @@ export const RightIcon: FC = () => {
     </svg>
   );
 };
+
+export const TriangleUp: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.91,10.213l-3.5-5a.52.52,0,0,0-.82,0l-3.5,5A.5.5,0,0,0,4.5,11h7a.5.5,0,0,0,.41-.787Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const TriangleDown: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.943,5.269A.5.5,0,0,0,11.5,5h-7a.5.5,0,0,0-.409.787l3.5,5a.5.5,0,0,0,.818,0l3.5-5A.5.5,0,0,0,11.943,5.269Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};

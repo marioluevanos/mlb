@@ -34,7 +34,9 @@ const StartingPitcher: FC<Player> = (props) => {
 
   return (
     <span className="starting-pitcher player">
-      <img className="player-avatar" src={avatar} />
+      {avatar && (
+        <img className="player-avatar" src={avatar} width={256} height={256} />
+      )}
       <span className="player-name">{pitcher}</span>
       {summary && <span className="player-summary">{summary}</span>}
     </span>

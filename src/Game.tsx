@@ -17,7 +17,8 @@ export type GameStatus =
   | "Pre-Game"
   | "Postponed"
   | "In Progress"
-  | "Game Over";
+  | "Game Over"
+  | "Warmup";
 
 export type GameTopPerformers = {
   jerseyNumber: string;
@@ -105,6 +106,11 @@ export type CurrentCount = {
 export type CurrentPlay = {
   matchup: CurrentMatchup;
   count: CurrentCount;
+  runners: {
+    first?: Player;
+    second?: Player;
+    third?: Player;
+  };
 };
 
 export type GameProps = {
@@ -122,7 +128,9 @@ export const Game: FC<GameProps> = (props) => {
   const isPreGame = game.status === "Pre-Game";
   const isPostponed = game.status === "Postponed";
   const isScheduled = game.status === "Scheduled";
-  const isPre = isPreGame || isPostponed || isScheduled;
+  const inProgress = game.status === "In Progress";
+  const isWarmup = game.status === "Warmup";
+  const isPre = isPreGame || isPostponed || isScheduled || isWarmup;
   const winner = isWinner(home, away);
 
   return (
@@ -166,10 +174,12 @@ export const Game: FC<GameProps> = (props) => {
         <GameDetails game={game} className={cn(isLoading && "loading")} />
       </summary>
       <footer className="game-footer">
-        <GameStartingPitchers
-          home={home.startingPitcher}
-          away={away.startingPitcher}
-        />
+        {!inProgress && (
+          <GameStartingPitchers
+            home={home.startingPitcher}
+            away={away.startingPitcher}
+          />
+        )}
         <GameDecisions decisions={game.decisions} />
         <GameMatchup matchup={game.currentPlay?.matchup} />
         {game.topPerformers.length > 0 && !isPre ? (

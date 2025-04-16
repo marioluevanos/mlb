@@ -210,10 +210,18 @@ export function cssVars(keyValue: CSSVariables): CSSVariables {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function mapToGame(game: GameToday, data: any): GameToday {
   const play = data.liveData?.plays?.currentPlay;
+  const offense = data.liveData?.linescore.offense;
+
   return {
     ...game,
+    innings: data.liveData?.linescore.innings,
     currentPlay: {
       count: play?.count,
+      runners: {
+        second: offense.second,
+        third: offense.third,
+        first: offense.first,
+      },
       matchup: {
         batter: {
           ...play?.matchup.batter,
@@ -227,7 +235,7 @@ export function mapToGame(game: GameToday, data: any): GameToday {
         },
       },
     },
-    status: data.status.detailedState,
+    status: data.gameData.status.detailedState,
     currentInning: `${
       data.liveData?.linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""
     } ${data.liveData?.linescore?.currentInningOrdinal || 0}`,
@@ -238,7 +246,7 @@ function avatar(id: string) {
   return `https://midfield.mlbstatic.com/v1/people/${id}/spots/120`;
 }
 
-export function getPlayerStats(
+export async function getPlayerStats(
   playerIds: string[],
   group: "pitching" | "hitting",
   season: number = 2025
@@ -247,4 +255,20 @@ export function getPlayerStats(
 
   const URL = `https://statsapi.mlb.com/api/v1/people?${ids}&season=${season}&hydrate=stats(group=${group},type=season,season=${season},gameType=[R])`;
   console.log(encodeURIComponent(URL));
+}
+
+export async function getStatings() {
+  const [date] = new Date().toISOString().split("T");
+  const [year] = date.split("-");
+  const URL = `https://bdfed.stitch.mlbinfra.com/bdfed/transform-mlb-standings?&splitPcts=false&numberPcts=false&standingsView=division&sortTemplate=3&season=${year}&leagueIds=103&&leagueIds=104&standingsTypes=regularSeason&contextTeamId=&teamId=&date=${date}&hydrateAlias=noSchedule&sortDivisions=201,202,200,204,205,203&sortLeagues=103,104,115,114&sortSports=1`;
+
+  try {
+    const response = await fetch(URL);
+    if (response.ok) {
+      const json = response.json();
+      return json;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }

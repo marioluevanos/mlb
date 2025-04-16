@@ -2,6 +2,7 @@ import { FC } from "react";
 import cn from "./utils";
 import { GameBug } from "./GameBug";
 import { GameToday } from "./Game";
+import { TriangleDown, TriangleUp } from "./Icon";
 
 export type GameDetailProps = {
   className?: string;
@@ -14,8 +15,9 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
   const isScheduled = game.status === "Scheduled";
   const isPregame = game.status === "Pre-Game";
   const isPostponed = game.status === "Postponed";
+  const isWarmup = game.status === "Warmup";
 
-  if (isPregame || isScheduled) {
+  if (isPregame || isScheduled || isWarmup) {
     return (
       <span className="game-details">
         <span className={cn("game-time", className)}>{game.time}</span>
@@ -23,8 +25,8 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
     );
   }
 
+  const totalInnings = parseInt(game.currentInning?.replace(/\D+/g, ""));
   if (isFinal || isPostponed) {
-    const totalInnings = parseInt(game.currentInning?.replace(/\D+/g, ""));
     const isExtraInnings = totalInnings > 9;
     return (
       <span className="game-details">
@@ -38,10 +40,13 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
     );
   }
 
+  const [pos] = (game.currentInning || "").split(" ");
+
   return (
     <span className="game-details">
       <span className={cn("current-inning", className)}>
-        {game.currentInning}
+        {pos === "TOP" ? <TriangleUp /> : <TriangleDown />}
+        {totalInnings}
       </span>
       <GameBug game={game} />
     </span>

@@ -15,13 +15,13 @@ export const GameMatchup: FC<GameMatchupProps> = (props) => {
       <div className="game-matchup">
         <h3>Current Matchup</h3>
         <span className="batter player">
-          <img className="avatar" src={matchup.batter.avatar} />
-          {matchup.batter.fullName}
+          <img className="player-avatar" src={matchup.batter.avatar} />
+          <span className="player-name">{matchup.batter.fullName}</span>
         </span>
         <span className="pitcher player">
-          <img className="avatar" src={matchup.pitcher.avatar} />
+          <img className="player-avatar" src={matchup.pitcher.avatar} />
           <span>({matchup.pitcher.throws}HP)</span>
-          {matchup.pitcher.fullName}
+          <span className="player-name">{matchup.pitcher.fullName}</span>
         </span>
       </div>
     )
