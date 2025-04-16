@@ -28,11 +28,11 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
             data-inning={inning.ordinalNum}
           >
             {team === "away" ? (
-              <span className={cn(inning.away.runs > 0 ? "scored" : "")}>
+              <span className={cn((inning.away.runs || 0) > 0 ? "scored" : "")}>
                 {inning.away.runs}
               </span>
             ) : (
-              <span className={cn(inning.home.runs > 0 ? "scored" : "")}>
+              <span className={cn((inning.home.runs || 0) > 0 ? "scored" : "")}>
                 {inning.home.runs}
               </span>
             )}

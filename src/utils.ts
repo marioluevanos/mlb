@@ -135,11 +135,11 @@ export default function cn(...args: ArgumentArray): string {
 
 export function isWinner(home: TeamClub, away: TeamClub) {
   if (home && away) {
-    if (home.score && home.score.runs > away.score.runs) {
+    if (home.score && (home.score.runs || 0) > (away.score.runs || 0)) {
       return "home";
     }
 
-    if (home.score && home.score.runs < away.score.runs) {
+    if (home.score && (home.score.runs || 0) < (away.score.runs || 0)) {
       return "away";
     }
   }
@@ -160,9 +160,11 @@ export function loadingData(cacheKey?: string): GameData {
       return {
         id: i,
         feed: "",
+        content: "",
         status: "Final",
         innings: [],
         away: {
+          id: 1,
           startingPitcher: {
             fullName: "XXXXXXXXXXXX",
             avatar: "",
@@ -175,6 +177,7 @@ export function loadingData(cacheKey?: string): GameData {
           logo: "",
         },
         home: {
+          id: 0,
           startingPitcher: {
             fullName: "XXXXXXXXXXXX",
             avatar: "",
