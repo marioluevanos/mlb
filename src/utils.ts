@@ -215,6 +215,14 @@ export function mapToGame(game: GameToday, data: any): GameToday {
   return {
     ...game,
     innings: data.liveData?.linescore.innings,
+    home: {
+      ...game.home,
+      score: data.liveData?.linescore.teams.home,
+    },
+    away: {
+      ...game.away,
+      score: data.liveData?.linescore.teams.away,
+    },
     currentPlay: {
       count: play?.count,
       runners: {

@@ -194,17 +194,15 @@ function App() {
         </div>
       </Header>
       {Array.isArray(data?.games) ? (
-        data.games
-          .sort((a) => (a.status === "Final" ? 1 : -1))
-          .map((game, i) => (
-            <Game
-              onClick={onGameClick}
-              ref={setGameRefs.bind(null, i)}
-              key={game.id}
-              game={game}
-              isLoading={isLoading}
-            />
-          ))
+        data.games.map((game, i) => (
+          <Game
+            onClick={onGameClick}
+            ref={setGameRefs.bind(null, i)}
+            key={game.id}
+            game={game}
+            isLoading={isLoading}
+          />
+        ))
       ) : (
         <p>No games today</p>
       )}
