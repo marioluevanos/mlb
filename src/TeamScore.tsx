@@ -1,16 +1,9 @@
 import { FC } from "react";
 import cn from "./utils";
-import { GameStatus } from "./Game";
-
-export type TeamScore = {
-  runs: number;
-  hits: number;
-  errors: number;
-  leftOnBase: number;
-};
+import { GameStatus, TeamScore as Score } from "./Game";
 
 type TeamScoreProps = {
-  score?: TeamScore;
+  score?: Score;
   className?: string;
   status: GameStatus;
 };

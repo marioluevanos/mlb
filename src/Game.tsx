@@ -33,7 +33,7 @@ export type GameTopPerformers = {
 export type GameHighlights = {
   type: string;
   title: string;
-  description: string;
+  description?: string;
   placeholder: {
     sm: {
       src: string;
@@ -56,6 +56,13 @@ export type GameStream = {
   url: string;
 };
 
+export type TeamScore = {
+  runs?: number;
+  hits: number;
+  errors: number;
+  leftOnBase: number;
+};
+
 export type GameInnings = {
   away: TeamScore;
   home: TeamScore;
@@ -66,6 +73,7 @@ export type GameInnings = {
 export type GameToday = {
   id: number;
   feed: string;
+  content: string;
   status: GameStatus;
   away: TeamClub;
   home: TeamClub;
@@ -141,7 +149,6 @@ export const Game: FC<GameProps> = (props) => {
     <details
       ref={ref}
       data-status={game.status}
-      data-feed={game.feed}
       id={game.id.toString()}
       onClick={onClick}
     >

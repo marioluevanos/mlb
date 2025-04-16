@@ -16,12 +16,6 @@ export type GameData = {
   games: GameToday[];
 };
 
-export type OpenGames = {
-  gameId: GameToday["id"];
-  feed: GameToday["feed"];
-  status: GameStatus;
-};
-
 const CACHE_KEY = "games" as const;
 
 function App() {
@@ -131,6 +125,7 @@ function App() {
                 updatedGame.currentPlay.matchup = matchup;
               }
 
+              // console.log(JSON.stringify(updatedGame));
               return updatedGame;
             }
 
@@ -240,15 +235,6 @@ function App() {
       ids.forEach((id) => clearInterval(id));
     };
   }, [data.games, openGame, shouldUpdateGame, updateLiveGame]);
-
-  useEffect(() => {
-    // if (batter && batter.id && gameId) {
-    //   getPlayerStats([batter.id], "hitting").then((response) => {
-    //     const [batter] = response.people;
-    //     console.log(batter.fullName, batter);
-    //   });
-    // }
-  }, []);
 
   return (
     <>
