@@ -9,12 +9,13 @@ type BoxScoreProps = {
 
 export const BoxScore: FC<BoxScoreProps> = (props) => {
   const { innings, team } = props;
+  const totalInnings = Math.max(9, innings.length);
 
   return (
     <div className="box-score">
       {team === "away" && (
         <div className="innings title">
-          {Array.from({ length: 9 }, (_, i) => (
+          {Array.from({ length: totalInnings }, (_, i) => (
             <span className="inning-title" key={i} data-num={i + 1} />
           ))}
         </div>

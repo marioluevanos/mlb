@@ -10,6 +10,7 @@ import { BoxScore } from "./BoxScore";
 import { GameMatchup } from "./GameMatchup";
 import { GameDecisions } from "./GameDecisions";
 import { GameStartingPitchers } from "./GameStartingPitchers";
+import { GameBug } from "./GameBug";
 
 export type GameStatus =
   | "Final"
@@ -18,7 +19,10 @@ export type GameStatus =
   | "Postponed"
   | "In Progress"
   | "Game Over"
-  | "Warmup";
+  | "Warmup"
+  // Check these with startsWith
+  | "Umpire review"
+  | "Manager challenge: Tag play";
 
 export type GameTopPerformers = {
   jerseyNumber: string;
@@ -130,13 +134,14 @@ export const Game: FC<GameProps> = (props) => {
   const isScheduled = game.status === "Scheduled";
   const inProgress = game.status === "In Progress";
   const isWarmup = game.status === "Warmup";
-  const isPre = isPreGame || isPostponed || isScheduled || isWarmup;
+  const isPre = isPreGame || isScheduled || isWarmup;
   const winner = isWinner(home, away);
 
   return (
     <details
-      data-status={game.status}
       ref={ref}
+      data-status={game.status}
+      data-feed={game.feed}
       id={game.id.toString()}
       onClick={onClick}
     >
@@ -174,15 +179,19 @@ export const Game: FC<GameProps> = (props) => {
         <GameDetails game={game} className={cn(isLoading && "loading")} />
       </summary>
       <footer className="game-footer">
-        {!inProgress && (
+        {isPre && (
           <GameStartingPitchers
             home={home.startingPitcher}
             away={away.startingPitcher}
           />
         )}
         <GameDecisions decisions={game.decisions} />
-        <GameMatchup matchup={game.currentPlay?.matchup} />
-        {game.topPerformers.length > 0 && !isPre ? (
+        {inProgress && (
+          <GameMatchup gameId={game.id} matchup={game.currentPlay?.matchup}>
+            <GameBug game={game} />
+          </GameMatchup>
+        )}
+        {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />
         ) : null}
         <GameHighlights

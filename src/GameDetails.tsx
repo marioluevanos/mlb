@@ -1,6 +1,5 @@
 import { FC } from "react";
 import cn from "./utils";
-import { GameBug } from "./GameBug";
 import { GameToday } from "./Game";
 import { TriangleDown, TriangleUp } from "./Icon";
 
@@ -40,15 +39,14 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
     );
   }
 
-  const [pos] = (game.currentInning || "").split(" ");
+  const [pos, inning] = (game.currentInning || "").split(" ");
 
   return (
     <span className="game-details">
       <span className={cn("current-inning", className)}>
         {pos === "TOP" ? <TriangleUp /> : <TriangleDown />}
-        {totalInnings}
+        {inning}
       </span>
-      <GameBug game={game} />
     </span>
   );
 };

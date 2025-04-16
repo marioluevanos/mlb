@@ -6,14 +6,20 @@ import {
   useState,
 } from "react";
 import { Header } from "./Header";
-import { Game, GameToday } from "./Game";
-import cn, { loadingData, mapToGame, timeAgo } from "./utils";
-import { RefreshIcon } from "./Icon";
+import { CurrentMatchup, Game, GameStatus, GameToday } from "./Game";
+import { getPlayerGameStats, loadingData, mapToGame, timeAgo } from "./utils";
 import { Standings } from "./Standings";
+import { HeaderNav } from "./HeaderNav";
 
 export type GameData = {
   date: string;
   games: GameToday[];
+};
+
+export type OpenGames = {
+  gameId: GameToday["id"];
+  feed: GameToday["feed"];
+  status: GameStatus;
 };
 
 const CACHE_KEY = "games" as const;
@@ -22,6 +28,7 @@ function App() {
   const [data, setData] = useState<GameData>(loadingData(CACHE_KEY));
   const [isLoading, setIsLoading] = useState(false);
   const gameRefs = useRef<HTMLDetailsElement[]>([]);
+  const [openGame, setOpenGame] = useState<number>();
 
   /**
    * Get data from API or cache
@@ -61,16 +68,83 @@ function App() {
     }
   }, [getData]);
 
+  const updateMatchup = useCallback(
+    async (
+      matchup: CurrentMatchup,
+      gameId: number
+    ): Promise<CurrentMatchup | undefined> => {
+      const { batter, pitcher } = matchup;
+      const [batterResponse, pitcherResponse] = await Promise.all([
+        getPlayerGameStats(batter.id, gameId),
+        getPlayerGameStats(pitcher.id, gameId),
+      ]);
+
+      const [batterGameStats] = batterResponse.stats || [];
+      const gameHitting = (batterGameStats.splits || []).find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (s: any) => s.group === "hitting"
+      );
+
+      const [pitcherGameStats] = pitcherResponse.stats || [];
+      const gamePitching = (pitcherGameStats.splits || []).find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (s: any) => s.group === "pitching"
+      );
+
+      return {
+        batter: {
+          ...batter,
+          summary: gameHitting?.stat?.summary || "",
+        },
+        pitcher: {
+          ...pitcher,
+          summary: gamePitching?.stat?.summary || "",
+        },
+      };
+    },
+    []
+  );
+
   /**
    * Updates live game
    */
-  const updateLiveGame = useCallback(async (game: GameToday) => {
-    const response = await fetch(game.feed);
-    if (response.ok) {
-      const json = await response.json();
-      return mapToGame(game, json);
-    }
-  }, []);
+  const updateLiveGame = useCallback(
+    async (game: GameToday) => {
+      const response = await fetch(game.feed);
+      if (response.ok) {
+        const json = await response.json();
+        const updatedGame = mapToGame(game, json);
+
+        let matchup: CurrentMatchup | undefined;
+        if (updatedGame.currentPlay?.matchup) {
+          matchup = await updateMatchup(
+            updatedGame.currentPlay?.matchup,
+            updatedGame.id
+          );
+        }
+
+        const updatedData = {
+          date: new Date().toISOString(),
+          games: data.games.map((g) => {
+            if (updatedGame && g.id === updatedGame.id) {
+              if (updatedGame.currentPlay?.matchup && matchup) {
+                updatedGame.currentPlay.matchup = matchup;
+              }
+
+              return updatedGame;
+            }
+
+            return g;
+          }),
+        };
+
+        localStorage.setItem(CACHE_KEY, JSON.stringify(updatedData));
+
+        setData(updatedData);
+      }
+    },
+    [updateMatchup, data]
+  );
 
   /**
    * Toggle game open state
@@ -80,15 +154,20 @@ function App() {
 
     const details = event.target.parentElement;
     if (details) {
+      // Close all details (games)
       gameRefs.current.forEach((d) => {
         if (d.id !== details.id) {
           d.open = false;
         }
       });
 
+      // Open the game clicked
       requestAnimationFrame(() => {
         if (details.open) {
+          setOpenGame(Number(details.id));
           scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
+        } else {
+          setOpenGame(undefined);
         }
       });
     }
@@ -116,6 +195,22 @@ function App() {
     []
   );
 
+  const shouldUpdateGame = useCallback(
+    (
+      gameId: number,
+      status: GameStatus,
+      gameOpenId: typeof openGame
+    ): boolean => {
+      return (
+        (status === "In Progress" ||
+          status.startsWith("Umpire review") ||
+          status.startsWith("Manager challenge")) &&
+        gameId === gameOpenId
+      );
+    },
+    []
+  );
+
   /**
    * Initialize data
    */
@@ -126,83 +221,57 @@ function App() {
   }, [getData, data]);
 
   /**
-   * @todo
    * Update live games
    */
   useEffect(() => {
     const ids: number[] = [];
 
     for (const game of data.games) {
-      if (game.status === "In Progress") {
-        const id = setInterval(() => {
-          updateLiveGame(game).then((updated) => {
-            setData((prev) => {
-              const updatedData = {
-                date: new Date().toISOString(),
-                games: prev.games.map((g) => {
-                  if (updated && g.id === updated.id) {
-                    return updated;
-                  }
-                  return g;
-                }),
-              };
-              localStorage.setItem(CACHE_KEY, JSON.stringify(updatedData));
-              return updatedData;
-            });
-          });
+      if (shouldUpdateGame(game.id, game.status, openGame)) {
+        const intervalId = setInterval(() => {
+          updateLiveGame(game);
         }, 5000);
-        ids.push(id);
+
+        ids.push(intervalId);
       }
     }
 
     return () => {
       ids.forEach((id) => clearInterval(id));
     };
-  }, [data.games, updateLiveGame]);
+  }, [data.games, openGame, shouldUpdateGame, updateLiveGame]);
+
+  useEffect(() => {
+    // if (batter && batter.id && gameId) {
+    //   getPlayerStats([batter.id], "hitting").then((response) => {
+    //     const [batter] = response.people;
+    //     console.log(batter.fullName, batter);
+    //   });
+    // }
+  }, []);
 
   return (
     <>
       <Header date={data.date}>
-        <div className="ctas">
-          {/* <button
-            id="previous-date"
-            className={cn("button", isLoading && "loading")}
-            title="Previous date"
-            onClick={onRefresh}
-            data-day={previousDay(data.date)}
-          >
-            <LeftIcon />
-          </button> */}
-          <button
-            id="refresh"
-            className={cn("button", isLoading && "loading")}
-            title="Refresh content"
-            onClick={onRefresh}
-            data-date={data.date}
-          >
-            <RefreshIcon />
-          </button>
-          {/* <button
-            id="next-date"
-            className={cn("button", isLoading && "loading")}
-            title="Next date"
-            onClick={onRefresh}
-            data-day={nextDay(data.date)}
-          >
-            <RightIcon />
-          </button> */}
-        </div>
+        <HeaderNav
+          key="header-nav"
+          onRefresh={onRefresh}
+          date={data.date}
+          isLoading={isLoading}
+        />
       </Header>
       {Array.isArray(data?.games) ? (
-        data.games.map((game, i) => (
-          <Game
-            onClick={onGameClick}
-            ref={setGameRefs.bind(null, i)}
-            key={game.id}
-            game={game}
-            isLoading={isLoading}
-          />
-        ))
+        data.games
+          .sort((a) => (a.status === "In Progress" ? -1 : 0))
+          .map((game, i) => (
+            <Game
+              onClick={onGameClick}
+              ref={setGameRefs.bind(null, i)}
+              key={game.id}
+              game={game}
+              isLoading={isLoading}
+            />
+          ))
       ) : (
         <p>No games today</p>
       )}

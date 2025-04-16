@@ -1,5 +1,5 @@
 import { GameData } from "./App";
-import { GameToday } from "./Game";
+import { GameToday, GameTopPerformers } from "./Game";
 import { TeamClub } from "./Team";
 import { CSSProperties } from "react";
 
@@ -211,18 +211,20 @@ export function cssVars(keyValue: CSSVariables): CSSVariables {
 export function mapToGame(game: GameToday, data: any): GameToday {
   const play = data.liveData?.plays?.currentPlay;
   const offense = data.liveData?.linescore.offense;
+  const { linescore, boxscore } = data.liveData;
 
   return {
     ...game,
-    innings: data.liveData?.linescore.innings,
+    innings: linescore.innings,
     home: {
       ...game.home,
-      score: data.liveData?.linescore.teams.home,
+      score: linescore.teams.home,
     },
     away: {
       ...game.away,
-      score: data.liveData?.linescore.teams.away,
+      score: linescore.teams.away,
     },
+    topPerformers: boxscore.topPerformers.map(topPerformers) || [],
     currentPlay: {
       count: play?.count,
       runners: {
@@ -244,9 +246,33 @@ export function mapToGame(game: GameToday, data: any): GameToday {
       },
     },
     status: data.gameData.status.detailedState,
-    currentInning: `${
-      data.liveData?.linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""
-    } ${data.liveData?.linescore?.currentInningOrdinal || 0}`,
+    currentInning: `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
+      linescore?.currentInningOrdinal || 0
+    }`,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function topPerformers(payload: any): GameTopPerformers {
+  const { type, player } = payload;
+  const { stats, person, position } = player;
+  let summary = "";
+
+  if (type === "hitter") {
+    summary = stats.batting.summary;
+  }
+
+  if (type === "starter") {
+    summary = stats.pitching.summary;
+  }
+
+  return {
+    avatar: avatar(person.id),
+    jerseyNumber: player.jerseyNumber,
+    id: person.id,
+    fullName: person.fullName,
+    pos: position.abbreviation,
+    summary,
   };
 }
 
@@ -255,14 +281,36 @@ function avatar(id: string) {
 }
 
 export async function getPlayerStats(
-  playerIds: string[],
+  playerIds: (string | number)[],
   group: "pitching" | "hitting",
   season: number = 2025
 ) {
   const ids = playerIds.map((id) => `personIds=${id}`).join("&");
 
   const URL = `https://statsapi.mlb.com/api/v1/people?${ids}&season=${season}&hydrate=stats(group=${group},type=season,season=${season},gameType=[R])`;
-  console.log(encodeURIComponent(URL));
+  try {
+    const response = await fetch(URL);
+    if (response.ok) {
+      const json = response.json();
+      return json;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPlayerGameStats(playerId: number, gameId: number) {
+  const URL = `https://statsapi.mlb.com/api/v1/people/${playerId}/stats/game/${gameId}`;
+
+  try {
+    const response = await fetch(URL);
+    if (response.ok) {
+      const json = response.json();
+      return json;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function getStatings() {
