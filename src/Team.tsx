@@ -23,7 +23,7 @@ export type TeamClub = {
   abbreviation: string;
   logo: string;
   id: number;
-  stats: {
+  stats?: {
     players: (Player & { game: AllStats; season: AllStats })[];
     team: AllStats;
   };

@@ -2,6 +2,8 @@ import { GameToday, GameTopPerformers } from "../Game";
 import { Decisions, MLBLive, Performer } from "../mlb.types";
 import { TeamClub } from "../Team";
 
+type PlayerSats = NonNullable<TeamClub["stats"]>["players"];
+
 export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const { gameData, liveData } = data;
   const { linescore, boxscore, plays } = liveData;
@@ -10,32 +12,33 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const { teams, probablePitchers } = gameData;
 
   const mapToTeam = (team: "home" | "away"): TeamClub => {
-    const players: TeamClub["stats"]["players"] = Object.values(
-      boxscore.teams[team].players
-    ).map((p) => ({
-      game: {
-        batting: p.stats.batting,
-        pitching: p.stats.pitching,
+    const players: PlayerSats = Object.values(boxscore.teams[team].players).map(
+      (p) => ({
+        game: {
+          batting: p.stats.batting,
+          pitching: p.stats.pitching,
+        },
+        season: {
+          batting: p.seasonStats.batting,
+          pitching: p.seasonStats.pitching,
+        },
+        position: p.position.abbreviation,
+        fullName: p.person.fullName,
+        id: p.person.id,
+        avatar: avatar(p.person.id),
+      })
+    );
+
+    const order = boxscore.teams[team].battingOrder.reduce<PlayerSats>(
+      (acc, id) => {
+        const player = players.find((p) => p.id === id);
+
+        if (player) acc.push(player);
+
+        return acc;
       },
-      season: {
-        batting: p.seasonStats.batting,
-        pitching: p.seasonStats.pitching,
-      },
-      position: p.position.abbreviation,
-      fullName: p.person.fullName,
-      id: p.person.id,
-      avatar: avatar(p.person.id),
-    }));
-
-    const order = boxscore.teams[team].battingOrder.reduce<
-      TeamClub["stats"]["players"]
-    >((acc, id) => {
-      const player = players.find((p) => p.id === id);
-
-      if (player) acc.push(player);
-
-      return acc;
-    }, []);
+      []
+    );
 
     return {
       record: teams[team].record.leagueRecord,
