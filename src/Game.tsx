@@ -161,7 +161,11 @@ export const Game: FC<GameProps> = (props) => {
               winner === "away" && "winner"
             )}
           >
-            <BoxScore innings={game.innings} team="away" />
+            <BoxScore
+              innings={game.innings}
+              team="away"
+              className={cn(game.currentInning, "away")}
+            />
             <TeamScore
               status={game.status}
               className={cn(isLoading && "loading")}
@@ -175,7 +179,11 @@ export const Game: FC<GameProps> = (props) => {
               winner === "home" && "winner"
             )}
           >
-            <BoxScore innings={game.innings} team="home" />
+            <BoxScore
+              innings={game.innings}
+              team="home"
+              className={cn(game.currentInning, "home")}
+            />
             <TeamScore
               status={game.status}
               className={cn(isLoading && "loading")}

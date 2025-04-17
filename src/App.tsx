@@ -106,29 +106,36 @@ function App() {
   /**
    * Toggle game open state
    */
-  const toggleGameOpen = useCallback((event: BaseSyntheticEvent) => {
-    if (event.target.nodeName !== "SUMMARY") return;
+  const toggleGameOpen = useCallback(
+    (event: BaseSyntheticEvent) => {
+      if (event.target.nodeName !== "SUMMARY") return;
 
-    const details = event.target.parentElement;
-    if (details) {
-      // Close all details (games)
-      gameRefs.current.forEach((d) => {
-        if (d.id !== details.id) {
-          d.open = false;
-        }
-      });
+      const details = event.target.parentElement;
+      if (details) {
+        // Close all details (games)
+        gameRefs.current.forEach((d) => {
+          if (d.id !== details.id) {
+            d.open = false;
+          }
+        });
 
-      // Open the game clicked
-      requestAnimationFrame(() => {
-        if (details.open) {
-          setOpenGame(Number(details.id));
-          scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
-        } else {
-          setOpenGame(undefined);
-        }
-      });
-    }
-  }, []);
+        // Open the game clicked
+        requestAnimationFrame(() => {
+          if (details.open) {
+            setOpenGame(Number(details.id));
+            scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
+            const game = data.games.find((g) => g.id === +details.id);
+            if (game) {
+              updateLiveGame(game);
+            }
+          } else {
+            setOpenGame(undefined);
+          }
+        });
+      }
+    },
+    [data.games, updateLiveGame]
+  );
 
   /**
    * Handle game click

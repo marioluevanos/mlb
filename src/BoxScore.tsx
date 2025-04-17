@@ -5,14 +5,15 @@ import cn from "./utils";
 type BoxScoreProps = {
   innings: GameInnings[];
   team: "home" | "away";
+  className?: string;
 };
 
 export const BoxScore: FC<BoxScoreProps> = (props) => {
-  const { innings, team } = props;
+  const { innings, team, className } = props;
   const totalInnings = Math.max(9, innings.length);
 
   return (
-    <div className="box-score">
+    <div className={cn("box-score", className)}>
       {team === "away" && (
         <div className="innings title">
           {Array.from({ length: totalInnings }, (_, i) => (
