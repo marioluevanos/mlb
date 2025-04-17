@@ -1,7 +1,7 @@
 import { FC } from "react";
 import cn from "./utils";
 import { GameToday } from "./Game";
-import { TriangleDown, TriangleUp } from "./Icon";
+import { CurrentInning } from "./CurrentInning";
 
 export type GameDetailProps = {
   className?: string;
@@ -29,7 +29,9 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
     const isExtraInnings = totalInnings > 9;
     return (
       <span className="game-details">
-        <span className={cn("game-status", className)}>{game.status}</span>
+        <span className={cn("game-status", className)}>
+          {isFinal ? "Final" : game.status}
+        </span>
         {isExtraInnings && (
           <span className={cn("total-innings", className)}>
             /{totalInnings}
@@ -39,14 +41,9 @@ export const GameDetails: FC<GameDetailProps> = (props) => {
     );
   }
 
-  const [pos, inning] = (game.currentInning || "").split(" ");
-
   return (
     <span className="game-details">
-      <span className={cn("current-inning", className)}>
-        {pos === "TOP" ? <TriangleUp /> : <TriangleDown />}
-        {inning}
-      </span>
+      <CurrentInning currentInning={game.currentInning} />
     </span>
   );
 };

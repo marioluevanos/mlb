@@ -1,16 +1,19 @@
 import { FC, ReactNode } from "react";
-import { GameToday } from "./Game";
+import { CurrentPlay } from "./Game";
 import cn from "./utils";
+import { CurrentInning } from "./CurrentInning";
 
 export type GameBugProps = {
   className?: string;
-  game: GameToday;
+  currentPlay?: CurrentPlay;
   children?: ReactNode;
+  currentInning?: string;
 };
 
 export const GameBug: FC<GameBugProps> = (props) => {
-  const { game, className } = props;
-  const runners = game.currentPlay?.runners;
+  const { currentPlay, currentInning, className } = props;
+  const runners = currentPlay?.runners;
+
   return (
     <span className={cn("game-bug", className)}>
       <span className="bases">
@@ -20,15 +23,15 @@ export const GameBug: FC<GameBugProps> = (props) => {
         <span className="base home"></span>
       </span>
       <div className="balls-strikes">
-        <span className="balls">{game?.currentPlay?.count.balls}</span> &ndash;
-        <span className="strikes">{game?.currentPlay?.count.strikes}</span>
+        <span className="balls">{currentPlay?.count.balls}</span> &ndash;
+        <span className="strikes">{currentPlay?.count.strikes}</span>
       </div>
       <div className="outs">
         {Array.from({ length: 3 }, (_, i) => (
           <span
             className={cn(
               "out",
-              (game?.currentPlay?.count.outs || 0) > i && "is-out"
+              (currentPlay?.count.outs || 0) > i && "is-out"
             )}
             key={i}
           >
@@ -36,6 +39,7 @@ export const GameBug: FC<GameBugProps> = (props) => {
           </span>
         ))}
       </div>
+      {currentInning && <CurrentInning currentInning={currentInning} />}
     </span>
   );
 };

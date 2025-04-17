@@ -639,6 +639,12 @@ details[open] {
 
 details[open] summary {
   transition: none;
+  position: sticky;
+  top: 48px;
+  background: var(--bg);
+  z-index: 10;
+  padding-bottom: 1rem;
+  box-shadow: 0 1px 1px hsl(0deg 0% 0%/8%);
 }
 
 details summary * {
@@ -706,6 +712,10 @@ details[id][open] > summary {
   padding-bottom: 1rem;
   border-bottom: 1px dotted var(--bg2);
 
+  &:first-child {
+    padding-top: 1rem;
+  }
+
   h3 {
     flex: 1 0 100%;
     display: none;
@@ -747,6 +757,11 @@ details[id][open] > summary {
   background: var(--bg1);
   border-radius: 8px;
   flex: 0;
+
+  .current-inning {
+    margin-top: 0.5rem;
+    font-size: 10px;
+  }
 }
 
 .game-decisions {
@@ -755,6 +770,10 @@ details[id][open] > summary {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  &:first-child {
+    padding-top: 1rem;
+  }
 
   h3 {
     flex: 1 0 100%;
@@ -778,6 +797,10 @@ details[id][open] > summary {
   flex-wrap: wrap;
   align-items: center;
   padding: 0 1rem 1.5rem;
+
+  &:first-child {
+    padding-top: 1rem;
+  }
 
   .starting-pitcher.player {
     flex: 1 0 40%;
@@ -818,7 +841,6 @@ details[id][open] > summary {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
   color: var(--accent);
   width: 100%;
   font-weight: 600;

@@ -22,7 +22,7 @@ export type GameStatus =
   | "Warmup"
   // Check these with startsWith
   | "Umpire review"
-  | "Manager challenge: Tag play";
+  | "Manager challenge";
 
 export type GameTopPerformers = {
   jerseyNumber: string;
@@ -194,8 +194,18 @@ export const Game: FC<GameProps> = (props) => {
         )}
         <GameDecisions decisions={game.decisions} />
         {inProgress && (
-          <GameMatchup gameId={game.id} matchup={game.currentPlay?.matchup}>
-            <GameBug game={game} />
+          <GameMatchup
+            key={
+              game.currentPlay?.matchup.pitcher.summary +
+              `${game.currentPlay?.matchup.batter.summary}`
+            }
+            gameId={game.id}
+            currentPlay={game.currentPlay}
+          >
+            <GameBug
+              currentPlay={game.currentPlay}
+              currentInning={game.currentInning}
+            />
           </GameMatchup>
         )}
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (

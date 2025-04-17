@@ -1,5 +1,5 @@
 import { GameData } from "./App";
-import { GameToday, GameTopPerformers } from "./Game";
+import { CurrentMatchup, GameToday, GameTopPerformers } from "./Game";
 import { TeamClub } from "./Team";
 import { CSSProperties } from "react";
 
@@ -289,7 +289,6 @@ export async function getPlayerStats(
   season: number = 2025
 ) {
   const ids = playerIds.map((id) => `personIds=${id}`).join("&");
-
   const URL = `https://statsapi.mlb.com/api/v1/people?${ids}&season=${season}&hydrate=stats(group=${group},type=season,season=${season},gameType=[R])`;
   try {
     const response = await fetch(URL);
@@ -302,13 +301,34 @@ export async function getPlayerStats(
   }
 }
 
-export async function getPlayerGameStats(playerId: number, gameId: number) {
+type PitchingStats = {
+  summary: string;
+  numberOfPitches: number;
+};
+
+type HittingStats = {
+  summary: string;
+};
+
+type PlayerGameStats = {
+  stats: {
+    splits: {
+      group: "pitching" | "hitting";
+      stat: HittingStats | PitchingStats;
+    }[];
+  }[];
+};
+
+export async function getPlayerGameStats(
+  playerId: number,
+  gameId: number
+): Promise<PlayerGameStats | undefined> {
   const URL = `https://statsapi.mlb.com/api/v1/people/${playerId}/stats/game/${gameId}`;
 
   try {
     const response = await fetch(URL);
     if (response.ok) {
-      const json = response.json();
+      const json = await response.json();
       return json;
     }
   } catch (error) {
@@ -316,7 +336,7 @@ export async function getPlayerGameStats(playerId: number, gameId: number) {
   }
 }
 
-export async function getStatings() {
+export async function getStandings() {
   const [date] = new Date().toISOString().split("T");
   const [year] = date.split("-");
   const URL = `https://bdfed.stitch.mlbinfra.com/bdfed/transform-mlb-standings?&splitPcts=false&numberPcts=false&standingsView=division&sortTemplate=3&season=${year}&leagueIds=103&&leagueIds=104&standingsTypes=regularSeason&contextTeamId=&teamId=&date=${date}&hydrateAlias=noSchedule&sortDivisions=201,202,200,204,205,203&sortLeagues=103,104,115,114&sortSports=1`;
@@ -330,4 +350,48 @@ export async function getStatings() {
   } catch (error) {
     console.log(error);
   }
+}
+
+/**
+ * Updated the current game matchup, Batter vs Pitcher
+ */
+export async function updateMatchup(
+  matchup: CurrentMatchup,
+  gameId: number
+): Promise<CurrentMatchup | undefined> {
+  const { batter, pitcher } = matchup;
+  const [batterResponse, pitcherResponse] = await Promise.all([
+    getPlayerGameStats(batter.id, gameId),
+    getPlayerGameStats(pitcher.id, gameId),
+  ]);
+
+  const [batterGameStats] = batterResponse?.stats || [];
+  const gameHitting = (batterGameStats.splits || []).find(
+    (s) => s.group === "hitting"
+  );
+
+  const [pitcherGameStats] = pitcherResponse?.stats || [];
+  const gamePitching = (pitcherGameStats.splits || []).find(
+    (s) => s.group === "pitching"
+  );
+
+  let numberOfPitches = "";
+  if (
+    gamePitching?.stat &&
+    "numberOfPitches" in gamePitching.stat &&
+    gamePitching.stat.numberOfPitches > 0
+  ) {
+    numberOfPitches = `P ${gamePitching?.stat?.numberOfPitches}, `;
+  }
+
+  return {
+    batter: {
+      ...batter,
+      summary: gameHitting?.stat?.summary || "",
+    },
+    pitcher: {
+      ...pitcher,
+      summary: `${numberOfPitches}${gamePitching?.stat?.summary || ""}`,
+    },
+  };
 }

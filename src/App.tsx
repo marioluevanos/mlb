@@ -7,7 +7,7 @@ import {
 } from "react";
 import { Header } from "./Header";
 import { CurrentMatchup, Game, GameStatus, GameToday } from "./Game";
-import { getPlayerGameStats, loadingData, mapToGame, timeAgo } from "./utils";
+import { loadingData, mapToGame, timeAgo, updateMatchup } from "./utils";
 import { Standings } from "./Standings";
 import { HeaderNav } from "./HeaderNav";
 
@@ -62,43 +62,6 @@ function App() {
     }
   }, [getData]);
 
-  const updateMatchup = useCallback(
-    async (
-      matchup: CurrentMatchup,
-      gameId: number
-    ): Promise<CurrentMatchup | undefined> => {
-      const { batter, pitcher } = matchup;
-      const [batterResponse, pitcherResponse] = await Promise.all([
-        getPlayerGameStats(batter.id, gameId),
-        getPlayerGameStats(pitcher.id, gameId),
-      ]);
-
-      const [batterGameStats] = batterResponse.stats || [];
-      const gameHitting = (batterGameStats.splits || []).find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (s: any) => s.group === "hitting"
-      );
-
-      const [pitcherGameStats] = pitcherResponse.stats || [];
-      const gamePitching = (pitcherGameStats.splits || []).find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (s: any) => s.group === "pitching"
-      );
-
-      return {
-        batter: {
-          ...batter,
-          summary: gameHitting?.stat?.summary || "",
-        },
-        pitcher: {
-          ...pitcher,
-          summary: gamePitching?.stat?.summary || "",
-        },
-      };
-    },
-    []
-  );
-
   /**
    * Updates live game
    */
@@ -125,7 +88,6 @@ function App() {
                 updatedGame.currentPlay.matchup = matchup;
               }
 
-              // console.log(JSON.stringify(updatedGame));
               return updatedGame;
             }
 
@@ -138,7 +100,7 @@ function App() {
         setData(updatedData);
       }
     },
-    [updateMatchup, data]
+    [data]
   );
 
   /**
@@ -198,6 +160,7 @@ function App() {
     ): boolean => {
       return (
         (status === "In Progress" ||
+          status === "Warmup" ||
           status.startsWith("Umpire review") ||
           status.startsWith("Manager challenge")) &&
         gameId === gameOpenId
@@ -225,7 +188,7 @@ function App() {
       if (shouldUpdateGame(game.id, game.status, openGame)) {
         const intervalId = setInterval(() => {
           updateLiveGame(game);
-        }, 5000);
+        }, 15000);
 
         ids.push(intervalId);
       }
