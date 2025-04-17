@@ -832,7 +832,7 @@ details[id][open] > summary {
   align-self: stretch;
   align-items: center;
   border-left: 1px dotted var(--text2);
-  padding: 0 0 0 0.5rem;
+  padding: 0 0 0 0.75rem;
   margin-left: 1rem;
   box-sizing: content-box;
 }
@@ -853,6 +853,11 @@ details[id][open] > summary {
     position: relative;
     top: 1px;
   }
+}
+
+.game-details .current-inning {
+  position: relative;
+  left: -3px;
 }
 
 .bases {
