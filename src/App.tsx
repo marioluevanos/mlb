@@ -23,6 +23,25 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const gameRefs = useRef<HTMLDetailsElement[]>([]);
   const [openGame, setOpenGame] = useState<number>();
+  const wakeRef = useRef<WakeLockSentinel>(null);
+
+  const releaseWakeLock = useCallback(async () => {
+    if (wakeRef.current) {
+      await wakeRef.current.release();
+      wakeRef.current = null;
+    }
+  }, []);
+
+  const acquireWakeLock = useCallback(async () => {
+    try {
+      wakeRef.current = await navigator.wakeLock.request("screen");
+      wakeRef.current.addEventListener("release", () => {
+        console.log("Screen Wake Lock was released");
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   /**
    * Get data from API or cache
@@ -128,8 +147,10 @@ function App() {
             if (game) {
               updateLiveGame(game);
             }
+            acquireWakeLock();
           } else {
             setOpenGame(undefined);
+            releaseWakeLock();
           }
         });
       }
