@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { GameInnings } from "./Game";
-import cn from "./utils";
+import { cn } from "./utils/cn";
 
 type BoxScoreProps = {
   innings: GameInnings[];

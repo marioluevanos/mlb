@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import cn from "./utils";
+import { cn } from "./utils/cn";
 
 type StandingsProps = {
   className?: string;

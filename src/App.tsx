@@ -7,9 +7,12 @@ import {
 } from "react";
 import { Header } from "./Header";
 import { CurrentMatchup, Game, GameStatus, GameToday } from "./Game";
-import { loadingData, mapToGame, timeAgo, updateMatchup } from "./utils";
 import { Standings } from "./Standings";
 import { HeaderNav } from "./HeaderNav";
+import { loadingData } from "./utils/loadingData";
+import { timeAgo } from "./utils/timeAgo";
+import { mapToGame } from "./utils/mapToGame";
+import { updateMatchup } from "./utils/updateMatchup";
 
 export type GameData = {
   date: string;
@@ -25,6 +28,9 @@ function App() {
   const [openGame, setOpenGame] = useState<number>();
   const wakeRef = useRef<WakeLockSentinel>(null);
 
+  /**
+   * Allow the phone to sleep
+   */
   const releaseWakeLock = useCallback(async () => {
     if (wakeRef.current) {
       await wakeRef.current.release();
@@ -32,6 +38,9 @@ function App() {
     }
   }, []);
 
+  /**
+   * Prevent the screen from sleeping
+   */
   const acquireWakeLock = useCallback(async () => {
     try {
       wakeRef.current = await navigator.wakeLock.request("screen");
@@ -148,14 +157,16 @@ function App() {
               updateLiveGame(game);
             }
             acquireWakeLock();
+            document.body.classList.add("game-open");
           } else {
             setOpenGame(undefined);
             releaseWakeLock();
+            document.body.classList.remove("game-open");
           }
         });
       }
     },
-    [data.games, updateLiveGame]
+    [data.games, acquireWakeLock, releaseWakeLock, updateLiveGame]
   );
 
   /**

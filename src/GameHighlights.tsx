@@ -1,5 +1,5 @@
 import { FC, useId, useRef, useState } from "react";
-import { cssVars } from "./utils";
+import { cssVars } from "./utils/cssVars";
 import { GameHighlights as Highlights } from "./Game";
 
 type GameHighlightsProps = {

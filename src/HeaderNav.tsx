@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, FC } from "react";
-import cn from "./utils";
+import { cn } from "./utils/cn";
 import { RefreshIcon } from "./Icon";
 
 type HeaderNavProps = {

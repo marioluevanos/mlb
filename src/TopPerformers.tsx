@@ -11,7 +11,7 @@ export const TopPerformers: FC<TopPerformersProps> = (props) => {
   return (
     <>
       <div className="top-performers">
-        <h3>Top performers</h3>
+        <h3>Top Performers</h3>
         {players?.map((player) => (
           <div className="player top-performer" key={player.fullName}>
             <img

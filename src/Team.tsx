@@ -1,11 +1,18 @@
 import { FC, ReactNode } from "react";
-import cn from "./utils";
+import { cn } from "./utils/cn";
 import { Player, TeamScore } from "./Game";
+import { BattingRecord, FieldingRecord, PitchingRecord } from "./mlb.types";
 
 export type TeamRecord = {
   wins: number;
   losses: number;
   pct: string;
+};
+
+export type AllStats = {
+  batting?: BattingRecord;
+  pitching?: PitchingRecord;
+  fielding?: FieldingRecord;
 };
 
 export type TeamClub = {
@@ -16,6 +23,10 @@ export type TeamClub = {
   abbreviation: string;
   logo: string;
   id: number;
+  stats: {
+    players: (Player & { game: AllStats; season: AllStats })[];
+    team: AllStats;
+  };
 };
 
 export type TeamProps = {

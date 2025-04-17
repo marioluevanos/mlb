@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { CurrentPlay } from "./Game";
-import cn from "./utils";
+import { cn } from "./utils/cn";
 import { CurrentInning } from "./CurrentInning";
 
 export type GameBugProps = {

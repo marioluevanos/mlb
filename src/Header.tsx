@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { formatDate } from "./utils";
+import { formatDate } from "./utils/date";
 
 export const Header: FC<{
   children?: ReactNode;

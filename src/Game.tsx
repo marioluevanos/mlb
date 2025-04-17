@@ -1,5 +1,4 @@
 import { BaseSyntheticEvent, FC, Ref } from "react";
-import cn, { isWinner } from "./utils";
 import { Team, TeamClub } from "./Team";
 import { TeamScore } from "./TeamScore";
 import { GameDetails } from "./GameDetails";
@@ -11,6 +10,10 @@ import { GameMatchup } from "./GameMatchup";
 import { GameDecisions } from "./GameDecisions";
 import { GameStartingPitchers } from "./GameStartingPitchers";
 import { GameBug } from "./GameBug";
+import { PlayEvent, PlayEvents } from "./PlayEvents";
+import { BoxPlayers } from "./BoxPlayers";
+import { isWinner } from "./utils/isWinner";
+import { cn } from "./utils/cn";
 
 export type GameStatus =
   | "Final"
@@ -95,9 +98,10 @@ export type GameDecision = {
 
 export type Player = {
   id: number;
-  avatar: string;
+  avatar?: string;
   fullName: string;
   summary?: string;
+  position?: string;
 };
 
 export type CurrentMatchup = {
@@ -118,6 +122,7 @@ export type CurrentCount = {
 export type CurrentPlay = {
   matchup: CurrentMatchup;
   count: CurrentCount;
+  events: PlayEvent[];
   runners: {
     first?: Player;
     second?: Player;
@@ -136,7 +141,7 @@ export type GameProps = {
 export const Game: FC<GameProps> = (props) => {
   const { game, isLoading, ref, onClick } = props;
   const { away, home } = game;
-  const isFinal = game.status === "Final";
+  const isFinal = game.status === "Final" || game.status === "Game Over";
   const isPreGame = game.status === "Pre-Game";
   const isPostponed = game.status === "Postponed";
   const isScheduled = game.status === "Scheduled";
@@ -216,6 +221,27 @@ export const Game: FC<GameProps> = (props) => {
             />
           </GameMatchup>
         )}
+        <BoxPlayers
+          title="Batting"
+          team={game.away.abbreviation}
+          stats={game.away.stats}
+        />
+        <BoxPlayers
+          title="Batting"
+          team={game.home.abbreviation}
+          stats={game.home.stats}
+        />
+        {/* <BoxPlayers
+          title="Pitching"
+          team={game.away.abbreviation}
+          stats={game.away.stats}
+        />
+        <BoxPlayers
+          title="Pitching"
+          team={game.home.abbreviation}
+          stats={game.home.stats}
+        /> */}
+        {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />
         ) : null}
