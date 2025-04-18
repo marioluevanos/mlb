@@ -4,7 +4,7 @@ import { cn } from "./utils/cn";
 export type TabsProps = {
   className?: string;
   children?: ReactNode[];
-  tabs?: string[];
+  tabs?: ReactNode[];
 };
 
 export const Tabs: FC<TabsProps> = (props) => {

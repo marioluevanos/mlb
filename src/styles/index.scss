@@ -96,6 +96,7 @@ body.game-open {
   font-size: 12px;
   letter-spacing: 0.05rem;
   text-transform: uppercase;
+  font-family: var(--font);
   font-weight: 600;
   color: var(--text1);
   background: var(--bg1);
@@ -789,10 +790,6 @@ details[id][open] > summary {
   flex-wrap: wrap;
   justify-content: space-between;
 
-  &:first-child {
-    padding-top: 1rem;
-  }
-
   h3 {
     flex: 1 0 100%;
   }
@@ -1036,6 +1033,10 @@ details[id][open] > summary {
   padding-bottom: 0.5rem;
 }
 
+.tabs {
+  padding: 1rem 0 0;
+}
+
 .tabs-actions {
   display: flex;
   padding: 0 1rem 0;
@@ -1049,4 +1050,13 @@ details[id][open] > summary {
     background: var(--bg2);
     color: var(--text);
   }
+}
+
+.tabs .label {
+  margin-left: 0.5rem;
+  font-size: 10px;
+  text-transform: none;
+  letter-spacing: none;
+  font-family: var(--font);
+  color: var(--text1);
 }

@@ -13,7 +13,7 @@ export const GameDecisions: FC<GameDecisionsProps> = (props) => {
   return (
     decisions?.winner && (
       <div className="game-decisions">
-        <h3>Decision</h3>
+        {/* <h3>Decision</h3> */}
         {decisions.winner && (
           <span className="winner player">
             <span className="player-summary">{decisions.winner?.summary}</span>

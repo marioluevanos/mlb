@@ -206,6 +206,9 @@ export const Game: FC<GameProps> = (props) => {
             away={away.startingPitcher}
           />
         )}
+
+        <GameDecisions decisions={game.decisions} />
+
         {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
         {inProgress && (
           <GameMatchup
@@ -222,7 +225,16 @@ export const Game: FC<GameProps> = (props) => {
             />
           </GameMatchup>
         )}
-        <Tabs tabs={[game.away.abbreviation, game.home.abbreviation]}>
+        <Tabs
+          tabs={[
+            <>
+              {game.away.abbreviation} <span className="label">(Away)</span>
+            </>,
+            <>
+              {game.home.abbreviation} <span className="label">(Home)</span>
+            </>,
+          ]}
+        >
           <BoxPlayers
             title={`${game.away.abbreviation} Batting`}
             stats={game.away.stats}
@@ -234,8 +246,6 @@ export const Game: FC<GameProps> = (props) => {
             position="Batting"
           />
         </Tabs>
-
-        <GameDecisions decisions={game.decisions} />
 
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />

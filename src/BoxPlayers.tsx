@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { TeamClub } from "./Team";
 import { cn } from "./utils/cn";
 
@@ -7,10 +7,11 @@ type BoxPlayersProps = {
   stats?: TeamClub["stats"];
   className?: string;
   position: "Batting" | "Pitching";
+  header?: ReactNode;
 };
 
 export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
-  const { className, stats, title, position } = props;
+  const { header, className, stats, title, position } = props;
   const firstName = (name: string) => {
     const [first, last] = name.split(" ");
     return `${first.slice(0, 1)}. ${last}`;
@@ -20,6 +21,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
     stats?.players && (
       <div className={cn("box-players", className)}>
         <h3>{title}</h3>
+        {header}
         <div className="box-row labels">
           <span className="box-name">Lineup</span>
           {position === "Batting" ? (
