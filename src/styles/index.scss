@@ -1035,3 +1035,18 @@ details[id][open] > summary {
   border-bottom: 1px dotted var(--bg2);
   padding-bottom: 0.5rem;
 }
+
+.tabs-actions {
+  display: flex;
+  padding: 0 1rem 0;
+  gap: 1rem;
+
+  .button {
+    flex: 1;
+  }
+
+  .button.active {
+    background: var(--bg2);
+    color: var(--text);
+  }
+}

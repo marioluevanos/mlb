@@ -14,6 +14,7 @@ import { PlayEvent, PlayEvents } from "./PlayEvents";
 import { BoxPlayers } from "./BoxPlayers";
 import { isWinner } from "./utils/isWinner";
 import { cn } from "./utils/cn";
+import { Tabs } from "./Tabs";
 
 export type GameStatus =
   | "Final"
@@ -205,7 +206,7 @@ export const Game: FC<GameProps> = (props) => {
             away={away.startingPitcher}
           />
         )}
-        <GameDecisions decisions={game.decisions} />
+        {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
         {inProgress && (
           <GameMatchup
             key={
@@ -221,27 +222,21 @@ export const Game: FC<GameProps> = (props) => {
             />
           </GameMatchup>
         )}
-        <BoxPlayers
-          title="Batting"
-          team={game.away.abbreviation}
-          stats={game.away.stats}
-        />
-        <BoxPlayers
-          title="Batting"
-          team={game.home.abbreviation}
-          stats={game.home.stats}
-        />
-        {/* <BoxPlayers
-          title="Pitching"
-          team={game.away.abbreviation}
-          stats={game.away.stats}
-        />
-        <BoxPlayers
-          title="Pitching"
-          team={game.home.abbreviation}
-          stats={game.home.stats}
-        /> */}
-        {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
+        <Tabs tabs={[game.away.abbreviation, game.home.abbreviation]}>
+          <BoxPlayers
+            title={`${game.away.abbreviation} Batting`}
+            stats={game.away.stats}
+            position="Batting"
+          />
+          <BoxPlayers
+            title={`${game.home.abbreviation} Batting`}
+            stats={game.home.stats}
+            position="Batting"
+          />
+        </Tabs>
+
+        <GameDecisions decisions={game.decisions} />
+
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />
         ) : null}
@@ -249,6 +244,7 @@ export const Game: FC<GameProps> = (props) => {
           title={isPre ? "Preview" : "Highlights"}
           highlights={game.highlights}
         />
+
         {!isFinal && <GameStreams streams={game.streams} />}
       </footer>
     </details>

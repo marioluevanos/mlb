@@ -3,14 +3,14 @@ import { TeamClub } from "./Team";
 import { cn } from "./utils/cn";
 
 type BoxPlayersProps = {
-  team: string;
+  title?: string;
   stats?: TeamClub["stats"];
   className?: string;
-  title: "Batting" | "Pitching";
+  position: "Batting" | "Pitching";
 };
 
 export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
-  const { className, stats, team, title } = props;
+  const { className, stats, title, position } = props;
   const firstName = (name: string) => {
     const [first, last] = name.split(" ");
     return `${first.slice(0, 1)}. ${last}`;
@@ -21,8 +21,8 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
       <div className={cn("box-players", className)}>
         <h3>{title}</h3>
         <div className="box-row labels">
-          <span className="box-name">{team}</span>
-          {title === "Batting" ? (
+          <span className="box-name">Lineup</span>
+          {position === "Batting" ? (
             <span className="box-stats">
               <span>AB</span>
               <span>R</span>
@@ -51,7 +51,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
             <span className="box-name" data-pos={player.position}>
               {firstName(player.fullName)}
             </span>
-            {title === "Batting" ? (
+            {position === "Batting" ? (
               <span className="box-stats">
                 <span>{player.game.batting?.atBats}</span>
                 <span>{player.game.batting?.runs}</span>

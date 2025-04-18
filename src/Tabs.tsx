@@ -1,0 +1,40 @@
+import { FC, Fragment, ReactNode, useState } from "react";
+import { cn } from "./utils/cn";
+
+export type TabsProps = {
+  className?: string;
+  children?: ReactNode[];
+  tabs?: string[];
+};
+
+export const Tabs: FC<TabsProps> = (props) => {
+  const { className, children, tabs } = props;
+  const [activeTab, setActiveTab] = useState<number>(0);
+
+  console.log([children]);
+
+  return (
+    <section className={cn("tabs", className)}>
+      <div className="tabs-actions">
+        {tabs?.map((t, i) => (
+          <button
+            className={cn("button", i === activeTab && "active")}
+            key={i}
+            onClick={() => {
+              setActiveTab(i);
+            }}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+      <div className="tabs-content">
+        {children
+          ?.filter((_, i) => i === activeTab)
+          .map((c, i) => (
+            <Fragment key={i}>{c}</Fragment>
+          ))}
+      </div>
+    </section>
+  );
+};
