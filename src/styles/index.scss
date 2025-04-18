@@ -322,6 +322,10 @@ details {
   margin: 0;
   padding: 0;
 
+  > :first-child {
+    padding-top: 1rem;
+  }
+
   > h3:first-child {
     margin: 0 0 1rem;
     padding: 1rem 1rem 0;
@@ -349,6 +353,7 @@ details {
     position: sticky;
     top: 0;
     z-index: 100;
+    padding-top: 0;
   }
 }
 
@@ -1000,6 +1005,7 @@ details[id][open] > summary {
   justify-content: space-evenly;
   margin-left: auto;
   text-align: right;
+  align-items: center;
 
   span {
     text-align: center;
@@ -1018,7 +1024,7 @@ details[id][open] > summary {
 }
 
 .box-row.players .box-name {
-  font-size: 10px;
+  // font-size: 10px;
 }
 
 .box-row.players .box-name::after {
@@ -1059,4 +1065,8 @@ details[id][open] > summary {
   letter-spacing: none;
   font-family: var(--font);
   color: var(--text1);
+}
+
+.tabs:has(.tabs-content:empty) {
+  display: none;
 }

@@ -8,9 +8,10 @@ export async function updateMatchup(
   gameId: number
 ): Promise<CurrentMatchup | undefined> {
   const { batter, pitcher } = matchup;
+
   const [batterResponse, pitcherResponse] = await Promise.all([
-    getPlayerGameStats(batter.id, gameId),
-    getPlayerGameStats(pitcher.id, gameId),
+    getPlayerGameStats(batter?.id, gameId),
+    getPlayerGameStats(pitcher?.id, gameId),
   ]);
 
   const gameHitting = getGameStats(batterResponse, "hitting");
@@ -74,9 +75,11 @@ type MLBPlayerGameStats = {
 };
 
 async function getPlayerGameStats(
-  playerId: number,
+  playerId: number | undefined,
   gameId: number
 ): Promise<MLBPlayerGameStats | undefined> {
+  if (!playerId) return;
+
   const URL = `https://statsapi.mlb.com/api/v1/people/${playerId}/stats/game/${gameId}`;
 
   try {
@@ -111,5 +114,5 @@ function getGameStats(
   group: "hitting" | "pitching"
 ) {
   const [stats] = gameStats?.stats || [];
-  return (stats.splits || []).find((s) => s.group === group);
+  return (stats?.splits || []).find((s) => s.group === group);
 }

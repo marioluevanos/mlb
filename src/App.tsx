@@ -172,6 +172,17 @@ function App() {
   /**
    * Handle game click
    */
+  const onLogoClick = useCallback(() => {
+    // Close all details (games)
+    gameRefs.current.forEach((d) => {
+      d.open = false;
+    });
+    document.body.classList.remove("game-open");
+  }, []);
+
+  /**
+   * Handle game click
+   */
   const onGameClick = useCallback(
     (event: BaseSyntheticEvent) => {
       toggleGameOpen(event);
@@ -240,7 +251,7 @@ function App() {
 
   return (
     <>
-      <Header date={data.date}>
+      <Header date={data.date} onLogoClick={onLogoClick}>
         <HeaderNav
           key="header-nav"
           onRefresh={onRefresh}

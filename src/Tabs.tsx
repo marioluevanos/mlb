@@ -8,12 +8,10 @@ export type TabsProps = {
 };
 
 export const Tabs: FC<TabsProps> = (props) => {
-  const { className, children, tabs } = props;
+  const { className, children, tabs = [] } = props;
   const [activeTab, setActiveTab] = useState<number>(0);
 
-  console.log([children]);
-
-  return (
+  return tabs?.length > 0 ? (
     <section className={cn("tabs", className)}>
       <div className="tabs-actions">
         {tabs?.map((t, i) => (
@@ -36,5 +34,5 @@ export const Tabs: FC<TabsProps> = (props) => {
           ))}
       </div>
     </section>
-  );
+  ) : null;
 };

@@ -151,6 +151,24 @@ export const Game: FC<GameProps> = (props) => {
   const isPre = isPreGame || isScheduled || isWarmup;
   const winner = isWinner(home, away);
 
+  const boxTabs = [];
+
+  if (game.away.stats?.players.length) {
+    boxTabs.push(
+      <>
+        {game.away.abbreviation} <span className="label">(Away)</span>
+      </>
+    );
+  }
+
+  if (game.home.stats?.players.length) {
+    boxTabs.push(
+      <>
+        {game.home.abbreviation} <span className="label">(Home)</span>
+      </>
+    );
+  }
+
   return (
     <details
       ref={ref}
@@ -225,23 +243,14 @@ export const Game: FC<GameProps> = (props) => {
             />
           </GameMatchup>
         )}
-        <Tabs
-          tabs={[
-            <>
-              {game.away.abbreviation} <span className="label">(Away)</span>
-            </>,
-            <>
-              {game.home.abbreviation} <span className="label">(Home)</span>
-            </>,
-          ]}
-        >
+        <Tabs tabs={boxTabs}>
           <BoxPlayers
-            title={`${game.away.abbreviation} Batting`}
+            title={`Lineup (${game.away.abbreviation})`}
             stats={game.away.stats}
             position="Batting"
           />
           <BoxPlayers
-            title={`${game.home.abbreviation} Batting`}
+            title={`Lineup (${game.home.abbreviation})`}
             stats={game.home.stats}
             position="Batting"
           />
