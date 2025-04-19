@@ -518,7 +518,6 @@ figure.game-highlight {
 
 details summary {
   padding: 2rem 1rem;
-  // min-height: 4rem;
   display: grid;
   outline-offset: 8px;
   grid-template-columns: 1fr auto;
@@ -967,4 +966,12 @@ summary:not(.final) .home.BOT .inning:last-child {
 
 .tabs:has(.tabs-content:empty) {
   display: none;
+}
+
+.win {
+  color: var(--accent);
+}
+
+.loss {
+  color: hsl(0 100% 60%);
 }

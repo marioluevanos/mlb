@@ -15,9 +15,11 @@ export const HeaderNav: FC<HeaderNavProps> = (props) => {
 
   return (
     <nav className="ctas">
-      <span className="today">
-        {day}, {today}
-      </span>
+      {day && today && (
+        <span className="today">
+          {day}, {today}
+        </span>
+      )}
       {/* <button
       id="previous-date"
       className={cn("button", isLoading && "loading")}

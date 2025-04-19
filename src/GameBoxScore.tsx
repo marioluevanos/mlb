@@ -30,7 +30,11 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
     boxTabs.push(
       <>
         <span className="label">{away.abbreviation} (Away)</span>
-        {isFinal && winner === "away" ? <span>🏆</span> : null}
+        {isFinal && winner === "away" ? (
+          <span className="win">W</span>
+        ) : (
+          <span className="loss">L</span>
+        )}
       </>
     );
   }
@@ -39,7 +43,11 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
     boxTabs.push(
       <>
         <span className="label">{home.abbreviation} (Home)</span>
-        {isFinal && winner === "home" ? <span>🏆</span> : null}
+        {isFinal && winner === "home" ? (
+          <span className="win">W</span>
+        ) : (
+          <span className="loss">L</span>
+        )}
       </>
     );
   }

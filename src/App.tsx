@@ -274,17 +274,15 @@ function App() {
         />
       </Header>
       {Array.isArray(data?.games) ? (
-        data.games
-          .filter((g) => g.id === 778251)
-          .map((game, i) => (
-            <Game
-              onClick={onGameClick}
-              ref={setGameRefs.bind(null, i)}
-              key={game.id}
-              game={game}
-              isLoading={isLoading}
-            />
-          ))
+        data.games.map((game, i) => (
+          <Game
+            onClick={onGameClick}
+            ref={setGameRefs.bind(null, i)}
+            key={game.id}
+            game={game}
+            isLoading={isLoading}
+          />
+        ))
       ) : (
         <p>No games today</p>
       )}
