@@ -336,9 +336,6 @@ details {
 }
 
 .game-open [open] .game-footer {
-  height: calc(100vh - 48px - 104px);
-  overflow: hidden scroll;
-
   .game-matchup {
     background: var(--bg);
     position: sticky;
@@ -913,7 +910,7 @@ details[id][open] > summary {
 
 .box-stats {
   display: grid;
-  grid-template-columns: repeat(6, 4ch) 6ch 6ch;
+  grid-template-columns: repeat(6, 3ch) 6ch 6ch;
   justify-content: space-evenly;
   margin-left: auto;
   text-align: right;
