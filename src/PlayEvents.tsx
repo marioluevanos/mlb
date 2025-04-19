@@ -25,6 +25,8 @@ export const PlayEvents: FC<PlayEventsProps> = (props) => {
     return event.isPitch && event.details?.isInPlay;
   };
 
+  console.log(events);
+
   return events.length > 0 ? (
     <div className={cn("play-events", className)}>
       <ol>

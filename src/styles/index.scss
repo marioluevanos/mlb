@@ -163,18 +163,6 @@ h1 {
   gap: 0.5rem;
   align-items: center;
   font: 700 0px/1 var(--font);
-
-  &::after {
-    content: attr(data-date);
-    display: inline-flex;
-    color: var(--text1);
-    pointer-events: none;
-    white-space: nowrap;
-    font-weight: 400;
-    font-size: 12px;
-    text-transform: none;
-    letter-spacing: 0;
-  }
 }
 
 .logo {
@@ -589,12 +577,14 @@ details[open] {
 
 details[open] summary {
   transition: none;
-  // position: sticky;
-  // top: 48px;
   background: var(--bg);
   z-index: 100;
   padding-bottom: 1rem;
   box-shadow: 0 1px 1px hsl(0deg 0% 0%/8%);
+
+  @media (prefers-color-scheme: dark) {
+    box-shadow: 0 1px 0 hsl(0deg 0% 100%/8%);
+  }
 }
 
 details summary * {
@@ -626,10 +616,15 @@ details[id][open] > summary {
 }
 .inning-title::after {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 400;
   content: attr(data-num);
   display: inline-flex;
   color: var(--text1);
+}
+
+.inning-title.active::after {
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .inning-title {
@@ -640,10 +635,29 @@ details[id][open] > summary {
 }
 
 .inning {
-  width: 2ch;
+  width: 1.5ch;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
+  z-index: 1;
+  color: var(--text1);
+  margin: 0 2px;
+}
+
+.away.TOP .inning:last-child,
+.home.BOT .inning:last-child {
+  color: var(--text);
+
+  &::after {
+    border: 1px dotted var(--accent);
+    border-radius: 4px;
+    position: absolute;
+    inset: 0;
+    content: "";
+    z-index: -1;
+    // opacity: 0.16;
+  }
 }
 
 .game-placeholder-box {
@@ -676,10 +690,6 @@ details[id][open] > summary {
     padding-left: 0;
     padding-right: 0;
   }
-}
-
-[data-status="In Progress"] .game-matchup {
-  padding-top: 0;
 }
 
 .game-bug {
@@ -721,6 +731,17 @@ details[id][open] > summary {
   align-items: center;
   display: flex;
   gap: 1rem;
+}
+
+.today {
+  display: inline-flex;
+  color: var(--text1);
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .game-starting-pitchers {

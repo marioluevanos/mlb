@@ -17,7 +17,14 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
       {team === "away" && (
         <div className="innings title">
           {Array.from({ length: totalInnings }, (_, i) => (
-            <span className="inning-title" key={i} data-num={i + 1} />
+            <span
+              className={cn(
+                "inning-title",
+                i === innings.length - 1 && "active"
+              )}
+              key={i}
+              data-num={i + 1}
+            />
           ))}
         </div>
       )}

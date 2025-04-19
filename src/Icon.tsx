@@ -195,3 +195,50 @@ export const HourglassIcon: FC = () => {
     </svg>
   );
 };
+
+export const BaseballPlayerIcon: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="currentColor">
+        <circle
+          cx="8.5"
+          cy="3"
+          fill="none"
+          r="1.5"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="3.5"
+          x2="5.5"
+          y1="4.5"
+          y2="0.5"
+        />
+        <path
+          d="M2.5,6.5l2,1,2-1h3a1,1,0,0,1,1,1v3l1,5"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <polyline
+          fill="none"
+          points="5.5 15.5 6.5 10.5 6.5 8.5"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};

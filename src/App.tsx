@@ -265,7 +265,7 @@ function App() {
 
   return (
     <>
-      <Header date={data.date} onLogoClick={onLogoClick}>
+      <Header onLogoClick={onLogoClick}>
         <HeaderNav
           key="header-nav"
           onRefresh={onRefresh}
