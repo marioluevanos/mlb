@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { cn } from "./utils/cn";
-import { GameToday } from "./Game";
+import { GameToday } from "./types";
 import { TriangleDown, TriangleUp } from "./Icon";
 
 export type CurrentInningProps = {

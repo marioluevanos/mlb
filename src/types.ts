@@ -26,7 +26,7 @@ export type TeamClub = {
   logo: string;
   id: number;
   players: GamePlayer[];
-} & TeamStats;
+} & Partial<TeamStats>;
 
 export type TeamRoster = GamePlayer;
 

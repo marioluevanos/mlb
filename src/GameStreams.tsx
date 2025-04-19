@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { GameStream } from "./Game";
+import { GameStream } from "./types";
 
 type GameStreamsProps = {
   streams?: GameStream[];

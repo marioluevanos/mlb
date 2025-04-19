@@ -20,6 +20,7 @@ export function loadingData(cacheKey?: string): GameData {
         innings: [],
         away: {
           id: 1,
+          players: [],
           battingOrder: [],
           startingPitcher: {
             fullName: "XXXXXXXXXXXX",
@@ -34,6 +35,7 @@ export function loadingData(cacheKey?: string): GameData {
         },
         home: {
           id: 0,
+          players: [],
           battingOrder: [],
           startingPitcher: {
             fullName: "XXXXXXXXXXXX",

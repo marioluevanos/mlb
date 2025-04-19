@@ -1,4 +1,4 @@
-import { CurrentMatchup } from "../Game";
+import { CurrentMatchup } from "../types";
 
 /**
  * Updated the current game matchup, Batter vs Pitcher

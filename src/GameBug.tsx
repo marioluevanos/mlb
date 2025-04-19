@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { CurrentPlay } from "./Game";
+import { CurrentPlay } from "./types";
 import { cn } from "./utils/cn";
 import { CurrentInning } from "./CurrentInning";
 

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { cn } from "./utils/cn";
-import { GameStatus, TeamScore as Score } from "./Game";
+import { GameStatus, TeamScore as Score } from "./types";
 
 type TeamScoreProps = {
   score?: Score;

@@ -1,5 +1,5 @@
 import { FC, useMemo } from "react";
-import { GamePlayer } from "./Game";
+import { GamePlayer } from "./types";
 
 type GameStartingPitchersProps = {
   home: GamePlayer;
