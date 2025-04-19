@@ -94,7 +94,11 @@ export const Game: FC<GameProps> = (props) => {
         )}
 
         <GameDecisions decisions={game.decisions} />
-        <TeamCompare away={game.away} home={game.home} />
+
+        {!isPre && !isPostponed && (
+          <TeamCompare away={game.away} home={game.home} />
+        )}
+
         {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
         {inProgress && (
           <GameMatchup

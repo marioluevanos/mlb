@@ -14,18 +14,16 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   return !media ? null : (
-    <>
-      <div className="game-highlight">
-        <h3>{title}</h3>
-        <video
-          ref={videoRef}
-          poster={media.placeholder?.lg?.src}
-          controls
-          src={media.video.url}
-        ></video>
-        <h4>{media.title}</h4>
-        <p>{media.description}</p>
-      </div>
+    <div className="game-highlight">
+      <h3>{title}</h3>
+      <video
+        ref={videoRef}
+        poster={media.placeholder?.lg?.src}
+        controls
+        src={media.video.url}
+      ></video>
+      <h4>{media.title}</h4>
+      <p>{media.description}</p>
       <div
         className="game-highlights"
         style={cssVars({
@@ -61,6 +59,6 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
           </figure>
         ))}
       </div>
-    </>
+    </div>
   );
 };

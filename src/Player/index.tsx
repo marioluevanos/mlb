@@ -21,8 +21,8 @@ export const Player: FC<PlayerProps> = (props) => {
   const note = hasNote
     ? gameStats.note
     : isPitcher
-    ? `${pitching?.era}`
-    : `${batting?.avg} AVG, ${batting?.ops} OPS`;
+    ? `${pitching?.era} ERA`
+    : batting && `${batting?.avg} AVG, ${batting?.ops} OPS`;
 
   return (
     player && (

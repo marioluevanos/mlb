@@ -76,7 +76,7 @@ body {
 }
 
 body.game-open {
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 #header {
@@ -303,15 +303,6 @@ details {
   font-size: 2rem;
 }
 
-.starting-pitcher {
-  margin-left: auto;
-  font-size: 12px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .game-time {
   font-weight: 600;
   white-space: nowrap;
@@ -466,6 +457,7 @@ details[open] .game-streams iframe {
 
 div.game-highlight {
   position: relative;
+  padding: 1rem 0;
 
   h3 {
     padding: 0 1rem;
@@ -735,23 +727,19 @@ details[id][open] > summary {
   align-items: center;
   padding: 0 1rem 1.5rem;
 
-  &:first-child {
-    padding-top: 1rem;
-  }
-
-  .starting-pitcher.player {
-    flex: 1 0 40%;
-    margin: 0;
-  }
-
   .vs {
     text-align: center;
-    flex: 1 0 20%;
+    flex: 1 4%;
     font-size: 12px;
   }
 
-  .player-avatar {
-    margin: auto;
+  .player {
+    flex: 1 0 40%;
+    margin: 0;
+
+    .player-note {
+      display: none;
+    }
   }
 
   h3 {

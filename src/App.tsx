@@ -85,7 +85,11 @@ function App() {
     if (document.body.classList.contains("game-open")) {
       const details = gameRefs.current.find((d) => d.open);
       const game = data.games.find((g) => details && g.id === +details.id);
-      if (game) updateLiveGame(game);
+      if (game) {
+        setIsLoading(true);
+        await updateLiveGame(game);
+        setIsLoading(false);
+      }
     } else {
       document.body.classList.remove("game-open");
       setData(loadingData());

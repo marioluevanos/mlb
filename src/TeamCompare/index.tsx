@@ -93,12 +93,12 @@ const CompareRow: FC<TeamCompareProps & { children?: ReactNode }> = (props) => {
 };
 
 function isMore(away: number | undefined, home: number | undefined) {
-  if (home && away) {
-    if (home && (home || 0) > (away || 0)) {
+  if (typeof home === "number" && typeof away === "number") {
+    if (home > away) {
       return "home";
     }
 
-    if (home && (home || 0) < (away || 0)) {
+    if (home < away) {
       return "away";
     }
   }
