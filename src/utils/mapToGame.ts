@@ -59,6 +59,8 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const homeTeam = mapToTeam("home", data);
   const status = gameData.status.detailedState;
 
+  console.log(plays);
+
   return {
     ...g,
     status,

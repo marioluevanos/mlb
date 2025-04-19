@@ -1,6 +1,7 @@
 import { FC, ReactNode, useCallback, useMemo } from "react";
 import { cn } from "./utils/cn";
 import { GamePlayer } from "./types";
+import { GameBoxScoreProps } from "./GameBoxScore";
 
 type BoxPlayersProps = {
   title?: string;
@@ -8,10 +9,11 @@ type BoxPlayersProps = {
   className?: string;
   position: "Batting" | "Pitching";
   header?: ReactNode;
+  matchup?: GameBoxScoreProps["matchup"];
 };
 
 export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
-  const { header, className, players = [], title, position } = props;
+  const { matchup, header, className, players = [], title, position } = props;
 
   const firstName = (name: string) => {
     const [_, last] = name.split(" ");
@@ -95,8 +97,11 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
       {currentPlayers.map((player) => (
         <div
           key={player.id}
+          data-player-id={player.id}
           className={cn(
             "box-row players",
+            matchup?.batterId === player.id && "active",
+            matchup?.pitcherId === player.id && "active",
             position.toLowerCase(),
             ph(player.battingOrder)
           )}

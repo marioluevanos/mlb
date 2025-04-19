@@ -123,6 +123,10 @@ export const Game: FC<GameProps> = (props) => {
 
         <GameBoxScore
           status={game.status}
+          matchup={{
+            batterId: game.currentPlay?.matchup.batter.id,
+            pitcherId: game.currentPlay?.matchup.pitcher.id,
+          }}
           away={game.away}
           home={game.home}
           winner={winner}
