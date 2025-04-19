@@ -76,7 +76,12 @@ body {
 }
 
 body.game-open {
-  // overflow: hidden;
+  overflow: hidden;
+
+  details[open] {
+    height: calc(100svh - 48px);
+    overflow: hidden scroll;
+  }
 }
 
 #header {
@@ -335,16 +340,6 @@ details {
   }
 }
 
-.game-open [open] .game-footer {
-  .game-matchup {
-    background: var(--bg);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    padding-top: 0;
-  }
-}
-
 .top-performers {
   display: flex;
   flex-wrap: wrap;
@@ -467,6 +462,7 @@ div.game-highlight {
   }
 
   h4 {
+    margin: 1rem 0;
     padding: 0 1rem;
     font-size: 14px;
     color: var(--text);
@@ -522,7 +518,7 @@ figure.game-highlight {
 
 details summary {
   padding: 2rem 1rem;
-  min-height: 4rem;
+  // min-height: 4rem;
   display: grid;
   outline-offset: 8px;
   grid-template-columns: 1fr auto;
@@ -593,10 +589,10 @@ details[open] {
 
 details[open] summary {
   transition: none;
-  position: sticky;
-  top: 48px;
+  // position: sticky;
+  // top: 48px;
   background: var(--bg);
-  z-index: 10;
+  z-index: 100;
   padding-bottom: 1rem;
   box-shadow: 0 1px 1px hsl(0deg 0% 0%/8%);
 }
@@ -674,6 +670,16 @@ details[id][open] > summary {
   .current-matchup {
     flex: 1;
   }
+
+  .play-events {
+    flex: 1 0 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+[data-status="In Progress"] .game-matchup {
+  padding-top: 0;
 }
 
 .game-bug {
@@ -695,11 +701,10 @@ details[id][open] > summary {
 
 .game-footer .game-decisions {
   font-size: 14px;
-  padding: 0.5rem 1rem 0.5rem;
+  padding: 1rem 1rem 0.5rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding-top: 0;
 
   h3 {
     flex: 1 0 100%;
@@ -840,55 +845,6 @@ details[id][open] > summary {
   padding: 1rem;
 }
 
-.play-events {
-  padding: 1rem 1rem 0;
-
-  ol {
-    counter-reset: section;
-    font-size: 12px;
-    padding: 0;
-    line-height: 1;
-    list-style: none;
-  }
-
-  li {
-    position: relative;
-    padding-left: 2rem;
-    display: flex;
-    margin-bottom: 1rem;
-  }
-
-  .status-icon {
-    counter-increment: section;
-    content: counter(section);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 1.5rem;
-    background: var(--bg2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .event {
-    color: var(--text1);
-    font-size: 10px;
-    line-height: 1;
-    display: inline-block;
-    border-radius: 4px;
-  }
-
-  .description {
-    color: var(--text);
-    font-size: 12px;
-    line-height: 1.5;
-    display: block;
-  }
-}
-
 .box-players {
   padding: 1rem;
   font-size: 12px;
@@ -950,7 +906,7 @@ details[id][open] > summary {
 
 .tabs-actions {
   display: flex;
-  padding: 0 1rem 0;
+  padding: 0 1rem 0.5rem;
   gap: 1rem;
 
   .button {
@@ -965,10 +921,9 @@ details[id][open] > summary {
 }
 
 .tabs .label {
-  margin-left: 0.5rem;
   font-size: 10px;
   text-transform: none;
-  letter-spacing: none;
+  letter-spacing: 0;
   font-family: var(--font);
 }
 

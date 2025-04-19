@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { cn } from "../utils/cn";
-import { GamePlayer } from "../types";
-import "./Player.scss";
+import { cn } from "./utils/cn";
+import { GamePlayer } from "./types";
+import "./styles/Player.scss";
 
 type PlayerProps = {
   className?: string;

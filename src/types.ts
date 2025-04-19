@@ -1,9 +1,10 @@
-import { BattingRecord, FieldingRecord, PitchingRecord } from "./mlb.types";
-
-export type PlayEvent = {
-  event: string;
-  description: string;
-};
+import {
+  BattingRecord,
+  FieldingRecord,
+  PitchingRecord,
+  PlayEvent,
+  PlayResult,
+} from "./mlb.types";
 
 export type TeamRecord = {
   wins: number;
@@ -136,6 +137,7 @@ export type CurrentPlay = {
   matchup: CurrentMatchup;
   count: CurrentCount;
   events: PlayEvent[];
+  result?: PlayResult;
   runners: {
     first?: GamePlayer;
     second?: GamePlayer;

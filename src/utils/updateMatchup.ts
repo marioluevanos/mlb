@@ -38,24 +38,6 @@ export async function updateMatchup(
   };
 }
 
-// async function getPlayerStats(
-//   playerIds: (string | number)[],
-//   group: "pitching" | "hitting",
-//   season: number = 2025
-// ) {
-//   const ids = playerIds.map((id) => `personIds=${id}`).join("&");
-//   const URL = `https://statsapi.mlb.com/api/v1/people?${ids}&season=${season}&hydrate=stats(group=${group},type=season,season=${season},gameType=[R])`;
-//   try {
-//     const response = await fetch(URL);
-//     if (response.ok) {
-//       const json = response.json();
-//       return json;
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 type MLBPitchingStats = {
   summary: string;
   numberOfPitches: number;

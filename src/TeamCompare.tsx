@@ -1,8 +1,8 @@
 import { FC, ReactNode } from "react";
-import { Team } from "../Team";
-import { TeamClub } from "../types";
-import "./TeamCompare.scss";
-import { cn } from "../utils/cn";
+import { Team } from "./Team";
+import { TeamClub } from "./types";
+import { cn } from "./utils/cn";
+import "./styles/TeamCompare.scss";
 
 export type TeamCompareProps = {
   className?: string;

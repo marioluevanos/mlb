@@ -99,3 +99,99 @@ export const TriangleDown: FC = () => {
     </svg>
   );
 };
+
+export const SwitchIcon: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="currentColor" strokeMiterlimit="10">
+        <polyline
+          fill="none"
+          points="11.5,0.5 15.5,4.5 11.5,8.5 "
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <polyline
+          fill="none"
+          points="4.5,7.5 0.5,11.5 4.5,15.5 "
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="0.5"
+          x2="15.5"
+          y1="4.5"
+          y2="4.5"
+        />
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="15.5"
+          x2="0.5"
+          y1="11.5"
+          y2="11.5"
+        />
+      </g>
+    </svg>
+  );
+};
+
+export const HourglassIcon: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="currentColor" strokeMiterlimit="10">
+        <path
+          d="M12.5,15.5 c0,0,0-0.784,0-1c0-2.843-0.955-5.39-2.5-6.5c1.545-1.11,2.5-3.657,2.5-6.5c0-0.216,0-1,0-1"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M3.5,15.5 c0,0,0-0.784,0-1C3.5,11.657,4.455,9.11,6,8C4.455,6.89,3.5,4.343,3.5,1.5c0-0.216,0-1,0-1"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="1.5"
+          x2="14.5"
+          y1="0.5"
+          y2="0.5"
+        />
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="1.5"
+          x2="14.5"
+          y1="15.5"
+          y2="15.5"
+        />
+      </g>
+    </svg>
+  );
+};

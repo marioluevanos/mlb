@@ -37,8 +37,6 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
     summary: `${pitching?.earnedRuns} ERA, ${pitching?.whip} WHIP`,
   };
 
-  console.log({ startingPitcher });
-
   return {
     record: teams[team].record.leagueRecord,
     name: teams[team].name,
@@ -70,13 +68,8 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
     currentPlay: {
       count: currentPlay?.count,
-      events: currentPlay?.playEvents.map((e) => ({
-        event:
-          "event" in e.details && typeof e.details.event === "string"
-            ? e.details.event
-            : "",
-        description: e.details.description,
-      })),
+      events: currentPlay?.playEvents,
+      result: currentPlay.result,
       runners: {
         second: offense.second,
         third: offense.third,

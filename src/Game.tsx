@@ -95,11 +95,6 @@ export const Game: FC<GameProps> = (props) => {
 
         <GameDecisions decisions={game.decisions} />
 
-        {!isPre && !isPostponed && (
-          <TeamCompare away={game.away} home={game.home} />
-        )}
-
-        {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
         {inProgress && (
           <GameMatchup
             key={
@@ -113,10 +108,25 @@ export const Game: FC<GameProps> = (props) => {
               currentPlay={game.currentPlay}
               currentInning={game.currentInning}
             />
+            {!isFinal && (
+              <PlayEvents
+                events={game.currentPlay?.events}
+                result={game.currentPlay?.result}
+              />
+            )}
           </GameMatchup>
         )}
 
-        <GameBoxScore away={game.away} home={game.home} winner={winner} />
+        {!isPre && !isPostponed && (
+          <TeamCompare away={game.away} home={game.home} />
+        )}
+
+        <GameBoxScore
+          status={game.status}
+          away={game.away}
+          home={game.home}
+          winner={winner}
+        />
 
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />
