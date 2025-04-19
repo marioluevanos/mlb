@@ -804,6 +804,7 @@ export type PitchingRecord = {
   popOuts: number;
   lineOuts: number;
   summary?: string;
+  note?: string;
 };
 
 export type BattingRecord = {

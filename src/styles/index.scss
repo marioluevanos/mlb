@@ -370,73 +370,12 @@ details {
   }
 }
 
-.player {
-  display: grid;
-  margin: 0 0 1rem;
-  gap: 0.5rem 0.5rem;
-  font-size: 12px;
-  flex: 1 0 calc(100% - 1rem);
-  align-items: center;
-  line-height: 1;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "avatar name summary";
-
-  &:last-child {
-    margin-bottom: 0.25rem;
-  }
-
-  & p {
-    margin: 0;
-  }
-}
-
 .footer-title {
   font-family: sans-serif;
   margin: 0 0 1rem;
   font-size: 12px;
   font-weight: 600;
   color: var(--text1);
-}
-
-.player-avatar {
-  width: 2rem;
-  height: 2rem;
-  display: block;
-  margin: 0;
-}
-
-.player-name {
-  line-height: 1.5;
-  color: var(--text);
-  font-weight: 600;
-
-  .player:has(.player-summary) & {
-    margin: 0 0 0.25rem;
-  }
-
-  &[data-pos]::after {
-    content: "(" attr(data-pos) ")";
-    font-weight: 400;
-    color: var(--text1);
-    margin-left: 0.25rem;
-  }
-}
-
-.player .player-summary {
-  color: var(--text1);
-  text-wrap: balance;
-}
-
-.player .player-avatar {
-  grid-area: avatar;
-}
-
-.player .player-name {
-  grid-area: name;
-}
-
-.player .player-summary {
-  grid-area: summary;
 }
 
 .game-streams {
@@ -746,29 +685,6 @@ details[id][open] > summary {
   .current-matchup {
     flex: 1;
   }
-
-  .player {
-    margin: 0;
-    gap: 0 0.5rem;
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-      "avatar name"
-      "avatar summary";
-  }
-
-  .player-name {
-    margin: 0;
-    align-self: flex-end;
-  }
-
-  .player-summary {
-    margin: 0;
-    align-self: flex-start;
-  }
-
-  .player:not(:last-child) {
-    margin: 0 0 1rem;
-  }
 }
 
 .game-bug {
@@ -788,12 +704,13 @@ details[id][open] > summary {
   }
 }
 
-.game-decisions {
+.game-footer .game-decisions {
   font-size: 14px;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem 0.5rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  padding-top: 0;
 
   h3 {
     flex: 1 0 100%;
@@ -999,9 +916,16 @@ details[id][open] > summary {
   margin-bottom: 4px;
 }
 
+.box-row.ph.batting {
+  &::before {
+    content: "—";
+    margin-right: 0.25rem;
+  }
+}
+
 .box-stats {
   display: grid;
-  grid-template-columns: repeat(6, 3ch) 6ch 6ch;
+  grid-template-columns: repeat(6, 4ch) 6ch 6ch;
   justify-content: space-evenly;
   margin-left: auto;
   text-align: right;
@@ -1021,10 +945,6 @@ details[id][open] > summary {
 .box-row .box-name {
   grid-area: name;
   color: var(--text);
-}
-
-.box-row.players .box-name {
-  // font-size: 10px;
 }
 
 .box-row.players .box-name::after {
@@ -1049,12 +969,13 @@ details[id][open] > summary {
   gap: 1rem;
 
   .button {
+    justify-content: space-between;
+    color: var(--text);
     flex: 1;
   }
 
   .button.active {
     background: var(--bg2);
-    color: var(--text);
   }
 }
 
@@ -1064,7 +985,6 @@ details[id][open] > summary {
   text-transform: none;
   letter-spacing: none;
   font-family: var(--font);
-  color: var(--text1);
 }
 
 .tabs:has(.tabs-content:empty) {

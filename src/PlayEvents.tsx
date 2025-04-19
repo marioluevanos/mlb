@@ -1,10 +1,6 @@
 import { FC } from "react";
 import { cn } from "./utils/cn";
-
-export type PlayEvent = {
-  event: string;
-  description: string;
-};
+import { PlayEvent } from "./types";
 
 type PlayEventsProps = {
   events?: PlayEvent[];

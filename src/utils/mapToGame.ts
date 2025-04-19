@@ -1,81 +1,73 @@
-import { GameToday, GameTopPerformers } from "../Game";
-import { Decisions, MLBLive, Performer } from "../mlb.types";
-import { TeamClub } from "../Team";
+import { Decisions, MLBLive, Performer, Player } from "../mlb.types";
+import { GamePlayer, GameStatus, GameToday, TeamClub } from "../types";
 
-type PlayerSats = NonNullable<TeamClub["stats"]>["players"];
+function toGamePlayer(p: Player): GamePlayer {
+  return {
+    game: {
+      batting: p.stats.batting,
+      pitching: p.stats.pitching,
+    },
+    season: {
+      batting: p.seasonStats.batting,
+      pitching: p.seasonStats.pitching,
+    },
+    jerseyNumber: p.jerseyNumber,
+    battingOrder: p.battingOrder ? Number(p.battingOrder) : undefined,
+    position: p.position.abbreviation,
+    fullName: p.person.fullName,
+    id: p.person.id,
+    avatar: avatar(p.person.id),
+  };
+}
+
+const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
+  const { gameData, liveData } = data;
+  const { linescore, boxscore } = liveData;
+  const { teams, probablePitchers } = gameData;
+  const players = Object.values(boxscore.teams[team].players).map(toGamePlayer);
+
+  return {
+    record: teams[team].record.leagueRecord,
+    name: teams[team].name,
+    id: teams[team].id,
+    score: linescore.teams[team],
+    startingPitcher: {
+      fullName: probablePitchers?.[team]?.fullName,
+      id: probablePitchers?.[team]?.id,
+      avatar: avatar(probablePitchers?.[team]?.id),
+    },
+    abbreviation: teams?.[team].abbreviation,
+    logo: logo(teams[team].id),
+    ...boxscore.teams[team].teamStats,
+    players,
+  };
+};
 
 export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const { gameData, liveData } = data;
-  const { linescore, boxscore, plays } = liveData;
-  const play = plays?.currentPlay;
-  const { offense } = liveData?.linescore;
-  const { teams, probablePitchers } = gameData;
-
-  const mapToTeam = (team: "home" | "away"): TeamClub => {
-    const players: PlayerSats = Object.values(boxscore.teams[team].players).map(
-      (p) => ({
-        game: {
-          batting: p.stats.batting,
-          pitching: p.stats.pitching,
-        },
-        season: {
-          batting: p.seasonStats.batting,
-          pitching: p.seasonStats.pitching,
-        },
-        position: p.position.abbreviation,
-        fullName: p.person.fullName,
-        id: p.person.id,
-        avatar: avatar(p.person.id),
-      })
-    );
-
-    const order = boxscore.teams[team].battingOrder.reduce<PlayerSats>(
-      (acc, id) => {
-        const player = players.find((p) => p.id === id);
-
-        if (player) acc.push(player);
-
-        return acc;
-      },
-      []
-    );
-
-    return {
-      record: teams[team].record.leagueRecord,
-      name: teams[team].name,
-      id: teams[team].id,
-      score: linescore.teams[team],
-      startingPitcher: {
-        fullName: probablePitchers?.[team]?.fullName,
-        id: probablePitchers?.[team]?.id,
-        avatar: avatar(probablePitchers?.[team]?.id),
-      },
-      abbreviation: teams?.[team].abbreviation,
-      logo: logo(teams[team].id),
-      stats: {
-        team: boxscore.teams[team].teamStats,
-        players: order,
-      },
-    };
-  };
+  const { linescore, boxscore, plays, decisions } = liveData;
+  const { currentPlay } = plays;
+  const { offense } = linescore;
+  const awayTeam = mapToTeam("away", data);
+  const homeTeam = mapToTeam("home", data);
+  const status = gameData.status.detailedState;
 
   return {
     ...g,
-    status: gameData.status.detailedState,
-    away: mapToTeam("away"),
-    home: mapToTeam("home"),
+    status,
+    away: awayTeam,
+    home: homeTeam,
     innings: linescore.innings,
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
     currentPlay: {
-      count: play?.count,
-      events: [],
-      // events: play.playEvents.map((e) => ({
-      //   event:
-      //     "event" in e.details && typeof e.details.event === "string"
-      //       ? e.details.event
-      //       : "",
-      //   description: e.details.description,
-      // })),
+      count: currentPlay?.count,
+      events: currentPlay?.playEvents.map((e) => ({
+        event:
+          "event" in e.details && typeof e.details.event === "string"
+            ? e.details.event
+            : "",
+        description: e.details.description,
+      })),
       runners: {
         second: offense.second,
         third: offense.third,
@@ -83,26 +75,60 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
       },
       matchup: {
         batter: {
-          ...play?.matchup.batter,
-          avatar: avatar(play?.matchup.batter.id),
-          bats: play?.matchup.batSide.code,
+          ...currentPlay?.matchup.batter,
+          avatar: avatar(currentPlay?.matchup.batter.id),
+          bats: currentPlay?.matchup.batSide.code,
         },
         pitcher: {
-          ...play?.matchup.pitcher,
-          avatar: avatar(play?.matchup.pitcher.id),
-          throws: play?.matchup.pitchHand.code,
+          ...currentPlay?.matchup.pitcher,
+          avatar: avatar(currentPlay?.matchup.pitcher.id),
+          throws: currentPlay?.matchup.pitchHand.code,
         },
       },
     },
     currentInning: `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
       linescore?.currentInningOrdinal || 0
     }`,
+    decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
 }
 
-function topPerformers(payload: Performer): GameTopPerformers {
+function getDecision(
+  state: GameStatus,
+  decisions: Decisions,
+  away: TeamClub,
+  home: TeamClub
+):
+  | {
+      winner: GamePlayer;
+      loser: GamePlayer;
+      save?: GamePlayer;
+    }
+  | undefined {
+  const final = state === "Final" || state === "Game Over";
+
+  if (!final) return;
+
+  const winner =
+    Number(away.score.runs) > Number(home.score.runs) ? "away" : "home";
+  const looser =
+    Number(away.score.runs) < Number(home.score.runs) ? "away" : "home";
+  const teams = { home, away };
+
+  const wp = teams[winner]?.players.find((p) => p.id === decisions.winner.id);
+  const lp = teams[looser]?.players.find((p) => p.id === decisions.loser.id);
+  const sv = teams[winner]?.players.find((p) => p.id === decisions.save?.id);
+
+  return {
+    winner: wp || decisions.winner,
+    loser: lp || decisions.loser,
+    save: sv || decisions.save,
+  };
+}
+
+function topPerformers(payload: Performer): GamePlayer {
   const { type, player } = payload;
-  const { stats, person, position } = player;
+  const { stats, person, position, seasonStats } = player;
   let summary = "";
 
   if (type === "hitter" && stats.batting.summary) {
@@ -118,8 +144,16 @@ function topPerformers(payload: Performer): GameTopPerformers {
     jerseyNumber: player.jerseyNumber,
     id: person.id,
     fullName: person.fullName,
-    pos: position.abbreviation,
+    position: position.abbreviation,
     summary,
+    game: {
+      batting: stats.batting,
+      pitching: stats.pitching,
+    },
+    season: {
+      batting: seasonStats.batting,
+      pitching: seasonStats.pitching,
+    },
   };
 }
 
@@ -134,10 +168,3 @@ function logo(teamId: number | string | undefined) {
 
   return `https://midfield.mlbstatic.com/v1/team/${teamId}/spots/64`;
 }
-
-/**
- * Asset an `href` as PathNames
- */
-export const isDecision = (
-  href: string | keyof Decisions
-): href is keyof Decisions => ["winner", "loser", "save"].includes(href);

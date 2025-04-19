@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, FC, Ref } from "react";
-import { Team, TeamClub } from "./Team";
+import { Team } from "./Team";
 import { TeamScore } from "./TeamScore";
 import { GameDetails } from "./GameDetails";
 import { TopPerformers } from "./TopPerformers";
@@ -10,126 +10,12 @@ import { GameMatchup } from "./GameMatchup";
 import { GameDecisions } from "./GameDecisions";
 import { GameStartingPitchers } from "./GameStartingPitchers";
 import { GameBug } from "./GameBug";
-import { PlayEvent, PlayEvents } from "./PlayEvents";
-import { BoxPlayers } from "./BoxPlayers";
+import { PlayEvents } from "./PlayEvents";
 import { isWinner } from "./utils/isWinner";
 import { cn } from "./utils/cn";
-import { Tabs } from "./Tabs";
-
-export type GameStatus =
-  | "Final"
-  | "Scheduled"
-  | "Pre-Game"
-  | "Postponed"
-  | "In Progress"
-  | "Game Over"
-  | "Warmup"
-  // Check these with startsWith
-  | "Umpire review"
-  | "Manager challenge";
-
-export type GameTopPerformers = {
-  jerseyNumber: string;
-  pos: string;
-  summary: string;
-} & Player;
-
-export type GameHighlights = {
-  type: string;
-  title: string;
-  description?: string;
-  placeholder: {
-    sm: {
-      src: string;
-      width: number;
-      height: number;
-    };
-    lg: {
-      src: string;
-      width: number;
-      height: number;
-    };
-  };
-  video: {
-    url: string;
-  };
-};
-
-export type GameStream = {
-  name: string;
-  url: string;
-};
-
-export type TeamScore = {
-  runs?: number;
-  hits: number;
-  errors: number;
-  leftOnBase: number;
-};
-
-export type GameInnings = {
-  away: TeamScore;
-  home: TeamScore;
-  num: number;
-  ordinalNum: string;
-};
-
-export type GameToday = {
-  id: number;
-  feed: string;
-  content: string;
-  status: GameStatus;
-  away: TeamClub;
-  home: TeamClub;
-  time: string;
-  currentInning: string;
-  topPerformers: GameTopPerformers[];
-  highlights: GameHighlights[];
-  streams: GameStream[];
-  innings: GameInnings[];
-  currentPlay?: CurrentPlay;
-  decisions?: GameDecision;
-};
-
-export type GameDecision = {
-  winner: Player;
-  loser: Player;
-  save?: Player;
-};
-
-export type Player = {
-  id: number;
-  avatar?: string;
-  fullName: string;
-  summary?: string;
-  position?: string;
-};
-
-export type CurrentMatchup = {
-  batter: {
-    bats: string;
-  } & Player;
-  pitcher: {
-    throws: string;
-  } & Player;
-};
-
-export type CurrentCount = {
-  balls: number;
-  strikes: number;
-  outs: number;
-};
-
-export type CurrentPlay = {
-  matchup: CurrentMatchup;
-  count: CurrentCount;
-  events: PlayEvent[];
-  runners: {
-    first?: Player;
-    second?: Player;
-    third?: Player;
-  };
-};
+import { GameToday } from "./types";
+import { GameBoxScore } from "./GameBoxScore";
+import { TeamCompare } from "./TeamCompare";
 
 export type GameProps = {
   className?: string;
@@ -150,24 +36,6 @@ export const Game: FC<GameProps> = (props) => {
   const isWarmup = game.status === "Warmup";
   const isPre = isPreGame || isScheduled || isWarmup;
   const winner = isWinner(home, away);
-
-  const boxTabs = [];
-
-  if (game.away.stats?.players.length) {
-    boxTabs.push(
-      <>
-        {game.away.abbreviation} <span className="label">(Away)</span>
-      </>
-    );
-  }
-
-  if (game.home.stats?.players.length) {
-    boxTabs.push(
-      <>
-        {game.home.abbreviation} <span className="label">(Home)</span>
-      </>
-    );
-  }
 
   return (
     <details
@@ -226,7 +94,7 @@ export const Game: FC<GameProps> = (props) => {
         )}
 
         <GameDecisions decisions={game.decisions} />
-
+        <TeamCompare away={game.away} home={game.home} />
         {!isFinal && <PlayEvents events={game.currentPlay?.events} />}
         {inProgress && (
           <GameMatchup
@@ -243,18 +111,8 @@ export const Game: FC<GameProps> = (props) => {
             />
           </GameMatchup>
         )}
-        <Tabs tabs={boxTabs}>
-          <BoxPlayers
-            title={`Lineup (${game.away.abbreviation})`}
-            stats={game.away.stats}
-            position="Batting"
-          />
-          <BoxPlayers
-            title={`Lineup (${game.home.abbreviation})`}
-            stats={game.home.stats}
-            position="Batting"
-          />
-        </Tabs>
+
+        <GameBoxScore away={game.away} home={game.home} winner={winner} />
 
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />

@@ -6,13 +6,14 @@ import {
   useState,
 } from "react";
 import { Header } from "./Header";
-import { CurrentMatchup, Game, GameStatus, GameToday } from "./Game";
+import { Game } from "./Game";
 import { Standings } from "./Standings";
 import { HeaderNav } from "./HeaderNav";
 import { loadingData } from "./utils/loadingData";
 import { timeAgo } from "./utils/timeAgo";
 import { mapToGame } from "./utils/mapToGame";
 import { updateMatchup } from "./utils/updateMatchup";
+import { CurrentMatchup, GameStatus, GameToday } from "./types";
 
 export type GameData = {
   date: string;
@@ -44,9 +45,7 @@ function App() {
   const acquireWakeLock = useCallback(async () => {
     try {
       wakeRef.current = await navigator.wakeLock.request("screen");
-      wakeRef.current.addEventListener("release", () => {
-        console.log("Screen Wake Lock was released");
-      });
+      wakeRef.current.addEventListener("release", () => undefined);
     } catch (error) {
       console.error(error);
     }
@@ -83,12 +82,29 @@ function App() {
    * Refresh data
    */
   const onRefresh = useCallback(async () => {
-    setData(loadingData());
-    const data = await getData();
-    if (data) {
-      setData(data);
+    if (document.body.classList.contains("game-open")) {
+      const details = gameRefs.current.find((d) => d.open);
+      const game = data.games.find((g) => details && g.id === +details.id);
+      if (game) updateLiveGame(game);
+    } else {
+      document.body.classList.remove("game-open");
+      setData(loadingData());
+      const d = await getData();
+      if (d) setData(d);
     }
   }, [getData]);
+
+  /**
+   * Is Game in progrss
+   */
+  const isGameInProgress = useCallback((status: GameStatus) => {
+    return (
+      status === "In Progress" ||
+      status === "Warmup" ||
+      status.startsWith("Umpire review") ||
+      status.startsWith("Manager challenge")
+    );
+  }, []);
 
   /**
    * Updates live game
@@ -101,7 +117,7 @@ function App() {
         const updatedGame = mapToGame(game, json);
 
         let matchup: CurrentMatchup | undefined;
-        if (updatedGame.currentPlay?.matchup) {
+        if (updatedGame.currentPlay?.matchup && isGameInProgress(game.status)) {
           matchup = await updateMatchup(
             updatedGame.currentPlay?.matchup,
             updatedGame.id
@@ -151,7 +167,7 @@ function App() {
         requestAnimationFrame(() => {
           if (details.open) {
             setOpenGame(Number(details.id));
-            scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
+            scrollTo({ behavior: "instant", top: details.offsetTop - 48 });
             const game = data.games.find((g) => g.id === +details.id);
             if (game) {
               updateLiveGame(game);
@@ -208,13 +224,7 @@ function App() {
       status: GameStatus,
       gameOpenId: typeof openGame
     ): boolean => {
-      return (
-        (status === "In Progress" ||
-          status === "Warmup" ||
-          status.startsWith("Umpire review") ||
-          status.startsWith("Manager challenge")) &&
-        gameId === gameOpenId
-      );
+      return isGameInProgress(status) && gameId === gameOpenId;
     },
     []
   );

@@ -1,9 +1,9 @@
 import { FC, useMemo } from "react";
-import { Player } from "./Game";
+import { GamePlayer } from "./Game";
 
 type GameStartingPitchersProps = {
-  home: Player;
-  away: Player;
+  home: GamePlayer;
+  away: GamePlayer;
 };
 
 export const GameStartingPitchers: FC<GameStartingPitchersProps> = (props) => {
@@ -18,7 +18,7 @@ export const GameStartingPitchers: FC<GameStartingPitchersProps> = (props) => {
   );
 };
 
-const StartingPitcher: FC<Player> = (props) => {
+const StartingPitcher: FC<GamePlayer> = (props) => {
   const { fullName, avatar, summary } = props;
 
   const pitcher = useMemo(() => {

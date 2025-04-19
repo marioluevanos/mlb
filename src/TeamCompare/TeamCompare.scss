@@ -1,0 +1,63 @@
+.team-compare {
+  padding: 1rem 1rem 0;
+
+  .team-logo {
+    display: none;
+  }
+
+  .team {
+    gap: 1rem;
+  }
+}
+
+.team-compare .cols {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+}
+
+.team-compare .cols .val {
+  font-size: 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+
+  &.team {
+    text-align: left;
+  }
+
+  .team-name {
+    font-size: 14px;
+  }
+
+  &.away {
+    span:first-child {
+      color: var(--text);
+      font-weight: 600;
+    }
+  }
+  &.home {
+    span:last-child {
+      color: var(--text);
+      font-weight: 600;
+    }
+  }
+}
+
+.team-compare .cols .val[data-label]::before {
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  color: var(--text1);
+  top: -0.5rem;
+  transform: translateY(calc(-100% - 0.5rem));
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  align-items: flex-end;
+  content: attr(data-label);
+}

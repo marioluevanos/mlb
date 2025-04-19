@@ -1,4 +1,4 @@
-import { TeamClub } from "../Team";
+import { TeamClub } from "../types";
 
 export function isWinner(home: TeamClub, away: TeamClub) {
   if (home && away) {
