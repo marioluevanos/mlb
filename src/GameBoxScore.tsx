@@ -2,6 +2,7 @@ import { FC } from "react";
 import { GamePlayer, GameStatus, TeamClub } from "./types";
 import { Tabs } from "./Tabs";
 import { BoxPlayers } from "./BoxPlayers";
+import { cn } from "./utils/cn";
 
 export type GameBoxScoreProps = {
   home: TeamClub;
@@ -25,15 +26,17 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
   const hasHomePitching = hasData("pitching", home.players);
   const isFinal = status === "Final" || status === "Game Over";
   const boxTabs = [];
+  const awayWin = winner === "away";
+  const homeWin = winner === "home";
 
   if (hasAwayBatting || hasAwayPitching) {
     boxTabs.push(
       <>
         <span className="label">{away.abbreviation} (Away)</span>
-        {isFinal && winner === "away" ? (
-          <span className="win">W</span>
-        ) : (
-          <span className="loss">L</span>
+        {isFinal && (
+          <span className={cn(awayWin ? "win" : "loss")}>
+            {awayWin ? "W" : "L"} {away.record.wins}&ndash;{away.record.losses}
+          </span>
         )}
       </>
     );
@@ -43,10 +46,10 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
     boxTabs.push(
       <>
         <span className="label">{home.abbreviation} (Home)</span>
-        {isFinal && winner === "home" ? (
-          <span className="win">W</span>
-        ) : (
-          <span className="loss">L</span>
+        {isFinal && (
+          <span className={cn(homeWin ? "win" : "loss")}>
+            {homeWin ? "W" : "L"} {home.record.wins}&ndash;{home.record.losses}
+          </span>
         )}
       </>
     );

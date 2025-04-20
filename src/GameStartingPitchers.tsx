@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { GamePlayer } from "./types";
 import { Player } from "./Player";
+import "./styles/GameStartingPitchers.scss";
 
 type GameStartingPitchersProps = {
   home: GamePlayer;
