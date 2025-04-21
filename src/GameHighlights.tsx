@@ -1,4 +1,12 @@
-import { FC, useEffect, useId, useRef, useState } from "react";
+import {
+  BaseSyntheticEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { cssVars } from "./utils/cssVars";
 import { GameHighlight } from "./types";
 import "./styles/GameHighlights.scss";
@@ -8,6 +16,7 @@ type GameHighlightsProps = {
   highlights?: GameHighlight[];
   title?: string;
   onFullscreenChange?: () => void;
+  isOpen?: boolean;
 };
 
 export const GameHighlights: FC<GameHighlightsProps> = (props) => {
@@ -15,18 +24,65 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
     highlights = [],
     title,
     onFullscreenChange = () => undefined,
+    isOpen,
   } = props;
   const id = useId();
   const [media, setMedia] = useState<GameHighlight>(highlights[0]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   /**
-   *
+   * Play video
+   */
+  const playVideo = useCallback(async () => {
+    try {
+      if (videoRef?.current) {
+        await videoRef.current.play();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  /**
+   * Highlight click handler
+   */
+  const onHighlightClick = useCallback(
+    (highlight: GameHighlight, event: BaseSyntheticEvent) => {
+      event.preventDefault();
+      setMedia(highlight);
+      if (videoRef.current?.paused) {
+        playVideo();
+      } else {
+        videoRef.current?.pause();
+      }
+    },
+    []
+  );
+
+  /**
+   * Stop playing the video
+   */
+  useEffect(() => {
+    console.log({ isOpen });
+    if (!isOpen) {
+      videoRef.current?.pause();
+    }
+  }, [isOpen]);
+
+  /**
+   * Add events to on fullscreen change
    */
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.addEventListener("fullscreenchange", onFullscreenChange);
     }
+
+    return () => {
+      videoRef.current?.removeEventListener(
+        "fullscreenchange",
+        onFullscreenChange
+      );
+    };
   }, []);
 
   return !media ? null : (
@@ -44,7 +100,6 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
         <h4>{media.title}</h4>
         {media.description && <p>{media.description}</p>}
       </div>
-
       <div
         className="game-highlights vertical"
         style={cssVars({
@@ -59,14 +114,7 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
                 highlight.title === media.title && "active"
               )}
               title={highlight.title}
-              onClick={() => {
-                setMedia(highlight);
-                requestAnimationFrame(() => {
-                  if (videoRef.current) {
-                    videoRef.current.play();
-                  }
-                });
-              }}
+              onClick={onHighlightClick.bind(null, highlight)}
             >
               {highlight.title}
             </button>

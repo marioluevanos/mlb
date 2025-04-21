@@ -12,6 +12,7 @@ import { loadingData } from "./utils/loadingData";
 import { timeAgo } from "./utils/timeAgo";
 import { mapToGame } from "./utils/mapToGame";
 import { GameStatus, GameToday } from "./types";
+import { MLBContent } from "./mlb.types";
 
 export type GameData = {
   date: string;
@@ -50,6 +51,32 @@ function App() {
       console.error(error);
     }
   }, []);
+
+  /**
+   *
+   */
+  const scrollToGame = useCallback(
+    (
+      gameId: string | undefined,
+      behavior: ScrollOptions["behavior"] = "smooth"
+    ) => {
+      const game = gameRefs.current.find((d) => d.id === gameId);
+      if (game) {
+        scrollTo({ behavior, top: game.offsetTop - 48 });
+      }
+    },
+    []
+  );
+
+  /**
+   *
+   */
+  const onFullscreenChange = useCallback(() => {
+    () => {
+      document.body.classList.remove("game-open");
+      scrollToGame(openGame?.toString(), "instant");
+    };
+  }, [scrollToGame, openGame?.toString()]);
 
   /**
    * Get data from API or cache
@@ -119,11 +146,13 @@ function App() {
       if (response.ok) {
         const json = await response.json();
         const updatedGame = mapToGame(game, json);
+        const highlights = await getHighlights(game.content);
 
         const updatedData = {
           date: new Date().toISOString(),
           games: data.games.map((g) => {
             if (updatedGame && g.id === updatedGame.id) {
+              updatedGame.highlights = highlights;
               return updatedGame;
             }
             return g;
@@ -139,6 +168,32 @@ function App() {
   );
 
   /**
+   * Updates live game
+   */
+  const getHighlights = useCallback(
+    async (contentUrl: string): Promise<GameToday["highlights"]> => {
+      const response = await fetch(contentUrl);
+      const content = (await response.json()) as MLBContent;
+      const items = content.highlights?.highlights?.items;
+
+      return items.map((item) => ({
+        type: item.type,
+        title: item.title,
+        description: item.description,
+        duration: item.duration,
+        placeholder: {
+          sm: item.image?.cuts.find((img) => img.width < 400),
+          lg: item.image?.cuts.find((img) => img.width < 1400),
+        },
+        video:
+          item.playbacks.find((vid) => vid.name === "mp4Avc") ||
+          item.playbacks[0],
+      }));
+    },
+    [data]
+  );
+
+  /**
    * Toggle game open state
    */
   const toggleGameOpen = useCallback(
@@ -147,45 +202,43 @@ function App() {
 
       const details = event.target.parentElement;
       if (details) {
-        // Close all details (games)
         gameRefs.current.forEach((d) => {
           if (d.id !== details.id) {
-            d.open = false;
+            d.open = false; // Close all details (games)
           }
         });
 
         // Open the game clicked
-        requestAnimationFrame(() => {
-          if (details.open) {
-            setOpenGame(Number(details.id));
-            const top = details.offsetTop - 48;
-            console.log(top);
-            scrollTo({ behavior: "smooth", top });
-            const game = data.games.find((g) => g.id === +details.id);
-            if (game) {
-              updateLiveGame(game);
-            }
-            acquireWakeLock();
-            document.body.classList.add("game-open");
-          } else {
-            setOpenGame(undefined);
-            releaseWakeLock();
-            document.body.classList.remove("game-open");
-          }
-        });
+        if (details.open) {
+          setOpenGame(Number(details.id));
+          scrollToGame(details.id, "smooth");
+          const game = data.games.find((g) => g.id === +details.id);
+          if (game) updateLiveGame(game);
+          acquireWakeLock();
+          document.body.classList.add("game-open");
+        } else {
+          setOpenGame(undefined);
+          releaseWakeLock();
+          document.body.classList.remove("game-open");
+        }
       }
     },
-    [data.games, acquireWakeLock, releaseWakeLock, updateLiveGame]
+    [data.games, acquireWakeLock, releaseWakeLock, updateLiveGame, scrollToGame]
   );
 
   /**
    * Handle game click
    */
   const onLogoClick = useCallback(() => {
-    // Close all details (games)
+    let activeGame;
     gameRefs.current.forEach((d) => {
-      d.open = false;
+      if (d.open) activeGame = d.id;
+      d.open = false; // Close all details (games)
     });
+
+    setOpenGame(undefined);
+    scrollToGame(activeGame, "instant");
+    releaseWakeLock();
     document.body.classList.remove("game-open");
   }, []);
 
@@ -221,14 +274,6 @@ function App() {
     },
     []
   );
-
-  const onFullscreenChange = () => {
-    document.body.classList.remove("game-open");
-    const game = gameRefs.current.find((d) => d.id === openGame?.toString());
-    if (game) {
-      scrollTo({ behavior: "smooth", top: game.offsetTop - 48 });
-    }
-  };
 
   /**
    * Initialize data
@@ -273,18 +318,21 @@ function App() {
       {Array.isArray(data?.games) ? (
         data.games.map((game, i) => (
           <Game
-            onClick={onGameClick}
             onFullscreenChange={onFullscreenChange}
             ref={setGameRefs.bind(null, i)}
+            onClick={onGameClick}
+            isLoading={isLoading}
             key={game.id}
             game={game}
-            isLoading={isLoading}
+            isOpen={game.id === openGame}
           />
         ))
       ) : (
         <p>No games today</p>
       )}
-      <p className="last-updated">Last updated {timeAgo(data.date)}</p>
+      {data.date && (
+        <p className="last-updated">Last updated {timeAgo(data.date)}</p>
+      )}
     </>
   );
 }

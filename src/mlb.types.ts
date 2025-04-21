@@ -15,6 +15,63 @@ export type MLBLive = {
   };
 };
 
+export interface MLBContent {
+  highlights: HighlightsData;
+}
+
+export interface HighlightsData {
+  scoreboard: null;
+  gameCenter: null;
+  milestone: null;
+  highlights: HighlightCollection;
+}
+
+export interface HighlightCollection {
+  items: HighlightItem[];
+}
+
+export interface HighlightItem {
+  type: string;
+  state: string;
+  date: string;
+  id: string;
+  headline: string;
+  seoTitle: string;
+  slug: string;
+  blurb: string;
+  image: HighlightImage;
+  noIndex: boolean;
+  mediaPlaybackId: string;
+  title: string;
+  description: string;
+  duration: string;
+  mediaPlaybackUrl: string;
+  playbacks: Playback[];
+}
+
+export interface HighlightImage {
+  title: string;
+  altText: string | null;
+  templateUrl: string;
+  cuts: ImageCut[];
+}
+
+export interface ImageCut {
+  aspectRatio: string;
+  width: number;
+  height: number;
+  src: string;
+  at2x: string;
+  at3x: string;
+}
+
+export interface Playback {
+  name: string;
+  url: string;
+  width: string;
+  height: string;
+}
+
 /**
  * Game Data
  */

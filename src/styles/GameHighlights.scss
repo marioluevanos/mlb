@@ -18,9 +18,12 @@
   }
 
   &:has(.vertical) .current-game-highlight {
-    background: var(--bg1);
+    background: var(--bg);
+    border-bottom: 1px solid var(--bg2);
+    // backdrop-filter: blur(16px) brightness(100%);
     position: sticky;
-    top: 48px;
+    /* 48px - header, 104px - summary */
+    top: calc(48px);
     z-index: 10;
     padding-bottom: 1.5rem;
   }
@@ -47,10 +50,11 @@
 .game-highlights {
   position: relative;
   display: flex;
+  background: var(--bg);
 
   &.vertical {
     flex-direction: column;
-    padding: 1rem;
+    padding: 1.5rem 1rem 1rem;
     gap: 1rem;
 
     .game-highlight-item {
@@ -113,6 +117,7 @@
   }
 
   & img {
+    background: var(--bg);
     width: 100%;
     height: auto;
     display: block;

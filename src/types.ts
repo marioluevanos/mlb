@@ -1,7 +1,9 @@
 import {
   BattingRecord,
   FieldingRecord,
+  ImageCut,
   PitchingRecord,
+  Playback,
   PlayEvent,
   PlayResult,
 } from "./mlb.types";
@@ -48,20 +50,10 @@ export type GameHighlight = {
   title: string;
   description?: string;
   placeholder: {
-    sm: {
-      src: string;
-      width: number;
-      height: number;
-    };
-    lg: {
-      src: string;
-      width: number;
-      height: number;
-    };
+    sm?: ImageCut;
+    lg?: ImageCut;
   };
-  video: {
-    url: string;
-  };
+  video: Playback;
 };
 
 export type GameStream = {

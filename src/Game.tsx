@@ -24,10 +24,11 @@ export type GameProps = {
   onClick?: (event: BaseSyntheticEvent) => void;
   ref?: Ref<HTMLDetailsElement | null> | null;
   onFullscreenChange?: () => void;
+  isOpen?: boolean;
 };
 
 export const Game: FC<GameProps> = (props) => {
-  const { game, isLoading, ref, onClick, onFullscreenChange } = props;
+  const { game, isLoading, ref, onClick, onFullscreenChange, isOpen } = props;
   const { away, home } = game;
   const isFinal = game.status === "Final" || game.status === "Game Over";
   const isPreGame = game.status === "Pre-Game";
@@ -140,6 +141,7 @@ export const Game: FC<GameProps> = (props) => {
           title={isPre ? "Preview" : "Highlights"}
           highlights={game.highlights}
           onFullscreenChange={onFullscreenChange}
+          isOpen={isOpen}
         />
 
         {!isFinal && <GameStreams streams={game.streams} />}
