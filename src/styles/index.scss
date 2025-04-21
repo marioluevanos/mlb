@@ -781,6 +781,10 @@ summary:not(.final) .home.BOT .inning:last-child {
   padding: 0 1rem 0.5rem;
   gap: 1rem;
 
+  &:empty {
+    display: none;
+  }
+
   .button {
     justify-content: space-between;
     color: var(--text);
@@ -805,6 +809,12 @@ summary:not(.final) .home.BOT .inning:last-child {
 
 .tabs:has(.tabs-content:empty) {
   display: none;
+}
+
+.tabs div {
+  &:empty {
+    display: none;
+  }
 }
 
 .win {

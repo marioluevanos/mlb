@@ -73,7 +73,7 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const status = gameData.status.detailedState;
   const matchup = getCurrentMatchup({
     players: [...awayTeam.players, ...homeTeam.players],
-    matchup: currentPlay.matchup,
+    matchup: currentPlay?.matchup,
   });
 
   return {
@@ -93,16 +93,8 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
         first: offense.first,
       },
       matchup: {
-        batter: {
-          ...matchup.batter,
-          avatar: avatar(currentPlay?.matchup.batter.id),
-          bats: currentPlay?.matchup.batSide.code,
-        },
-        pitcher: {
-          ...matchup.pitcher,
-          avatar: avatar(currentPlay?.matchup.pitcher.id),
-          throws: currentPlay?.matchup.pitchHand.code,
-        },
+        batter: matchup?.batter,
+        pitcher: matchup?.pitcher,
       },
     },
     currentInning: `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
@@ -119,10 +111,10 @@ function getCurrentMatchup(args: {
   const { players, matchup } = args;
 
   const [batter, pitcher] = players.reduce<GamePlayer[]>((acc, player) => {
-    if (player.id === matchup.batter.id) {
+    if (matchup?.batter && player.id === matchup.batter.id) {
       acc.push(player);
     }
-    if (player.id === matchup.pitcher.id) {
+    if (matchup?.pitcher && player.id === matchup.pitcher.id) {
       acc.push(player);
     }
     return acc;
@@ -131,11 +123,13 @@ function getCurrentMatchup(args: {
   return {
     batter: {
       ...batter,
-      bats: matchup.batSide.code,
+      bats: matchup?.batSide?.code,
+      avatar: avatar(matchup?.pitcher.id),
     },
     pitcher: {
       ...pitcher,
-      throws: matchup.pitchHand.code,
+      throws: matchup?.pitchHand?.code,
+      avatar: avatar(matchup?.pitcher.id),
     },
   };
 }

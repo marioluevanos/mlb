@@ -57,21 +57,23 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
 
   return (
     <section className={cn("game-box-score tabs")}>
-      <div className="tabs-actions">
-        {boxTabs?.map((t, i) => (
-          <button
-            className={cn("button", i === activeTab && "active")}
-            key={i}
-            onClick={() => {
-              setActiveTab(i);
-            }}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
+      {boxTabs.length > 0 ? (
+        <div className="tabs-actions">
+          {boxTabs?.map((t, i) => (
+            <button
+              className={cn("button", i === activeTab && "active")}
+              key={i}
+              onClick={() => {
+                setActiveTab(i);
+              }}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      ) : null}
       <div className="tabs-content">
-        {activeTab === 0 && (
+        {activeTab === 0 && (hasAwayBatting || hasAwayPitching) && (
           <div>
             {hasAwayBatting && (
               <BoxPlayers
@@ -95,7 +97,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
             )}
           </div>
         )}
-        {activeTab === 1 && (
+        {activeTab === 1 && (hasHomeBatting || hasHomePitching) && (
           <div>
             {hasHomeBatting && (
               <BoxPlayers
