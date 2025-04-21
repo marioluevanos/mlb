@@ -2,7 +2,7 @@ import { FC } from "react";
 import { cn } from "./utils/cn";
 import { PlayEvent, PlayResult } from "./mlb.types";
 import "./styles/PlayEvents.scss";
-import { HourglassIcon, SwitchIcon } from "./Icon";
+import { CapIcon, HourglassIcon, SwitchIcon } from "./Icon";
 
 type PlayEventsProps = {
   events?: Partial<PlayEvent>[];
@@ -49,15 +49,16 @@ export const PlayEvents: FC<PlayEventsProps> = (props) => {
                   event.pitchNumber
                 ) : isSub(event) ? (
                   <SwitchIcon />
+                ) : event.details &&
+                  "eventType" in event.details &&
+                  event.details.eventType === "mound_visit" ? (
+                  <CapIcon />
                 ) : (
                   <HourglassIcon />
                 )}
               </span>
 
               <span className="description">
-                {event.details && "event" in event.details && (
-                  <span className="event">{event.details.event}</span>
-                )}
                 {isInPlay(event)
                   ? result?.description
                   : event.details?.description}

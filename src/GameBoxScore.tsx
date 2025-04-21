@@ -1,6 +1,5 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { GamePlayer, GameStatus, TeamClub } from "./types";
-import { Tabs } from "./Tabs";
 import { BoxPlayers } from "./BoxPlayers";
 import { cn } from "./utils/cn";
 
@@ -18,6 +17,7 @@ export type GameBoxScoreProps = {
 
 export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
   const { home, away, winner, status, matchup } = props;
+  const [activeTab, setActiveTab] = useState<number>(0);
   const hasData = (type: "batting" | "pitching", players: GamePlayer[] = []) =>
     players.some((p) => p.game && Object.values(p.game[type] || {}).length > 0);
   const hasAwayBatting = hasData("batting", away.players);
@@ -56,47 +56,70 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
   }
 
   return (
-    <Tabs tabs={boxTabs}>
-      <div>
-        {hasAwayBatting && (
-          <BoxPlayers
-            title={`Batting (${away.abbreviation})`}
-            players={away.players}
-            position="Batting"
-            key="batting-away"
-            matchup={matchup}
-          />
+    <section className={cn("game-box-score tabs")}>
+      <div className="tabs-actions">
+        {boxTabs?.map((t, i) => (
+          <button
+            className={cn("button", i === activeTab && "active")}
+            key={i}
+            onClick={() => {
+              setActiveTab(i);
+            }}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+      <div className="tabs-content">
+        {activeTab === 0 && (
+          <div>
+            {hasAwayBatting && (
+              <BoxPlayers
+                className={cn(isFinal && "final")}
+                title={`Batting (${away.abbreviation})`}
+                players={away.players}
+                position="Batting"
+                key="batting-away"
+                matchup={matchup}
+              />
+            )}
+            {hasAwayPitching && (
+              <BoxPlayers
+                className={cn(isFinal && "final")}
+                title={`Pitching (${away.abbreviation})`}
+                players={away.players}
+                position="Pitching"
+                key="pitching-away"
+                matchup={matchup}
+              />
+            )}
+          </div>
         )}
-        {hasAwayPitching && (
-          <BoxPlayers
-            title={`Pitching (${away.abbreviation})`}
-            players={away.players}
-            position="Pitching"
-            key="pitching-away"
-            matchup={matchup}
-          />
+        {activeTab === 1 && (
+          <div>
+            {hasHomeBatting && (
+              <BoxPlayers
+                className={cn(isFinal && "final")}
+                title={`Batting (${home.abbreviation})`}
+                players={home.players}
+                position="Batting"
+                key="batting-home"
+                matchup={matchup}
+              />
+            )}
+            {hasHomePitching && (
+              <BoxPlayers
+                className={cn(isFinal && "final")}
+                title={`Pitching (${home.abbreviation})`}
+                players={home.players}
+                position="Pitching"
+                key="pitching-home"
+                matchup={matchup}
+              />
+            )}
+          </div>
         )}
       </div>
-      <div>
-        {hasHomeBatting && (
-          <BoxPlayers
-            title={`Batting (${home.abbreviation})`}
-            players={home.players}
-            position="Batting"
-            key="batting-home"
-            matchup={matchup}
-          />
-        )}
-        {hasHomePitching && (
-          <BoxPlayers
-            title={`Pitching (${home.abbreviation})`}
-            players={home.players}
-            position="Pitching"
-            key="pitching-home"
-            matchup={matchup}
-          />
-        )}
-      </div>
-    </Tabs>
+    </section>
   );
 };

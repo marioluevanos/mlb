@@ -1,0 +1,68 @@
+.box-players {
+  padding: 1rem;
+  font-size: 12px;
+}
+
+.box-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.box-players:not(.final) .box-row.active {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.box-row.ph.batting {
+  &::before {
+    content: "—";
+    margin-right: 0.25rem;
+  }
+}
+
+.box-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 3ch) 6ch 6ch;
+  justify-content: space-evenly;
+  margin-left: auto;
+  text-align: right;
+  align-items: center;
+
+  .batting & {
+    grid-template-columns: repeat(6, 3ch) 6ch 6ch;
+  }
+
+  .pitching & {
+    grid-template-columns: 5ch repeat(5, 3ch) 6ch 6ch;
+  }
+
+  span {
+    text-align: center;
+  }
+  span:last-child {
+    text-align: right;
+  }
+
+  span:nth-child(7n) {
+    text-align: right;
+  }
+}
+
+.box-row .box-name {
+  grid-area: name;
+  color: var(--text);
+}
+
+.box-row.players .box-name::after {
+  content: "(" attr(data-pos) ")";
+  color: var(--text1);
+  margin-left: 0.25rem;
+}
+
+.box-row:first-of-type {
+  font-weight: 600;
+  border-bottom: 1px dotted var(--bg2);
+  padding-bottom: 0.5rem;
+}

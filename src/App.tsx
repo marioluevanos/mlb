@@ -7,13 +7,11 @@ import {
 } from "react";
 import { Header } from "./Header";
 import { Game } from "./Game";
-import { Standings } from "./Standings";
 import { HeaderNav } from "./HeaderNav";
 import { loadingData } from "./utils/loadingData";
 import { timeAgo } from "./utils/timeAgo";
 import { mapToGame } from "./utils/mapToGame";
-import { updateMatchup } from "./utils/updateMatchup";
-import { CurrentMatchup, GameStatus, GameToday } from "./types";
+import { GameStatus, GameToday } from "./types";
 
 export type GameData = {
   date: string;
@@ -44,8 +42,10 @@ function App() {
    */
   const acquireWakeLock = useCallback(async () => {
     try {
-      wakeRef.current = await navigator.wakeLock.request("screen");
-      wakeRef.current.addEventListener("release", () => undefined);
+      if (navigator.wakeLock) {
+        wakeRef.current = await navigator.wakeLock.request("screen");
+        wakeRef.current.addEventListener("release", () => undefined);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -120,25 +120,12 @@ function App() {
         const json = await response.json();
         const updatedGame = mapToGame(game, json);
 
-        let matchup: CurrentMatchup | undefined;
-        if (updatedGame.currentPlay?.matchup && isGameInProgress(game.status)) {
-          matchup = await updateMatchup(
-            updatedGame.currentPlay?.matchup,
-            updatedGame.id
-          );
-        }
-
         const updatedData = {
           date: new Date().toISOString(),
           games: data.games.map((g) => {
             if (updatedGame && g.id === updatedGame.id) {
-              if (updatedGame.currentPlay?.matchup && matchup) {
-                updatedGame.currentPlay.matchup = matchup;
-              }
-
               return updatedGame;
             }
-
             return g;
           }),
         };
@@ -171,7 +158,7 @@ function App() {
         requestAnimationFrame(() => {
           if (details.open) {
             setOpenGame(Number(details.id));
-            scrollTo({ behavior: "instant", top: details.offsetTop - 48 });
+            scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
             const game = data.games.find((g) => g.id === +details.id);
             if (game) {
               updateLiveGame(game);
@@ -233,6 +220,14 @@ function App() {
     []
   );
 
+  const onFullscreenChange = () => {
+    document.body.classList.remove("game-open");
+    const game = gameRefs.current.find((d) => d.id === openGame?.toString());
+    if (game) {
+      scrollTo({ behavior: "smooth", top: game.offsetTop - 48 });
+    }
+  };
+
   /**
    * Initialize data
    */
@@ -277,6 +272,7 @@ function App() {
         data.games.map((game, i) => (
           <Game
             onClick={onGameClick}
+            onFullscreenChange={onFullscreenChange}
             ref={setGameRefs.bind(null, i)}
             key={game.id}
             game={game}
@@ -287,7 +283,6 @@ function App() {
         <p>No games today</p>
       )}
       <p className="last-updated">Last updated {timeAgo(data.date)}</p>
-      <Standings />
     </>
   );
 }

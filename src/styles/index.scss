@@ -4,6 +4,8 @@
   --accent: hsl(110deg 100% 30%);
   --accent-text: hsl(0deg 80% 100%);
   --secondary: hsl(161deg 40% 87%);
+  --blue: hsl(240deg 97% 27%);
+  --red: hsl(0 100% 40%);
   --bg: hsl(210deg 0% 100%);
   --bg1: hsl(210deg 16% 96%);
   --bg2: hsl(210deg 8% 92%);
@@ -16,9 +18,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --accent: hsl(110deg 100% 40%);
+    --accent: hsl(110deg 100% 36%);
     --accent-text: hsl(0deg 80% 0%);
     --secondary: hsl(161deg 40% 66%);
+    --blue: hsl(240deg 100% 54%);
+    --red: hsl(0 100% 32%);
     --bg: hsl(210deg 22% 8%);
     --bg1: hsl(210deg 22% 12%);
     --bg2: hsl(210deg 22% 20%);
@@ -61,6 +65,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: hsl(110deg 100% 40%/16%);
 }
 
 html,
@@ -98,6 +103,10 @@ body.game-open {
 
   .game-open & {
     background: var(--bg1);
+
+    .button {
+      background: var(--bg);
+    }
   }
 }
 
@@ -186,8 +195,13 @@ details {
   border-bottom: 1px dotted var(--text2);
   padding: 0;
 
-  &:last-child {
-    margin-bottom: 25vh;
+  &:last-of-type {
+    /* 
+      121px - height of <summary>, 
+      48px - height of <header>, 
+      59px - height of "Last updated" date-stamp 
+    */
+    margin-bottom: calc(100vh - 121px - 48px - 59px);
   }
 }
 
@@ -433,93 +447,6 @@ details[open] .game-streams iframe {
   text-align: center;
 }
 
-.game-highlights {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  overflow: scroll hidden;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none; /* Firefox */
-  overflow: -moz-scrollbars-none;
-  scroll-padding: 0 1rem 0 1rem;
-  padding: 0 0.5rem 1rem;
-
-  &::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-  }
-}
-
-div.game-highlight {
-  position: relative;
-  padding: 1rem 0;
-
-  h3 {
-    padding: 0 1rem;
-  }
-
-  video {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  h4 {
-    margin: 1rem 0;
-    padding: 0 1rem;
-    font-size: 14px;
-    color: var(--text);
-  }
-
-  p {
-    padding: 0 1rem;
-    font-size: 12px;
-    line-height: 1.75;
-
-    &:empty {
-      display: none;
-    }
-  }
-}
-
-figure.game-highlight {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  margin: 0;
-  position: relative;
-  padding: 0 0.5rem;
-  flex: 1;
-  min-width: 40vw;
-
-  & figcaption {
-    text-wrap: balance;
-    font-size: 12px;
-    margin: 0;
-    padding: 1rem 0 0;
-    display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  & img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-}
-
-.game-highlight-btn {
-  background: none;
-  border: none;
-  color: transparent;
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  cursor: pointer;
-}
-
 details summary {
   padding: 2rem 1rem;
   display: grid;
@@ -670,7 +597,6 @@ summary:not(.final) .home.BOT .inning:last-child {
     inset: 0;
     content: "";
     z-index: -1;
-    // opacity: 0.16;
   }
 }
 
@@ -679,31 +605,6 @@ summary:not(.final) .home.BOT .inning:last-child {
   height: auto;
   background: var(--bg2);
   aspect-ratio: 16/9;
-}
-
-.game-matchup {
-  font-size: 14px;
-  padding: 0 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px dotted var(--bg2);
-
-  h3 {
-    flex: 1 0 100%;
-    display: none;
-  }
-
-  .current-matchup {
-    flex: 1;
-  }
-
-  .play-events {
-    flex: 1 0 100%;
-    padding-left: 0;
-    padding-right: 0;
-  }
 }
 
 .game-bug {
@@ -773,10 +674,6 @@ summary:not(.final) .home.BOT .inning:last-child {
   .player {
     flex: 1 0 40%;
     margin: 0;
-
-    .player-note {
-      display: none;
-    }
   }
 
   h3 {
@@ -880,66 +777,6 @@ summary:not(.final) .home.BOT .inning:last-child {
   padding: 1rem;
 }
 
-.box-players {
-  padding: 1rem;
-  font-size: 12px;
-}
-
-.box-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-.box-row.active {
-  background: var(--bg2);
-  color: var(--text);
-}
-
-.box-row.ph.batting {
-  &::before {
-    content: "—";
-    margin-right: 0.25rem;
-  }
-}
-
-.box-stats {
-  display: grid;
-  grid-template-columns: repeat(6, 3ch) 6ch 6ch;
-  justify-content: space-evenly;
-  margin-left: auto;
-  text-align: right;
-  align-items: center;
-
-  span {
-    text-align: center;
-  }
-  span:last-child {
-    text-align: right;
-  }
-  span:nth-child(7n) {
-    text-align: right;
-  }
-}
-
-.box-row .box-name {
-  grid-area: name;
-  color: var(--text);
-}
-
-.box-row.players .box-name::after {
-  content: "(" attr(data-pos) ")";
-  color: var(--text1);
-  margin-left: 0.25rem;
-}
-
-.box-row:first-of-type {
-  font-weight: 600;
-  border-bottom: 1px dotted var(--bg2);
-  padding-bottom: 0.5rem;
-}
-
 .tabs {
   padding: 1rem 0 0;
 }
@@ -981,4 +818,5 @@ summary:not(.final) .home.BOT .inning:last-child {
 
 .loss {
   color: hsl(0 100% 60%);
+  color: var(--text1);
 }

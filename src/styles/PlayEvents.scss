@@ -6,14 +6,25 @@
     padding: 0;
     line-height: 1;
     list-style: none;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      content: "";
+      width: 1px;
+      top: 0;
+      bottom: 12px;
+      background: var(--bg2);
+      left: 12px;
+    }
   }
 
   .play-event {
-    font-size: 10px;
+    font-size: 12px;
     position: relative;
     display: flex;
-    align-items: center;
-    min-height: 1.5rem;
+    align-items: flex-start;
     margin-bottom: 1rem;
     font-weight: 700;
   }
@@ -32,6 +43,7 @@
     line-height: 1.5;
     display: block;
     font-weight: 400;
+    min-height: 24px;
   }
 
   .count {
@@ -45,6 +57,9 @@
     .description {
       display: flex;
       flex-direction: column;
+      align-self: center;
+      height: auto;
+      min-height: auto;
     }
   }
 }
@@ -75,11 +90,12 @@
   min-width: 1.5rem;
   min-height: 1.5rem;
   border-radius: 1.5rem;
-  background: var(--bg2);
+  background: var(--bg1);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid transparent;
+  border: 1px solid var(--bg2);
 
   svg {
     width: 12px;
@@ -89,13 +105,15 @@
 
 .play-event.is-strike .status-icon {
   font-weight: 700;
-  background: #cc0100;
+  background: var(--red);
+  border-color: var(--red);
   color: white;
 }
 
 .play-event.is-ball .status-icon {
   font-weight: 700;
-  background: #020287;
+  background: var(--blue);
+  border-color: var(--blue);
   color: white;
 }
 

@@ -2,6 +2,7 @@ import { FC, ReactNode, useCallback, useMemo } from "react";
 import { cn } from "./utils/cn";
 import { GamePlayer } from "./types";
 import { GameBoxScoreProps } from "./GameBoxScore";
+import "./styles/BoxPlayers.scss";
 
 type BoxPlayersProps = {
   title?: string;
@@ -15,6 +16,9 @@ type BoxPlayersProps = {
 export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
   const { matchup, header, className, players = [], title, position } = props;
 
+  /**
+   * Modified player name
+   */
   const firstName = (name: string) => {
     const [_, last] = name.split(" ");
     return `${last}`;
@@ -54,6 +58,9 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
     }, []);
   }, []);
 
+  /**
+   * Pinch hitter class
+   */
   const ph = (bo?: number | string) => (Number(bo) % 100 > 0 ? "ph" : "");
 
   /**
@@ -89,7 +96,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
             <span>ER</span>
             <span>BB</span>
             <span>SO</span>
-            <span>HR</span>
+            <span>ERA</span>
             <span>WHIP</span>
           </span>
         )}
@@ -129,7 +136,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
                 <span>{player.game.pitching?.earnedRuns}</span>
                 <span>{player.game.pitching?.baseOnBalls}</span>
                 <span>{player.game.pitching?.strikeOuts}</span>
-                <span>{player.season?.pitching?.homeRuns}</span>
+                <span>{player.season?.pitching?.era}</span>
                 <span>{player.season?.pitching?.whip}</span>
               </span>
             ))}

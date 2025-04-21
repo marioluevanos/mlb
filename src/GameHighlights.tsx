@@ -1,21 +1,39 @@
-import { FC, useId, useRef, useState } from "react";
+import { FC, useEffect, useId, useRef, useState } from "react";
 import { cssVars } from "./utils/cssVars";
 import { GameHighlight } from "./types";
+import "./styles/GameHighlights.scss";
+import { cn } from "./utils/cn";
 
 type GameHighlightsProps = {
   highlights?: GameHighlight[];
   title?: string;
+  onFullscreenChange?: () => void;
 };
 
 export const GameHighlights: FC<GameHighlightsProps> = (props) => {
-  const { highlights = [], title } = props;
+  const {
+    highlights = [],
+    title,
+    onFullscreenChange = () => undefined,
+  } = props;
   const id = useId();
   const [media, setMedia] = useState<GameHighlight>(highlights[0]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  /**
+   *
+   */
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.addEventListener("fullscreenchange", onFullscreenChange);
+    }
+  }, []);
+
   return !media ? null : (
     <div className="game-highlight">
-      <h3>{title}</h3>
+      <h3>
+        {title} <span>({highlights.length})</span>
+      </h3>
       <video
         ref={videoRef}
         poster={media.placeholder?.lg?.src}
@@ -23,20 +41,23 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
         src={media.video.url}
       ></video>
       <h4>{media.title}</h4>
-      <p>{media.description}</p>
+      {media.description && <p>{media.description}</p>}
       <div
         className="game-highlights"
         style={cssVars({
           "--highlights-total": highlights?.length || 0,
         })}
       >
-        {highlights?.map((media, i) => (
+        {highlights?.map((highlight, i) => (
           <figure className="game-highlight" key={id + i}>
             <button
-              className="game-highlight-btn"
-              title={media.title}
+              className={cn(
+                "game-highlight-btn",
+                highlight.title === media.title && "active"
+              )}
+              title={highlight.title}
               onClick={() => {
-                setMedia(media);
+                setMedia(highlight);
                 requestAnimationFrame(() => {
                   if (videoRef.current) {
                     videoRef.current.play();
@@ -44,18 +65,18 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
                 });
               }}
             >
-              {media.title}
+              {highlight.title}
             </button>
-            {media.placeholder.sm?.src ? (
+            {highlight.placeholder.sm?.src ? (
               <img
-                src={media.placeholder.sm.src}
-                width={media.placeholder.sm.width}
-                height={media.placeholder.sm.height}
+                src={highlight.placeholder.sm.src}
+                width={highlight.placeholder.sm.width}
+                height={highlight.placeholder.sm.height}
               />
             ) : (
               <div id="game-placeholder-box"></div>
             )}
-            <figcaption>{media.title}</figcaption>
+            <figcaption>{highlight.title}</figcaption>
           </figure>
         ))}
       </div>

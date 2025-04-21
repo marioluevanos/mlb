@@ -242,3 +242,31 @@ export const BaseballPlayerIcon: FC = () => {
     </svg>
   );
 };
+
+export const CapIcon: FC = () => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="currentColor">
+        <path
+          d="M3.227,9.711S.5,10.68.5,11.763c0,1.2,4.261,2.737,6.818,2.737,2.727,0,6.818-3.421,6.818-3.421"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M15.5,10.4s-1.818,1.368-6.136,1.368S3.227,10.4,3.227,10.4V7.658A6.148,6.148,0,0,1,9.364,1.5h0A6.147,6.147,0,0,1,15.5,7.658Z"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};

@@ -1,0 +1,104 @@
+.game-highlights {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  overflow: scroll hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none; /* Firefox */
+  overflow: -moz-scrollbars-none;
+  scroll-padding: 0 1rem 0 1rem;
+  padding: 1px 0.5rem 1rem;
+  margin-top: 1.5rem;
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
+
+div.game-highlight {
+  position: relative;
+  padding: 1rem 0;
+
+  h3 {
+    padding: 0 1rem;
+  }
+
+  h3 span {
+    color: var(--text1);
+    font-weight: 400;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  h4 {
+    margin: 1rem 0 0;
+    padding: 0 1rem;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  p {
+    margin-top: 0.25rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+    font-size: 12px;
+    line-height: 1.75;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+figure.game-highlight {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  margin: 0;
+  position: relative;
+  padding: 0 0.5rem;
+  flex: 1;
+  min-width: 40vw;
+
+  & figcaption {
+    text-wrap: balance;
+    font-size: 12px;
+    margin: 0;
+    padding: 1rem 0 0;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  & img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    img {
+      filter: brightness(66%);
+    }
+  }
+}
+
+.game-highlight-btn {
+  background: none;
+  border: none;
+  color: transparent;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+
+  &.active + img {
+    outline: 1px solid var(--text);
+  }
+}

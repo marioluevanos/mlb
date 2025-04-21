@@ -1,5 +1,11 @@
-import { Decisions, MLBLive, Performer, Player } from "../mlb.types";
-import { GamePlayer, GameStatus, GameToday, TeamClub } from "../types";
+import { Decisions, Matchup, MLBLive, Performer, Player } from "../mlb.types";
+import {
+  CurrentMatchup,
+  GamePlayer,
+  GameStatus,
+  GameToday,
+  TeamClub,
+} from "../types";
 
 function toGamePlayer(p: Player): GamePlayer {
   return {
@@ -58,8 +64,10 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const awayTeam = mapToTeam("away", data);
   const homeTeam = mapToTeam("home", data);
   const status = gameData.status.detailedState;
-
-  console.log(plays);
+  const matchup = getCurrentMatchup({
+    players: [...awayTeam.players, ...homeTeam.players],
+    matchup: currentPlay.matchup,
+  });
 
   return {
     ...g,
@@ -71,7 +79,7 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     currentPlay: {
       count: currentPlay?.count,
       events: currentPlay?.playEvents,
-      result: currentPlay.result,
+      result: currentPlay?.result,
       runners: {
         second: offense.second,
         third: offense.third,
@@ -79,12 +87,12 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
       },
       matchup: {
         batter: {
-          ...currentPlay?.matchup.batter,
+          ...matchup.batter,
           avatar: avatar(currentPlay?.matchup.batter.id),
           bats: currentPlay?.matchup.batSide.code,
         },
         pitcher: {
-          ...currentPlay?.matchup.pitcher,
+          ...matchup.pitcher,
           avatar: avatar(currentPlay?.matchup.pitcher.id),
           throws: currentPlay?.matchup.pitchHand.code,
         },
@@ -94,6 +102,34 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
       linescore?.currentInningOrdinal || 0
     }`,
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
+  };
+}
+
+function getCurrentMatchup(args: {
+  players: GamePlayer[];
+  matchup: Matchup;
+}): CurrentMatchup {
+  const { players, matchup } = args;
+
+  const [batter, pitcher] = players.reduce<GamePlayer[]>((acc, player) => {
+    if (player.id === matchup.batter.id) {
+      acc.push(player);
+    }
+    if (player.id === matchup.pitcher.id) {
+      acc.push(player);
+    }
+    return acc;
+  }, []);
+
+  return {
+    batter: {
+      ...batter,
+      bats: matchup.batSide.code,
+    },
+    pitcher: {
+      ...pitcher,
+      throws: matchup.pitchHand.code,
+    },
   };
 }
 

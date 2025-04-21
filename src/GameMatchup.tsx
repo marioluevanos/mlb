@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { CurrentPlay } from "./types";
 import { Player } from "./Player";
+import "./styles/GameMatchup.scss";
 
 export type GameMatchupProps = {
   className?: string;

@@ -24,6 +24,10 @@ export const Player: FC<PlayerProps> = (props) => {
     ? `${pitching?.era} ERA`
     : batting && `${batting?.avg} AVG, ${batting?.ops} OPS`;
 
+  const na = (v?: string) => v?.replace("0-0", "");
+  const _summary = na(summary);
+  const _note = na(note);
+
   return (
     player && (
       <div className={cn("player", className)}>
@@ -31,8 +35,11 @@ export const Player: FC<PlayerProps> = (props) => {
         <span data-pos={player.position} className="player-name">
           {player.fullName}
         </span>
-        <span className="player-summary">{summary}</span>
-        <span className="player-note">{note}</span>
+        {_summary ||
+          (_note && (
+            <span className="player-summary">{_summary || _note}</span>
+          ))}
+        {_note && <span className="player-note">{_note}</span>}
       </div>
     )
   );
