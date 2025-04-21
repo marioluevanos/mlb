@@ -209,18 +209,20 @@ function App() {
         });
 
         // Open the game clicked
-        if (details.open) {
-          setOpenGame(Number(details.id));
-          scrollToGame(details.id, "smooth");
-          const game = data.games.find((g) => g.id === +details.id);
-          if (game) updateLiveGame(game);
-          acquireWakeLock();
-          document.body.classList.add("game-open");
-        } else {
-          setOpenGame(undefined);
-          releaseWakeLock();
-          document.body.classList.remove("game-open");
-        }
+        requestAnimationFrame(() => {
+          if (details.open) {
+            setOpenGame(Number(details.id));
+            scrollToGame(details.id, "smooth");
+            const game = data.games.find((g) => g.id === +details.id);
+            if (game) updateLiveGame(game);
+            acquireWakeLock();
+            document.body.classList.add("game-open");
+          } else {
+            setOpenGame(undefined);
+            releaseWakeLock();
+            document.body.classList.remove("game-open");
+          }
+        });
       }
     },
     [data.games, acquireWakeLock, releaseWakeLock, updateLiveGame, scrollToGame]
@@ -235,10 +237,8 @@ function App() {
       if (d.open) activeGame = d.id;
       d.open = false; // Close all details (games)
     });
-
     setOpenGame(undefined);
     scrollToGame(activeGame, "instant");
-    releaseWakeLock();
     document.body.classList.remove("game-open");
   }, []);
 
