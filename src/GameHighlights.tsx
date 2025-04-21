@@ -50,11 +50,7 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
     (highlight: GameHighlight, event: BaseSyntheticEvent) => {
       event.preventDefault();
       setMedia(highlight);
-      if (videoRef.current?.paused) {
-        playVideo();
-      } else {
-        videoRef.current?.pause();
-      }
+      requestAnimationFrame(playVideo);
     },
     []
   );
@@ -63,7 +59,6 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
    * Stop playing the video
    */
   useEffect(() => {
-    console.log({ isOpen });
     if (!isOpen) {
       videoRef.current?.pause();
     }
@@ -127,7 +122,10 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
             ) : (
               <div id="game-placeholder-box"></div>
             )}
-            <figcaption>{highlight.title}</figcaption>
+            <figcaption className="caption">
+              <span className="title">{highlight.title}</span>
+              <span className="duration">{highlight.duration}</span>
+            </figcaption>
           </figure>
         ))}
       </div>

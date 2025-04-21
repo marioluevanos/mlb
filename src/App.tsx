@@ -10,7 +10,7 @@ import { Game } from "./Game";
 import { HeaderNav } from "./HeaderNav";
 import { loadingData } from "./utils/loadingData";
 import { timeAgo } from "./utils/timeAgo";
-import { mapToGame } from "./utils/mapToGame";
+import { mapHighlight, mapToGame } from "./utils/mapToGame";
 import { GameStatus, GameToday } from "./types";
 import { MLBContent } from "./mlb.types";
 
@@ -176,19 +176,7 @@ function App() {
       const content = (await response.json()) as MLBContent;
       const items = content.highlights?.highlights?.items;
 
-      return items.map((item) => ({
-        type: item.type,
-        title: item.title,
-        description: item.description,
-        duration: item.duration,
-        placeholder: {
-          sm: item.image?.cuts.find((img) => img.width < 400),
-          lg: item.image?.cuts.find((img) => img.width < 1400),
-        },
-        video:
-          item.playbacks.find((vid) => vid.name === "mp4Avc") ||
-          item.playbacks[0],
-      }));
+      return items.map(mapHighlight);
     },
     [data]
   );

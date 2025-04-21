@@ -1,4 +1,11 @@
-import { Decisions, Matchup, MLBLive, Performer, Player } from "../mlb.types";
+import {
+  Decisions,
+  HighlightItem,
+  Matchup,
+  MLBLive,
+  Performer,
+  Player,
+} from "../mlb.types";
 import {
   CurrentMatchup,
   GamePlayer,
@@ -194,6 +201,23 @@ function topPerformers(payload: Performer): GamePlayer {
       batting: seasonStats.batting,
       pitching: seasonStats.pitching,
     },
+  };
+}
+
+export function mapHighlight(item: HighlightItem) {
+  const [_, m, s] = item.duration.split(":");
+
+  return {
+    type: item.type,
+    title: item.title,
+    description: item.description,
+    duration: `${parseFloat(m)}:${s}`,
+    placeholder: {
+      sm: item.image?.cuts.find((img) => img.width < 400),
+      lg: item.image?.cuts.find((img) => img.width < 1400),
+    },
+    video:
+      item.playbacks.find((vid) => vid.name === "mp4Avc") || item.playbacks[0],
   };
 }
 

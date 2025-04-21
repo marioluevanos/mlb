@@ -49,6 +49,7 @@ export type GameHighlight = {
   type: string;
   title: string;
   description?: string;
+  duration: string;
   placeholder: {
     sm?: ImageCut;
     lg?: ImageCut;

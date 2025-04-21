@@ -62,13 +62,17 @@
       gap: 1rem;
     }
 
-    figcaption {
+    .caption {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
     }
 
     img {
-      max-width: 8rem;
+      width: 8rem;
+      height: auto;
+      object-fit: contain;
     }
   }
 
@@ -94,7 +98,7 @@
       min-width: 40vw;
       padding: 0 0.5rem;
 
-      figcaption {
+      .caption {
         padding: 1rem 0 0;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -109,14 +113,25 @@
   position: relative;
   flex: 1;
 
-  & figcaption {
+  .caption {
     text-wrap: balance;
     font-size: 12px;
     margin: 0;
     display: block;
   }
 
-  & img {
+  .title {
+    color: var(--text);
+    display: block;
+  }
+
+  .duration {
+    margin-top: 0.5rem;
+    color: var(--text1);
+    display: block;
+  }
+
+  .img {
     background: var(--bg);
     width: 100%;
     height: auto;
