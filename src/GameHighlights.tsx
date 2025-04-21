@@ -30,26 +30,29 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
   }, []);
 
   return !media ? null : (
-    <div className="game-highlight">
+    <section className="game-highlight">
       <h3>
         {title} <span>({highlights.length})</span>
       </h3>
-      <video
-        ref={videoRef}
-        poster={media.placeholder?.lg?.src}
-        controls
-        src={media.video.url}
-      ></video>
-      <h4>{media.title}</h4>
-      {media.description && <p>{media.description}</p>}
+      <div className="current-game-highlight">
+        <video
+          ref={videoRef}
+          poster={media.placeholder?.lg?.src}
+          controls
+          src={media.video.url}
+        ></video>
+        <h4>{media.title}</h4>
+        {media.description && <p>{media.description}</p>}
+      </div>
+
       <div
-        className="game-highlights"
+        className="game-highlights vertical"
         style={cssVars({
           "--highlights-total": highlights?.length || 0,
         })}
       >
         {highlights?.map((highlight, i) => (
-          <figure className="game-highlight" key={id + i}>
+          <figure className="game-highlight-item" key={id + i}>
             <button
               className={cn(
                 "game-highlight-btn",
@@ -80,6 +83,6 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
           </figure>
         ))}
       </div>
-    </div>
+    </section>
   );
 };

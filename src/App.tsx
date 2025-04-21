@@ -158,7 +158,9 @@ function App() {
         requestAnimationFrame(() => {
           if (details.open) {
             setOpenGame(Number(details.id));
-            scrollTo({ behavior: "smooth", top: details.offsetTop - 48 });
+            const top = details.offsetTop - 48;
+            console.log(top);
+            scrollTo({ behavior: "smooth", top });
             const game = data.games.find((g) => g.id === +details.id);
             if (game) {
               updateLiveGame(game);

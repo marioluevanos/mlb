@@ -9,11 +9,11 @@ type TopPerformersProps = {
 export const TopPerformers: FC<TopPerformersProps> = (props) => {
   const { players } = props;
   return (
-    <div className="top-performers">
+    <section className="top-performers">
       <h3>Top Performers</h3>
       {players?.map((player) => (
         <Player player={player} key={player.fullName} />
       ))}
-    </div>
+    </section>
   );
 };

@@ -13,7 +13,7 @@ export const GameDecisions: FC<GameDecisionsProps> = (props) => {
 
   return (
     decisions?.winner && (
-      <div className="game-decisions">
+      <section className="game-decisions">
         <h3>Decision</h3>
         {decisions.winner && (
           <Player className="winner" player={decisions.winner} />
@@ -24,7 +24,7 @@ export const GameDecisions: FC<GameDecisionsProps> = (props) => {
         {decisions.save?.fullName && (
           <Player className="save" player={decisions.save} />
         )}
-      </div>
+      </section>
     )
   );
 };

@@ -81,11 +81,11 @@ body {
 }
 
 body.game-open {
-  overflow: hidden;
+  // overflow: hidden;
 
   details[open] {
-    height: calc(100svh - 48px);
-    overflow: hidden scroll;
+    // height: calc(100svh - 48px);
+    // overflow: hidden scroll;
   }
 }
 
@@ -352,10 +352,6 @@ details[open] .final .team-logo.winner::after {
     color: var(--text);
     flex: 1 0 100%;
   }
-
-  > :last-child {
-    padding-bottom: 2rem;
-  }
 }
 
 .top-performers {
@@ -517,9 +513,12 @@ details[open] {
 }
 
 details[open] summary {
+  position: sticky;
+  top: 48px;
+  z-index: 10;
   transition: none;
   background: var(--bg);
-  z-index: 100;
+  color: var(--text-active);
   padding-bottom: 1rem;
   box-shadow: 0 1px 1px hsl(0deg 0% 0%/8%);
 
@@ -530,10 +529,6 @@ details[open] summary {
 
 details summary * {
   pointer-events: none;
-}
-
-details[id][open] > summary {
-  color: var(--text-active);
 }
 
 .innings {

@@ -14,7 +14,7 @@ export const TeamCompare: FC<TeamCompareProps> = (props) => {
   const { home, away } = props;
 
   return (
-    <div className="team-compare">
+    <section className="team-compare">
       <h3>Team Comparison</h3>
       <CompareRow {...props}>
         <span
@@ -24,7 +24,7 @@ export const TeamCompare: FC<TeamCompareProps> = (props) => {
           <Team team={home} />
         </span>
       </CompareRow>
-    </div>
+    </section>
   );
 };
 
