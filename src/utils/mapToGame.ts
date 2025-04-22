@@ -9,7 +9,6 @@ import {
 } from "../mlb.types";
 import {
   CurrentMatchup,
-  CurrentPlay,
   GamePlayer,
   GameStatus,
   GameToday,
@@ -276,13 +275,19 @@ export function mapHighlight(item: HighlightItem) {
   };
 }
 
-function avatar(id: string | number | undefined) {
+function avatar(id?: string | number) {
   if (!id) return;
 
   return `https://midfield.mlbstatic.com/v1/people/${id}/spots/120`;
 }
 
-function logo(teamId: number | string | undefined) {
+export function headshot(id?: string | number) {
+  if (!id) return;
+
+  return `https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${id}/headshot/67/current`;
+}
+
+function logo(teamId?: number | string) {
   if (!teamId) return "";
 
   return `https://midfield.mlbstatic.com/v1/team/${teamId}/spots/64`;

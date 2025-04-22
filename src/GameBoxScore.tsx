@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { GamePlayer, GameStatus, TeamClub } from "./types";
-import { BoxPlayers } from "./BoxPlayers";
+import { BoxPlayers, BoxPlayersProps } from "./BoxPlayers";
 import { cn } from "./utils/cn";
 import { AtBatIcon } from "./Icon";
 
@@ -15,10 +15,12 @@ export type GameBoxScoreProps = {
     pitcherId?: number;
   };
   currentInning?: string;
+  onPlayerClick?: BoxPlayersProps["onPlayerClick"];
 };
 
 export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
-  const { home, away, winner, status, matchup, currentInning } = props;
+  const { home, away, winner, status, matchup, currentInning, onPlayerClick } =
+    props;
   const [activeTab, setActiveTab] = useState<number>(0);
   const hasData = (type: "batting" | "pitching", players: GamePlayer[] = []) =>
     players.some((p) => p.game && Object.values(p.game[type] || {}).length > 0);
@@ -82,6 +84,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
           <div>
             {hasAwayBatting && (
               <BoxPlayers
+                onPlayerClick={onPlayerClick}
                 className={cn(isFinal && "final")}
                 title={`Batting (${away.abbreviation})`}
                 players={away.players}
@@ -92,6 +95,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
             )}
             {hasAwayPitching && (
               <BoxPlayers
+                onPlayerClick={onPlayerClick}
                 className={cn(isFinal && "final")}
                 title={`Pitching (${away.abbreviation})`}
                 players={away.players}
@@ -106,6 +110,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
           <div>
             {hasHomeBatting && (
               <BoxPlayers
+                onPlayerClick={onPlayerClick}
                 className={cn(isFinal && "final")}
                 title={`Batting (${home.abbreviation})`}
                 players={home.players}
@@ -116,6 +121,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
             )}
             {hasHomePitching && (
               <BoxPlayers
+                onPlayerClick={onPlayerClick}
                 className={cn(isFinal && "final")}
                 title={`Pitching (${home.abbreviation})`}
                 players={home.players}

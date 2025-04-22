@@ -1,0 +1,74 @@
+.box-player {
+  padding: 1rem;
+  font-size: 12px;
+}
+
+.box-player header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  * {
+    margin: 0;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  img {
+    border-radius: 4px;
+    width: 3rem;
+  }
+}
+
+.box-player .box-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  cursor: pointer;
+
+  * {
+    pointer-events: none;
+  }
+}
+
+.box-player-section {
+  margin-bottom: 1.5rem;
+}
+
+.box-player .box-stats {
+  display: grid;
+  grid-template-columns: repeat(8, 4ch);
+  gap: 1ch;
+  margin: 0;
+  text-align: right;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-start;
+
+  span {
+    text-align: left;
+  }
+}
+
+.box-player .box-row .box-name {
+  grid-area: name;
+  color: var(--text);
+}
+
+.box-player .box-row.players .box-name::after {
+  content: "(" attr(data-pos) ")";
+  color: var(--text1);
+  margin-left: 0.25rem;
+}
+
+.box-player .box-row:first-of-type {
+  font-weight: 600;
+  border-bottom: 1px dotted var(--bg2);
+  padding-bottom: 0.5rem;
+}

@@ -1,26 +1,35 @@
-import { FC, ReactNode, useCallback, useMemo } from "react";
+import { BaseSyntheticEvent, FC, ReactNode, useCallback, useMemo } from "react";
 import { cn } from "./utils/cn";
 import { GamePlayer } from "./types";
 import { GameBoxScoreProps } from "./GameBoxScore";
 import "./styles/BoxPlayers.scss";
 
-type BoxPlayersProps = {
+export type BoxPlayersProps = {
   title?: string;
   players?: GamePlayer[];
   className?: string;
   position: "Batting" | "Pitching";
   header?: ReactNode;
   matchup?: GameBoxScoreProps["matchup"];
+  onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
 export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
-  const { matchup, header, className, players = [], title, position } = props;
+  const {
+    matchup,
+    header,
+    className,
+    players = [],
+    title,
+    position,
+    onPlayerClick,
+  } = props;
 
   /**
    * Modified player name
    */
-  const firstName = (name: string) => {
-    const [_, last] = name.split(" ");
+  const firstName = (name: string = "") => {
+    const [_, last] = name?.split(" ");
     return `${last}`;
   };
 
@@ -105,6 +114,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
         <div
           key={player.id}
           data-player-id={player.id}
+          onClick={onPlayerClick}
           className={cn(
             "box-row players",
             matchup?.batterId === player.id && "active",

@@ -711,16 +711,23 @@ summary:not(.final) .home.BOT .inning:last-child {
 }
 
 .standings {
-  padding: 1rem;
+  padding: 0 1rem 1rem;
 }
 
 .game-box-score {
   padding: 1rem 0 0;
 }
 
+.game-box-score .tabs-actions {
+  position: sticky;
+  top: calc(48px + 104px);
+  border-bottom: 1px dotted var(--bg2);
+}
+
 .tabs-actions {
+  background: var(--bg);
   display: flex;
-  padding: 0 1rem 0.5rem;
+  padding: 1rem 1rem 1rem;
   gap: 1rem;
 
   &:empty {
@@ -771,4 +778,29 @@ summary:not(.final) .home.BOT .inning:last-child {
 .loss {
   color: hsl(0 100% 60%);
   color: var(--text1);
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: hsl(0deg 0% 0%/66%);
+}
+
+.drawer-content .drawer-handle {
+  top: 1rem;
+  background: var(--bg3);
+}
+
+.drawer-content {
+  height: fit-content;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  outline: none;
+
+  .drawer-children {
+    padding: 2rem 1rem 2rem;
+    background: var(--bg1);
+  }
 }

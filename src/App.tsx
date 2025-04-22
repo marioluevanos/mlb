@@ -10,9 +10,10 @@ import { Game } from "./Game";
 import { HeaderNav } from "./HeaderNav";
 import { loadingData } from "./utils/loadingData";
 import { timeAgo } from "./utils/timeAgo";
-import { mapHighlight, mapToGame } from "./utils/mapToGame";
-import { GameStatus, GameToday } from "./types";
+import { headshot, mapHighlight, mapToGame } from "./utils/mapToGame";
+import { GamePlayer, GameStatus, GameToday } from "./types";
 import { MLBContent } from "./mlb.types";
+import { PlayerProfile } from "./PlayerProfile";
 
 export type GameData = {
   date: string;
@@ -23,10 +24,34 @@ const CACHE_KEY = "games" as const;
 
 function App() {
   const [data, setData] = useState<GameData>(loadingData(CACHE_KEY));
+  const [activePlayer, setActivePlayer] = useState<GamePlayer>();
   const [isLoading, setIsLoading] = useState(false);
   const gameRefs = useRef<HTMLDetailsElement[]>([]);
   const [openGame, setOpenGame] = useState<number>();
   const wakeRef = useRef<WakeLockSentinel>(null);
+
+  /**
+   * On Player click
+   */
+  const onPlayerClick = useCallback(
+    (event: BaseSyntheticEvent) => {
+      event?.preventDefault();
+
+      const target = event.target;
+      const game = data.games.find((g) => g.id === openGame);
+      const players = [
+        ...(game?.away?.players || []),
+        ...(game?.home?.players || []),
+      ];
+      const player = players.find((p) => p.id === +target.dataset?.playerId);
+
+      setActivePlayer({
+        ...player,
+        avatar: headshot(player?.id),
+      });
+    },
+    [openGame, data.games]
+  );
 
   /**
    * Allow the phone to sleep
@@ -309,6 +334,7 @@ function App() {
             onFullscreenChange={onFullscreenChange}
             ref={setGameRefs.bind(null, i)}
             onClick={onGameClick}
+            onPlayerClick={onPlayerClick}
             isLoading={isLoading}
             key={game.id}
             game={game}
@@ -318,9 +344,16 @@ function App() {
       ) : (
         <p>No games today</p>
       )}
+
       {data.date && (
         <p className="last-updated">Last updated {timeAgo(data.date)}</p>
       )}
+
+      <PlayerProfile
+        open={typeof activePlayer === "object"}
+        onOpenChange={() => setActivePlayer(undefined)}
+        player={activePlayer}
+      />
     </>
   );
 }

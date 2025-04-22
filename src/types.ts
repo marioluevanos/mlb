@@ -6,7 +6,6 @@ import {
   Playback,
   PlayEvent,
   PlayResult,
-  ScoringPlays,
 } from "./mlb.types";
 
 export type TeamRecord = {

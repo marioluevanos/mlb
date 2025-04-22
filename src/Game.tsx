@@ -14,7 +14,7 @@ import { PlayEvents } from "./PlayEvents";
 import { isWinner } from "./utils/isWinner";
 import { cn } from "./utils/cn";
 import { GameToday } from "./types";
-import { GameBoxScore } from "./GameBoxScore";
+import { GameBoxScore, GameBoxScoreProps } from "./GameBoxScore";
 import { TeamCompare } from "./TeamCompare";
 import { ScoringPlays } from "./ScoringPlays";
 
@@ -26,10 +26,19 @@ export type GameProps = {
   ref?: Ref<HTMLDetailsElement | null> | null;
   onFullscreenChange?: () => void;
   isOpen?: boolean;
+  onPlayerClick?: GameBoxScoreProps["onPlayerClick"];
 };
 
 export const Game: FC<GameProps> = (props) => {
-  const { game, isLoading, ref, onClick, onFullscreenChange, isOpen } = props;
+  const {
+    game,
+    isLoading,
+    ref,
+    onClick,
+    onFullscreenChange,
+    onPlayerClick,
+    isOpen,
+  } = props;
   const { away, home } = game;
   const isFinal = game.status === "Final" || game.status === "Game Over";
   const isPreGame = game.status === "Pre-Game";
@@ -125,6 +134,7 @@ export const Game: FC<GameProps> = (props) => {
         )}
 
         <GameBoxScore
+          onPlayerClick={onPlayerClick}
           currentInning={game.currentInning}
           status={game.status}
           matchup={{

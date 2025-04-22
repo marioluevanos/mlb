@@ -8,6 +8,11 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
+  cursor: pointer;
+
+  * {
+    pointer-events: none;
+  }
 }
 
 .box-players:not(.final) .box-row.active {
