@@ -995,4 +995,4 @@ export interface Decisions {
   save?: PersonRef;
 }
 
-type ScoringPlays = number[];
+export type ScoringPlays = number[];

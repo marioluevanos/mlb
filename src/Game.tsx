@@ -16,6 +16,7 @@ import { cn } from "./utils/cn";
 import { GameToday } from "./types";
 import { GameBoxScore } from "./GameBoxScore";
 import { TeamCompare } from "./TeamCompare";
+import { ScoringPlays } from "./ScoringPlays";
 
 export type GameProps = {
   className?: string;
@@ -138,6 +139,9 @@ export const Game: FC<GameProps> = (props) => {
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
           <TopPerformers players={game.topPerformers} />
         ) : null}
+
+        <ScoringPlays scoringPlays={game.scoringPlays} />
+
         <GameHighlights
           title={isPre ? "Preview" : "Highlights"}
           highlights={game.highlights}

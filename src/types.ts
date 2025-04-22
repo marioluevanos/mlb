@@ -6,6 +6,7 @@ import {
   Playback,
   PlayEvent,
   PlayResult,
+  ScoringPlays,
 } from "./mlb.types";
 
 export type TeamRecord = {
@@ -90,7 +91,13 @@ export type GameToday = {
   streams: GameStream[];
   innings: GameInnings[];
   currentPlay?: CurrentPlay;
+  scoringPlays?: ScoringPlay[];
   decisions?: GameDecision;
+};
+
+export type ScoringPlay = Omit<CurrentPlay, "runners" | "count"> & {
+  inning: string;
+  teamLogo: string;
 };
 
 export type GameDecision = {

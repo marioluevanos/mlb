@@ -1,0 +1,133 @@
+.scoring-plays {
+  border-top: 1px dotted var(--bg2);
+  padding: 1rem 1rem 0;
+
+  ol {
+    padding: 0;
+    line-height: 1;
+    list-style: none;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      content: "";
+      width: 1px;
+      top: 0;
+      bottom: 40px;
+      background: var(--bg2);
+      left: 16px;
+    }
+  }
+
+  .scoring-event {
+    font-size: 12px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .event {
+    display: block;
+    color: var(--text1);
+    line-height: 1;
+    font-size: 10px;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+  }
+
+  .description {
+    color: var(--text1);
+    line-height: 1.5;
+    font-weight: 400;
+    min-height: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .count {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text1);
+    margin-top: 0;
+    display: block;
+  }
+
+  .player {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: "avatar name summary";
+  }
+
+  .player-summary {
+    color: var(--text);
+  }
+
+  .player-avatar {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    align-items: center;
+  }
+
+  .event {
+    display: inline-flex;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    border: 1px solid var(--bg2);
+    border-radius: 10000rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 10px;
+  }
+}
+.scoring-event:last-child {
+  position: relative;
+}
+
+.scoring-event:last-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2rem;
+  height: 100%;
+  background: var(--bg);
+  z-index: 0;
+}
+
+.scoring-event .current-inning {
+  margin: 0;
+  width: inherit;
+  height: inherit;
+  justify-content: center;
+  position: relative;
+  left: -1px;
+  gap: 0;
+  line-height: 0;
+}
+
+.scoring-event .status-icon {
+  margin-right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  border-radius: 2rem;
+  background: var(--bg1);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bg2);
+  position: relative;
+  z-index: 1;
+
+  img {
+    width: inherit;
+    height: inherit;
+  }
+}

@@ -1,4 +1,5 @@
 import {
+  AtBat,
   Decisions,
   HighlightItem,
   Matchup,
@@ -8,9 +9,11 @@ import {
 } from "../mlb.types";
 import {
   CurrentMatchup,
+  CurrentPlay,
   GamePlayer,
   GameStatus,
   GameToday,
+  ScoringPlay,
   TeamClub,
 } from "../types";
 
@@ -50,8 +53,6 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
     summary: `${pitching?.era} ERA, ${pitching?.whip} WHIP`,
   };
 
-  console.log(JSON.stringify(data));
-
   return {
     record: teams[team].record.leagueRecord,
     name: teams[team].name,
@@ -68,13 +69,14 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
 export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const { gameData, liveData } = data;
   const { linescore, boxscore, plays, decisions } = liveData;
-  const { currentPlay } = plays;
+  const { currentPlay, scoringPlays, allPlays } = plays;
   const { offense } = linescore;
   const awayTeam = mapToTeam("away", data);
   const homeTeam = mapToTeam("home", data);
   const status = gameData.status.detailedState;
+  const allPlayers = [...awayTeam.players, ...homeTeam.players];
   const matchup = getCurrentMatchup({
-    players: [...awayTeam.players, ...homeTeam.players],
+    players: allPlayers,
     matchup: currentPlay?.matchup,
   });
 
@@ -85,6 +87,14 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     home: homeTeam,
     innings: linescore.innings,
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
+    scoringPlays: scoringPlays.reduce<ScoringPlay[]>(
+      scoringPlay.bind(null, {
+        allPlays,
+        allPlayers,
+        teamLogos: [awayTeam.logo, homeTeam.logo],
+      }),
+      []
+    ),
     currentPlay: {
       count: currentPlay?.count,
       events: currentPlay?.playEvents,
@@ -106,9 +116,42 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   };
 }
 
+function scoringPlay(
+  args: {
+    allPlays: AtBat[];
+    allPlayers: GamePlayer[];
+    teamLogos: string[];
+  },
+  acc: ScoringPlay[],
+  playIndex: number
+) {
+  const { allPlayers, allPlays, teamLogos = [] } = args;
+  const play = allPlays.find((b) => b.atBatIndex === playIndex);
+
+  if (play) {
+    const matchup = getCurrentMatchup({
+      players: allPlayers,
+      matchup: play.matchup,
+    });
+
+    acc.push({
+      inning: `${play.about.isTopInning ? "TOP" : "BOT"} ${play.about.inning}`,
+      teamLogo: play.about.isTopInning ? teamLogos[0] : teamLogos[1],
+      events: play?.playEvents,
+      result: play?.result,
+      matchup: {
+        batter: matchup?.batter,
+        pitcher: matchup?.pitcher,
+      },
+    });
+  }
+
+  return acc;
+}
+
 function getCurrentMatchup(args: {
   players: GamePlayer[];
-  matchup: Matchup;
+  matchup: Omit<Matchup, "batterHotColdZoneStats">;
 }): CurrentMatchup {
   const { players, matchup } = args;
 
@@ -132,7 +175,7 @@ function getCurrentMatchup(args: {
       ...batter,
       bats: matchup?.batSide?.code,
       summary: `(G) ${batter?.game?.batting.summary}`,
-      note: `(S) ${batter?.season?.batting.avg} AVG, ${batter?.season?.batting.obp} OPS`,
+      note: `(S) ${batter?.season?.batting.avg} AVG, ${batter?.season?.batting.homeRuns} HR, ${batter?.season?.batting.rbi} RBI`,
       avatar: avatar(matchup?.batter.id),
     },
     pitcher: {

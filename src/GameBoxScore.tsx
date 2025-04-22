@@ -36,7 +36,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
     boxTabs.push(
       <>
         <span className="label">{away.abbreviation} (Away)</span>
-        {isTop && <AtBatIcon className="at-bat-icon" />}
+        {!isFinal && isTop && <AtBatIcon className="at-bat-icon" />}
         {isFinal && (
           <span className={cn(awayWin ? "win" : "loss")}>
             {awayWin ? "W" : "L"} {away.record.wins}&ndash;{away.record.losses}
@@ -50,7 +50,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
     boxTabs.push(
       <>
         <span className="label">{home.abbreviation} (Home)</span>
-        {!isTop && <AtBatIcon className="at-bat-icon" />}
+        {!isFinal && !isTop && <AtBatIcon className="at-bat-icon" />}
         {isFinal && (
           <span className={cn(homeWin ? "win" : "loss")}>
             {homeWin ? "W" : "L"} {home.record.wins}&ndash;{home.record.losses}

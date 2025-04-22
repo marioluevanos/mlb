@@ -32,8 +32,9 @@ export const Player: FC<PlayerProps> = (props) => {
         <span data-pos={position} className="player-name">
           {fullName}
         </span>
-        {summary ||
-          (note && <span className="player-summary">{summary || note}</span>)}
+        {(summary || note) && (
+          <span className="player-summary">{summary || note}</span>
+        )}
         {note && <span className="player-note">{note}</span>}
       </div>
     )
