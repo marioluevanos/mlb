@@ -1,28 +1,41 @@
 import { FC, ReactNode } from "react";
 import { GameDecision } from "./types";
-import { Player } from "./Player";
+import { Player, PlayerProps } from "./Player";
 
 export type GameDecisionsProps = {
   className?: string;
   decisions?: GameDecision;
   children?: ReactNode;
+  onPlayerClick?: PlayerProps["onClick"];
 };
 
 export const GameDecisions: FC<GameDecisionsProps> = (props) => {
-  const { decisions } = props;
+  const { decisions, onPlayerClick } = props;
 
   return (
     decisions?.winner && (
       <section className="game-decisions">
         <h3>Decision</h3>
         {decisions.winner && (
-          <Player className="winner" player={decisions.winner} />
+          <Player
+            onClick={onPlayerClick}
+            className="winner"
+            player={decisions.winner}
+          />
         )}
         {decisions.loser && (
-          <Player className="loser" player={decisions.loser} />
+          <Player
+            onClick={onPlayerClick}
+            className="loser"
+            player={decisions.loser}
+          />
         )}
         {decisions.save?.fullName && (
-          <Player className="save" player={decisions.save} />
+          <Player
+            onClick={onPlayerClick}
+            className="save"
+            player={decisions.save}
+          />
         )}
       </section>
     )

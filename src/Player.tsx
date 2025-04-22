@@ -3,7 +3,7 @@ import { cn } from "./utils/cn";
 import { GamePlayer } from "./types";
 import "./styles/Player.scss";
 
-type PlayerProps = {
+export type PlayerProps = {
   className?: string;
   onClick?: (event: BaseSyntheticEvent) => void;
   player?: Pick<

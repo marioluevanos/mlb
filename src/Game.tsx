@@ -102,10 +102,14 @@ export const Game: FC<GameProps> = (props) => {
           <GameStartingPitchers
             home={home.startingPitcher}
             away={away.startingPitcher}
+            onPlayerClick={onPlayerClick}
           />
         )}
 
-        <GameDecisions decisions={game.decisions} />
+        <GameDecisions
+          onPlayerClick={onPlayerClick}
+          decisions={game.decisions}
+        />
 
         {inProgress && (
           <GameMatchup
@@ -115,6 +119,7 @@ export const Game: FC<GameProps> = (props) => {
             }
             gameId={game.id}
             currentPlay={game.currentPlay}
+            onPlayerClick={onPlayerClick}
           >
             <GameBug
               currentPlay={game.currentPlay}
@@ -147,10 +152,16 @@ export const Game: FC<GameProps> = (props) => {
         />
 
         {game.topPerformers.length > 0 && !isPre && !isPostponed ? (
-          <TopPerformers players={game.topPerformers} />
+          <TopPerformers
+            players={game.topPerformers}
+            onPlayerClick={onPlayerClick}
+          />
         ) : null}
 
-        <ScoringPlays scoringPlays={game.scoringPlays} />
+        <ScoringPlays
+          scoringPlays={game.scoringPlays}
+          onPlayerClick={onPlayerClick}
+        />
 
         <GameHighlights
           title={isPre ? "Preview" : "Highlights"}

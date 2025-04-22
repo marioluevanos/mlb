@@ -3,15 +3,16 @@ import { cn } from "./utils/cn";
 import "./styles/ScoringPlays.scss";
 import { ScoringPlay } from "./types";
 import { CurrentInning } from "./CurrentInning";
-import { Player } from "./Player";
+import { Player, PlayerProps } from "./Player";
 
 type PlayEventsProps = {
   scoringPlays?: ScoringPlay[];
   className?: string;
+  onPlayerClick?: PlayerProps["onClick"];
 };
 
 export const ScoringPlays: FC<PlayEventsProps> = (props) => {
-  const { className, scoringPlays = [] } = props;
+  const { className, scoringPlays = [], onPlayerClick } = props;
 
   return scoringPlays.length > 0 ? (
     <div className={cn("scoring-plays", className)}>
@@ -29,6 +30,7 @@ export const ScoringPlays: FC<PlayEventsProps> = (props) => {
                 <span className="event">{event.result?.event}</span>
                 {event.result?.description}
                 <Player
+                  onClick={onPlayerClick}
                   player={{
                     avatar: event.matchup.batter.avatar,
                     fullName: event.matchup.batter.fullName,
