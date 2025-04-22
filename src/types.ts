@@ -96,7 +96,7 @@ export type GameToday = {
 
 export type ScoringPlay = Omit<CurrentPlay, "runners" | "count"> & {
   inning: string;
-  teamLogo: string;
+  teamAbbreviation: string;
 };
 
 export type GameDecision = {

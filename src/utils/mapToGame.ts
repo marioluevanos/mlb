@@ -91,7 +91,7 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
       scoringPlay.bind(null, {
         allPlays,
         allPlayers,
-        teamLogos: [awayTeam.logo, homeTeam.logo],
+        teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
       }),
       []
     ),
@@ -120,12 +120,12 @@ function scoringPlay(
   args: {
     allPlays: AtBat[];
     allPlayers: GamePlayer[];
-    teamLogos: string[];
+    teamAbbreviation: string[];
   },
   acc: ScoringPlay[],
   playIndex: number
 ) {
-  const { allPlayers, allPlays, teamLogos = [] } = args;
+  const { allPlayers, allPlays, teamAbbreviation = [] } = args;
   const play = allPlays.find((b) => b.atBatIndex === playIndex);
 
   if (play) {
@@ -136,7 +136,9 @@ function scoringPlay(
 
     acc.push({
       inning: `${play.about.isTopInning ? "TOP" : "BOT"} ${play.about.inning}`,
-      teamLogo: play.about.isTopInning ? teamLogos[0] : teamLogos[1],
+      teamAbbreviation: play.about.isTopInning
+        ? teamAbbreviation[0]
+        : teamAbbreviation[1],
       events: play?.playEvents,
       result: play?.result,
       matchup: {

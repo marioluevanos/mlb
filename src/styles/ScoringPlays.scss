@@ -19,6 +19,7 @@
   }
 
   .scoring-event .header {
+    font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -73,10 +74,14 @@
     align-items: center;
   }
 
+  .abbreviation,
   .event {
     display: inline-flex;
     color: var(--text);
-    font-size: 10px;
+  }
+
+  .abbreviation {
+    color: var(--accent);
   }
 }
 

@@ -25,6 +25,9 @@ export const ScoringPlays: FC<PlayEventsProps> = (props) => {
             <li className={cn("scoring-event")} key={i}>
               <span className="header">
                 <CurrentInning currentInning={event.inning} />
+                {event.teamAbbreviation && (
+                  <span className="abbreviation">{event.teamAbbreviation}</span>
+                )}{" "}
                 <span className="event">{event.result?.event}</span>
               </span>
               <span className="description">{event.result?.description}</span>
