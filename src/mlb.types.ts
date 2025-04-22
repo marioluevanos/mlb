@@ -8,11 +8,19 @@ export type MLBLive = {
       allPlays: AtBat[];
       currentPlay: CurrentPlay;
       scoringPlays: ScoringPlays;
+      playsByInning: PlaysByInning[];
     };
     linescore: Linescore;
     boxscore: Boxscore;
     decisions: Decisions;
   };
+};
+
+export type PlaysByInning = {
+  bottom: number[];
+  top: number[];
+  startIndex: number;
+  endIndex: number;
 };
 
 export interface MLBContent {

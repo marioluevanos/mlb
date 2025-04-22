@@ -80,6 +80,8 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     matchup: currentPlay?.matchup,
   });
 
+  console.log(plays);
+
   return {
     ...g,
     status,
