@@ -4,8 +4,8 @@ import { Player } from "./Player";
 import "./styles/GameStartingPitchers.scss";
 
 type GameStartingPitchersProps = {
-  home: GamePlayer;
-  away: GamePlayer;
+  home?: GamePlayer;
+  away?: GamePlayer;
 };
 
 export const GameStartingPitchers: FC<GameStartingPitchersProps> = (props) => {

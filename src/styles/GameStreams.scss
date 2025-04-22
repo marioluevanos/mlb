@@ -1,0 +1,63 @@
+.game-streams {
+  margin: 0;
+  padding: 1rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  &:last-child {
+    padding-bottom: 1.5rem;
+  }
+
+  &:empty {
+    display: none;
+  }
+
+  iframe {
+    background: var(--bg1);
+    display: none;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    border: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+    &::-webkit-scrollbar {
+      width: 0 !important;
+    }
+  }
+}
+
+details[open] .game-streams iframe {
+  display: block;
+}
+
+.game-link {
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--bg2);
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease-out;
+  padding: 0.25rem 0.75rem;
+  letter-spacing: 0.01em;
+  user-select: none;
+
+  &:hover {
+    background: var(--bg3);
+  }
+
+  .final + .game-footer & {
+    display: none;
+  }
+}

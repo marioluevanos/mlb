@@ -124,6 +124,7 @@ export const Game: FC<GameProps> = (props) => {
         )}
 
         <GameBoxScore
+          currentInning={game.currentInning}
           status={game.status}
           matchup={{
             batterId: game.currentPlay?.matchup.batter.id,

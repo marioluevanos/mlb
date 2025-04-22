@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { GamePlayer, GameStatus, TeamClub } from "./types";
 import { BoxPlayers } from "./BoxPlayers";
 import { cn } from "./utils/cn";
+import { AtBatIcon } from "./Icon";
 
 export type GameBoxScoreProps = {
   home: TeamClub;
@@ -13,10 +14,11 @@ export type GameBoxScoreProps = {
     batterId?: number;
     pitcherId?: number;
   };
+  currentInning?: string;
 };
 
 export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
-  const { home, away, winner, status, matchup } = props;
+  const { home, away, winner, status, matchup, currentInning } = props;
   const [activeTab, setActiveTab] = useState<number>(0);
   const hasData = (type: "batting" | "pitching", players: GamePlayer[] = []) =>
     players.some((p) => p.game && Object.values(p.game[type] || {}).length > 0);
@@ -28,11 +30,13 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
   const boxTabs = [];
   const awayWin = winner === "away";
   const homeWin = winner === "home";
+  const isTop = !isFinal && currentInning?.startsWith("TOP");
 
   if (hasAwayBatting || hasAwayPitching) {
     boxTabs.push(
       <>
         <span className="label">{away.abbreviation} (Away)</span>
+        {isTop && <AtBatIcon className="at-bat-icon" />}
         {isFinal && (
           <span className={cn(awayWin ? "win" : "loss")}>
             {awayWin ? "W" : "L"} {away.record.wins}&ndash;{away.record.losses}
@@ -46,6 +50,7 @@ export const GameBoxScore: FC<GameBoxScoreProps> = (props) => {
     boxTabs.push(
       <>
         <span className="label">{home.abbreviation} (Home)</span>
+        {!isTop && <AtBatIcon className="at-bat-icon" />}
         {isFinal && (
           <span className={cn(homeWin ? "win" : "loss")}>
             {homeWin ? "W" : "L"} {home.record.wins}&ndash;{home.record.losses}
