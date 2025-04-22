@@ -23,8 +23,12 @@
       "avatar note";
   }
 
-  .current-matchup .player-note::before {
-    content: "Season: ";
+  .player-avatar {
+    align-self: flex-start;
+  }
+
+  .player-avatar {
+    margin-top: 0.25rem;
   }
 
   .play-events {

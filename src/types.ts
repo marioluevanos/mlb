@@ -23,7 +23,7 @@ export type TeamStats = {
 export type TeamClub = {
   record: TeamRecord;
   name: string;
-  startingPitcher: GamePlayer;
+  startingPitcher?: GamePlayer;
   score: TeamScore;
   abbreviation: string;
   logo: string;
@@ -100,10 +100,11 @@ export type GameDecision = {
 };
 
 export type GamePlayer = {
-  id: number;
+  id?: number;
   avatar?: string;
-  fullName: string;
+  fullName?: string;
   summary?: string;
+  note?: string;
   position?: string;
   jerseyNumber?: string | number;
   battingOrder?: string | number;

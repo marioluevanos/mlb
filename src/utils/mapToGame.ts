@@ -47,8 +47,10 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
     id: probablePitchers?.[team]?.id,
     avatar: avatar(probablePitchers?.[team]?.id),
     position: `${pitching?.wins} — ${pitching?.losses}`,
-    summary: `${pitching?.earnedRuns} ERA, ${pitching?.whip} WHIP`,
+    summary: `${pitching?.era} ERA, ${pitching?.whip} WHIP`,
   };
+
+  console.log(JSON.stringify(data));
 
   return {
     record: teams[team].record.leagueRecord,
@@ -110,25 +112,34 @@ function getCurrentMatchup(args: {
 }): CurrentMatchup {
   const { players, matchup } = args;
 
-  const [batter, pitcher] = players.reduce<GamePlayer[]>((acc, player) => {
+  const { batter, pitcher } = players.reduce<{
+    batter?: GamePlayer;
+    pitcher?: GamePlayer;
+  }>((acc, player) => {
     if (matchup?.batter && player.id === matchup.batter.id) {
-      acc.push(player);
+      acc.batter = player;
     }
+
     if (matchup?.pitcher && player.id === matchup.pitcher.id) {
-      acc.push(player);
+      acc.pitcher = player;
     }
+
     return acc;
-  }, []);
+  }, {});
 
   return {
     batter: {
       ...batter,
       bats: matchup?.batSide?.code,
-      avatar: avatar(matchup?.pitcher.id),
+      summary: `(G) ${batter?.game?.batting.summary}`,
+      note: `(S) ${batter?.season?.batting.avg} AVG, ${batter?.season?.batting.obp} OPS`,
+      avatar: avatar(matchup?.batter.id),
     },
     pitcher: {
       ...pitcher,
       throws: matchup?.pitchHand?.code,
+      summary: `(G) ${pitcher?.game?.pitching.summary}`,
+      note: `(S) ${pitcher?.season?.pitching.era} ERA, ${pitcher?.season?.pitching.whip} WHIP`,
       avatar: avatar(matchup?.pitcher.id),
     },
   };
@@ -161,17 +172,29 @@ function getDecision(
   const sv = teams[winner]?.players.find((p) => p.id === decisions.save?.id);
 
   return {
-    winner: wp || decisions.winner,
-    loser: lp || decisions.loser,
-    save: sv || decisions.save,
+    winner: {
+      ...(wp || decisions.winner),
+      summary: wp?.game?.pitching.summary,
+      note: wp?.game?.pitching.note,
+    },
+    loser: {
+      ...(lp || decisions.loser),
+      summary: lp?.game?.pitching.summary,
+      note: lp?.game?.pitching.note,
+    },
+    save: {
+      ...(sv || decisions.save),
+      summary: sv?.game?.pitching.summary,
+      note: sv?.game?.pitching.note,
+    },
   };
 }
 
 function topPerformers(payload: Performer): GamePlayer {
   const { type, player } = payload;
   const { stats, person, position, seasonStats } = player;
-  let summary = "";
 
+  let summary = "";
   if (type === "hitter" && stats.batting.summary) {
     summary = stats.batting.summary;
   }
@@ -179,6 +202,8 @@ function topPerformers(payload: Performer): GamePlayer {
   if (type === "starter" && stats.pitching.summary) {
     summary = stats.pitching.summary;
   }
+  const seasonBatting = `${seasonStats.batting.hits} H, ${seasonStats.batting.baseOnBalls} BB, ${seasonStats.batting.homeRuns} HR`;
+  const seasonPitching = `${seasonStats.pitching.era} ERA`;
 
   return {
     avatar: avatar(person.id),
@@ -187,14 +212,7 @@ function topPerformers(payload: Performer): GamePlayer {
     fullName: person.fullName,
     position: position.abbreviation,
     summary,
-    game: {
-      batting: stats.batting,
-      pitching: stats.pitching,
-    },
-    season: {
-      batting: seasonStats.batting,
-      pitching: seasonStats.pitching,
-    },
+    note: type === "hitter" ? seasonBatting : seasonPitching,
   };
 }
 

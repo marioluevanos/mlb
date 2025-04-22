@@ -5,41 +5,36 @@ import "./styles/Player.scss";
 
 type PlayerProps = {
   className?: string;
-  player?: GamePlayer;
+  player?: Pick<
+    GamePlayer,
+    | "avatar"
+    | "id"
+    | "fullName"
+    | "jerseyNumber"
+    | "position"
+    | "summary"
+    | "note"
+  >;
 };
 
 export const Player: FC<PlayerProps> = (props) => {
   const { className, player } = props;
-  const isPitcher = player?.position === "P";
-  const pos = isPitcher ? "pitching" : "batting";
-  const game = player?.game;
-  const gameStats = game && game[pos];
-  const summary = gameStats?.summary || player?.summary;
-  const batting = player?.season?.batting;
-  const pitching = player?.season?.pitching;
-  const hasNote = gameStats && "note" in gameStats && gameStats.note;
-  const note = hasNote
-    ? gameStats.note
-    : isPitcher
-    ? `${pitching?.era} ERA`
-    : batting && `${batting?.avg} AVG, ${batting?.ops} OPS`;
-
-  const na = (v?: string) => v?.replace("0-0", "");
-  const _summary = na(summary);
-  const _note = na(note);
+  const fullName = player?.fullName;
+  const summary = player?.summary;
+  const position = player?.position;
+  const avatar = player?.avatar;
+  const note = player?.note;
 
   return (
     player && (
       <div className={cn("player", className)}>
-        <img className="player-avatar" src={player?.avatar} />
-        <span data-pos={player.position} className="player-name">
-          {player.fullName}
+        <img className="player-avatar" src={avatar} />
+        <span data-pos={position} className="player-name">
+          {fullName}
         </span>
-        {_summary ||
-          (_note && (
-            <span className="player-summary">{_summary || _note}</span>
-          ))}
-        {_note && <span className="player-note">{_note}</span>}
+        {summary ||
+          (note && <span className="player-summary">{summary || note}</span>)}
+        {note && <span className="player-note">{note}</span>}
       </div>
     )
   );
