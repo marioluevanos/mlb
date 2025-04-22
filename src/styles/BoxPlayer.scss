@@ -1,5 +1,5 @@
 .box-player {
-  padding: 1rem;
+  // padding: 1rem;
   font-size: 12px;
 }
 
@@ -25,11 +25,10 @@
   }
 }
 
-.box-player .box-row {
+.box-player .box-player-row {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 4px;
+  justify-content: space-between;
   cursor: pointer;
 
   * {
@@ -37,23 +36,18 @@
   }
 }
 
-.box-player-section {
-  margin-bottom: 1.5rem;
+.box-player-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  > span:first-child {
+    font-weight: 700;
+  }
 }
 
-.box-player .box-stats {
-  display: grid;
-  grid-template-columns: repeat(8, 4ch);
-  gap: 1ch;
-  margin: 0;
-  text-align: right;
-  align-items: center;
-  width: 100%;
-  justify-content: flex-start;
-
-  span {
-    text-align: left;
-  }
+.box-player-section {
+  margin-bottom: 1.5rem;
 }
 
 .box-player .box-row .box-name {

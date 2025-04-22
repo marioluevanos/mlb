@@ -18,6 +18,10 @@
   & p {
     margin: 0;
   }
+
+  * {
+    pointer-events: none;
+  }
 }
 
 .player-note {
@@ -35,6 +39,10 @@
   line-height: 1.5;
   color: var(--text);
   font-weight: 600;
+
+  &:empty {
+    display: none;
+  }
 
   &[data-pos]::after {
     content: "(" attr(data-pos) ")";

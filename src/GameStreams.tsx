@@ -10,7 +10,7 @@ export const GameStreams: FC<GameStreamsProps> = (props) => {
   const { streams = [] } = props;
 
   return (
-    <div className="game-streams">
+    <section className="game-streams">
       <h3>Game Links</h3>
       {/* <iframe src={streams[0].url} seamless={true} allow="fullscreen" /> */}
 
@@ -25,6 +25,6 @@ export const GameStreams: FC<GameStreamsProps> = (props) => {
           {link.name}
         </a>
       ))}
-    </div>
+    </section>
   );
 };

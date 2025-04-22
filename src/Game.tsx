@@ -134,6 +134,11 @@ export const Game: FC<GameProps> = (props) => {
           </GameMatchup>
         )}
 
+        <ScoringPlays
+          scoringPlays={game.scoringPlays}
+          onPlayerClick={onPlayerClick}
+        />
+
         {!isPre && !isPostponed && (
           <TeamCompare away={game.away} home={game.home} />
         )}
@@ -157,11 +162,6 @@ export const Game: FC<GameProps> = (props) => {
             onPlayerClick={onPlayerClick}
           />
         ) : null}
-
-        <ScoringPlays
-          scoringPlays={game.scoringPlays}
-          onPlayerClick={onPlayerClick}
-        />
 
         <GameHighlights
           title={isPre ? "Preview" : "Highlights"}

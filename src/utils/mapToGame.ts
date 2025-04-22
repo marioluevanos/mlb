@@ -42,14 +42,15 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
   const players = Object.values(boxscore.teams[team].players).map(toGamePlayer);
   const pitcher = players.find((p) => p.id === probablePitchers?.[team]?.id);
   const pitching = pitcher?.season?.pitching;
-  const [first, last] = probablePitchers?.[team]?.fullName.split(" ");
+  const pPitchers = probablePitchers?.[team]?.fullName?.split(" ");
+  const [first = "", last = ""] = pPitchers || [];
   const startingPitcher: GamePlayer = {
     ...pitcher,
-    fullName: `${first.slice(0, 1)}. ${last}`,
+    fullName: pPitchers ? `${first.slice(0, 1)}. ${last}` : "TBD",
     id: probablePitchers?.[team]?.id,
     avatar: avatar(probablePitchers?.[team]?.id),
-    position: `${pitching?.wins} — ${pitching?.losses}`,
-    summary: `${pitching?.era} ERA, ${pitching?.whip} WHIP`,
+    position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : "0-0",
+    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : "",
   };
 
   return {

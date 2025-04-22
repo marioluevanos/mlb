@@ -22,6 +22,28 @@ export type GameData = {
 
 const CACHE_KEY = "games" as const;
 
+function getPlayerProfile({
+  openGame,
+  games = [],
+  playerId,
+}: {
+  playerId: number;
+  games?: GameToday[];
+  openGame: number;
+}): GamePlayer {
+  const game = games.find((g) => g.id === openGame);
+  const players = [
+    ...(game?.away?.players || []),
+    ...(game?.home?.players || []),
+  ];
+  const player = players.find((p) => p.id === playerId);
+
+  return {
+    ...player,
+    avatar: headshot(player?.id),
+  };
+}
+
 function App() {
   const [data, setData] = useState<GameData>(loadingData(CACHE_KEY));
   const [activePlayer, setActivePlayer] = useState<GamePlayer>();
@@ -38,17 +60,14 @@ function App() {
       event?.preventDefault();
 
       const target = event.target;
-      const game = data.games.find((g) => g.id === openGame);
-      const players = [
-        ...(game?.away?.players || []),
-        ...(game?.home?.players || []),
-      ];
-      const player = players.find((p) => p.id === +target.dataset?.playerId);
-
-      setActivePlayer({
-        ...player,
-        avatar: headshot(player?.id),
+      const playerId = +target.dataset?.playerId;
+      const player = getPlayerProfile({
+        playerId,
+        openGame: Number(openGame),
+        games: data.games,
       });
+
+      setActivePlayer(player);
     },
     [openGame, data.games]
   );

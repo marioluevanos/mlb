@@ -16,14 +16,14 @@ export const GameMatchup: FC<GameMatchupProps> = (props) => {
   const matchup = currentPlay?.matchup;
   return (
     matchup && (
-      <div className="game-matchup">
+      <section className="game-matchup">
         <h3>Current Matchup</h3>
         <div className="current-matchup">
           <Player player={matchup.batter} onClick={onPlayerClick} />
           <Player player={matchup.pitcher} onClick={onPlayerClick} />
         </div>
         {children}
-      </div>
+      </section>
     )
   );
 };

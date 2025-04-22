@@ -1,32 +1,42 @@
 .scoring-plays {
-  border-top: 1px dotted var(--bg2);
-  padding: 1rem 1rem 0;
+  padding: 1rem;
+  border-bottom: 1px dotted var(--bg2);
 
   ol {
     padding: 0;
+    margin-bottom: 0;
     line-height: 1;
     list-style: none;
     position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      content: "";
-      width: 0;
-      border-left: 1px dotted var(--bg2);
-      top: 0;
-      bottom: 40px;
-      left: 16px;
-    }
   }
 
   .scoring-event {
+    display: block;
     font-size: 12px;
     position: relative;
-    display: flex;
-    align-items: flex-start;
     margin-bottom: 1rem;
     font-weight: 700;
+  }
+
+  .scoring-event .header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0.25rem 0 0.5rem;
+    border: 1px solid var(--bg2);
+    background: var(--bg);
+    border-radius: 10000rem;
+    padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+    line-height: 1;
+    width: max-content;
+    position: relative;
+    left: -2px;
+    gap: 0.5rem;
+  }
+
+  .scoring-event .current-inning {
+    margin: 0;
+    width: auto;
   }
 
   .description {
@@ -34,10 +44,7 @@
     line-height: 1.5;
     font-size: 14px;
     font-weight: 400;
-    min-height: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    display: block;
   }
 
   .count {
@@ -68,60 +75,12 @@
 
   .event {
     display: inline-flex;
-    margin: 0.25rem 0 0.5rem;
     color: var(--text);
-    border: 1px solid var(--bg2);
-    border-radius: 10000rem;
-    padding: 0.25rem 0.5rem;
-    line-height: 1;
     font-size: 10px;
   }
 }
+
 .scoring-event:last-child {
   position: relative;
-}
-
-.scoring-event:last-child::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2rem;
-  height: 100%;
-  background: var(--bg);
-  z-index: 0;
-}
-
-.scoring-event .current-inning {
-  margin: 0;
-  width: inherit;
-  height: inherit;
-  justify-content: center;
-  position: relative;
-  left: -1px;
-  gap: 0;
-  line-height: 0;
-  color: var(--text1);
-}
-
-.scoring-event .status-icon {
-  margin-right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  min-width: 2rem;
-  min-height: 2rem;
-  border-radius: 2rem;
-  background: var(--bg1);
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px dotted var(--bg2);
-  position: relative;
-  z-index: 1;
-
-  img {
-    width: inherit;
-    height: inherit;
-  }
+  margin-bottom: 0;
 }

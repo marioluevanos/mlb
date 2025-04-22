@@ -715,7 +715,7 @@ summary:not(.final) .home.BOT .inning:last-child {
 }
 
 .game-box-score {
-  padding: 1rem 0 0;
+  padding: 0;
 }
 
 .game-box-score .tabs-actions {
@@ -748,9 +748,9 @@ summary:not(.final) .home.BOT .inning:last-child {
     outline: 1px solid var(--text1);
   }
 
-  .at-bat-icon {
-    width: 12px;
-    height: 12px;
+  .icon {
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -798,6 +798,7 @@ summary:not(.final) .home.BOT .inning:last-child {
   left: 0;
   right: 0;
   outline: none;
+  z-index: 100;
 
   .drawer-children {
     padding: 2rem 1rem 2rem;

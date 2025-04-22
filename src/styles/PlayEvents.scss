@@ -20,6 +20,10 @@
     }
   }
 
+  ol:has(li:only-child)::before {
+    display: none;
+  }
+
   .play-event {
     font-size: 12px;
     position: relative;
@@ -42,16 +46,13 @@
     color: var(--text);
     line-height: 1.5;
     font-weight: 400;
-    min-height: 24px;
-  }
-
-  .play-event.is-in-play .description {
-    //
   }
 
   .play-event.is-strike.is-out .status-icon {
     position: relative;
     color: transparent;
+    background: var(--bg1);
+    border: 2px solid var(--red);
 
     &::before {
       content: "K";
@@ -60,7 +61,7 @@
       align-items: center;
       justify-content: center;
       position: absolute;
-      color: var(--red);
+      color: var(--text);
       inset: 0;
     }
   }
@@ -97,6 +98,7 @@
 
   .type {
     font-weight: 400;
+    color: var(--text1);
   }
 }
 

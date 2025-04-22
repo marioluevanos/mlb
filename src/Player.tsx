@@ -23,14 +23,16 @@ export const Player: FC<PlayerProps> = (props) => {
   const fullName = player?.fullName;
   const summary = player?.summary;
   const position = player?.position;
-  const avatar = player?.avatar;
+  const avatar =
+    player?.avatar ||
+    "https://prod-gameday.mlbstatic.com/responsive-gameday-assets/1.3.0/images/players/default-batter.svg";
   const note = player?.note;
 
   return (
     player && (
       <div
         className={cn("player", className)}
-        data-id={player.id}
+        data-player-id={player.id}
         onClick={onClick}
       >
         <img className="player-avatar" src={avatar} />

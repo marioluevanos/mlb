@@ -19,11 +19,7 @@ export const PlayerProfile: FC<PlayerProfileProps> = (props) => {
         <Drawer.Content className="drawer-content">
           <Drawer.Handle className="drawer-handle" />
           <div className="drawer-children">
-            {player && (
-              <>
-                <BoxPlayer player={player} />
-              </>
-            )}
+            {player && <BoxPlayer player={player} />}
           </div>
         </Drawer.Content>
       </Drawer.Portal>
