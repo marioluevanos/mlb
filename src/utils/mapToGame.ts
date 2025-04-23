@@ -12,6 +12,7 @@ import {
   GamePlayer,
   GameStatus,
   GameToday,
+  InningPlay,
   ScoringPlay,
   TeamClub,
 } from "../types";
@@ -69,7 +70,7 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
 export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const { gameData, liveData } = data;
   const { linescore, boxscore, plays, decisions } = liveData;
-  const { currentPlay, scoringPlays, allPlays } = plays;
+  const { currentPlay, scoringPlays, allPlays, playsByInning } = plays;
   const { offense } = linescore;
   const awayTeam = mapToTeam("away", data);
   const homeTeam = mapToTeam("home", data);
@@ -80,7 +81,10 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     matchup: currentPlay?.matchup,
   });
 
-  console.log(plays);
+  const [currentInning] = playsByInning.reverse();
+  const currentPlays = linescore.isTopInning
+    ? currentInning.top
+    : currentInning.bottom;
 
   return {
     ...g,
@@ -88,6 +92,14 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     away: awayTeam,
     home: homeTeam,
     innings: linescore.innings,
+    playsByInning: currentPlays.reduce<InningPlay[]>(
+      playByInning.bind(null, {
+        allPlays,
+        allPlayers,
+        teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
+      }),
+      []
+    ),
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
     scoringPlays: scoringPlays.reduce<ScoringPlay[]>(
       scoringPlay.bind(null, {
@@ -116,6 +128,40 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     }`,
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
+}
+
+function playByInning(
+  args: {
+    allPlays: AtBat[];
+    allPlayers: GamePlayer[];
+    teamAbbreviation: string[];
+  },
+  acc: InningPlay[],
+  playIndex: number
+) {
+  const { allPlayers, allPlays, teamAbbreviation } = args;
+  const play = allPlays[playIndex];
+
+  if (play) {
+    const matchup = getCurrentMatchup({
+      players: allPlayers,
+      matchup: play.matchup,
+    });
+
+    acc.push({
+      teamAbbreviation: play.about.isTopInning
+        ? teamAbbreviation[0]
+        : teamAbbreviation[1],
+      events: play?.playEvents,
+      result: play?.result,
+      matchup: {
+        batter: matchup?.batter,
+        pitcher: matchup?.pitcher,
+      },
+    });
+  }
+
+  return acc;
 }
 
 function scoringPlay(

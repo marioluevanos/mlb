@@ -91,7 +91,12 @@ export type GameToday = {
   innings: GameInnings[];
   currentPlay?: CurrentPlay;
   scoringPlays?: ScoringPlay[];
+  playsByInning?: InningPlay[];
   decisions?: GameDecision;
+};
+
+export type InningPlay = Omit<CurrentPlay, "runners" | "count" | "event"> & {
+  teamAbbreviation: string;
 };
 
 export type ScoringPlay = Omit<CurrentPlay, "runners" | "count"> & {

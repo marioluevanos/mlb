@@ -112,10 +112,8 @@ body.game-open {
 
 .button {
   font-size: 12px;
-  letter-spacing: 0.05rem;
-  text-transform: uppercase;
   font-family: var(--font);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text1);
   background: var(--bg1);
   padding: 0.5rem 0.75rem;
@@ -463,6 +461,10 @@ details[open] summary {
   }
 }
 
+body:has([data-state="open"]) details[open] summary {
+  z-index: 0;
+}
+
 details summary * {
   pointer-events: none;
 }
@@ -735,6 +737,7 @@ summary:not(.final) .home.BOT .inning:last-child {
   }
 
   .button {
+    text-transform: capitalize;
     justify-content: space-between;
     color: var(--text);
     flex: 1;
@@ -755,7 +758,6 @@ summary:not(.final) .home.BOT .inning:last-child {
 }
 
 .tabs .label {
-  font-size: 10px;
   text-transform: none;
   letter-spacing: 0;
   font-family: var(--font);
@@ -769,6 +771,14 @@ summary:not(.final) .home.BOT .inning:last-child {
   &:empty {
     display: none;
   }
+}
+
+.tabs.inning-plays .tabs-actions {
+  position: sticky;
+  top: calc(48px + 104px);
+  background: var(--bg);
+  z-index: 9;
+  border-bottom: 1px dotted var(--bg2);
 }
 
 .win {

@@ -1,23 +1,25 @@
-.scoring-plays {
-  padding: 1rem 1rem 0;
+.plays-by-inning {
+  padding: 0 1rem;
   border-bottom: 1px dotted var(--bg2);
 
   ol {
     padding: 0;
-    margin: 0;
+    margin: 1rem 0 0;
     line-height: 1;
     list-style: none;
     position: relative;
+    counter-reset: plays;
     display: flex;
     flex-direction: column-reverse;
   }
 
-  .scoring-event {
+  .play-event-by-inning {
     display: block;
     font-size: 12px;
     position: relative;
     padding-bottom: 1rem;
     font-weight: 700;
+    padding-left: 2rem;
     position: relative;
 
     &::before {
@@ -30,25 +32,73 @@
     }
   }
 
-  .scoring-event .header {
+  .play-event-by-inning.is-out {
+    color: var(--red);
+
+    .header::before {
+      border-color: var(--red);
+    }
+    & .event {
+      border-color: var(--red);
+    }
+  }
+  .play-event-by-inning.is-rbi {
+    color: var(--accent);
+
+    .header::before {
+      border-color: var(--accent);
+    }
+    & .event {
+      border-color: var(--accent);
+    }
+  }
+
+  .play-event-by-inning .header {
     font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin: 0 0 1rem;
-    border: 1px solid var(--bg2);
-    background: var(--bg);
-    border-radius: 10000rem;
-    padding: 0 0.75rem 0;
-    height: 1.5rem;
-    line-height: 1;
-    width: max-content;
+    border-radius: 0 1.5rem 1.5rem 0;
     position: relative;
-    left: -2px;
     gap: 0.5rem;
+
+    &::before {
+      counter-increment: plays;
+      content: counter(plays);
+      position: absolute;
+      left: -32px;
+      top: 0;
+      width: 2rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      border: 1px solid var(--bg2);
+      border-radius: 1.5rem 0 0 1.5rem;
+      box-sizing: border-box;
+      border-right: none;
+    }
   }
 
-  .scoring-event .current-inning {
+  .play-event-by-inning .event {
+    border: 1px solid var(--bg2);
+    color: currentColor;
+    border-left: none;
+    background: var(--bg);
+    border-radius: 0 1.5rem 1.5rem 0;
+    padding: 0 0.75rem 0 0.25rem;
+    line-height: 1;
+    width: max-content;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: -8px;
+  }
+
+  .play-event-by-inning .current-inning {
     margin: 0;
     width: auto;
   }
@@ -59,7 +109,6 @@
     font-size: 14px;
     font-weight: 400;
     display: block;
-    padding-left: 1.5rem;
   }
 
   .count {
@@ -71,7 +120,6 @@
   }
 
   .player {
-    padding-left: 1.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     grid-template-columns: auto auto 1fr;
@@ -98,4 +146,10 @@
   .abbreviation {
     color: var(--accent);
   }
+}
+
+.play-event-by-inning:last-child {
+  position: relative;
+  margin-bottom: 0;
+  padding-bottom: 1.5rem;
 }

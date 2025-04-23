@@ -7,6 +7,7 @@
     line-height: 1;
     list-style: none;
     position: relative;
+    margin-bottom: 0;
 
     &::before {
       content: "";
@@ -29,8 +30,11 @@
     position: relative;
     display: flex;
     align-items: flex-start;
-    margin-bottom: 1rem;
     font-weight: 700;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+    }
   }
 
   .event {
