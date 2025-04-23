@@ -33,15 +33,15 @@
   }
 
   .play-event-by-inning.is-out {
-    color: var(--red);
+    color: var(--text);
 
-    .header::before {
-      border-color: var(--red);
-    }
+    .header::before,
     & .event {
       border-color: var(--red);
+      background: var(--red);
     }
   }
+
   .play-event-by-inning.is-rbi {
     color: var(--accent);
 

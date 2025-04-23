@@ -16,9 +16,6 @@ import { cn } from "./utils/cn";
 import { GameToday } from "./types";
 import { GameBoxScore, GameBoxScoreProps } from "./GameBoxScore";
 import { TeamCompare } from "./TeamCompare";
-import { ScoringPlays } from "./ScoringPlays";
-import { PlaysByInning } from "./PlaysByInning";
-import { Tabs } from "./Tabs";
 import { InningPlays } from "./InningPlays";
 
 export type GameProps = {

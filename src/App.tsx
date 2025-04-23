@@ -50,7 +50,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const gameRefs = useRef<HTMLDetailsElement[]>([]);
   const [openGame, setOpenGame] = useState<number>();
-  const wakeRef = useRef<WakeLockSentinel>(null);
+  const initRef = useRef(false);
 
   /**
    * On Player click
@@ -71,30 +71,6 @@ function App() {
     },
     [openGame, data.games]
   );
-
-  /**
-   * Allow the phone to sleep
-   */
-  const releaseWakeLock = useCallback(async () => {
-    if (wakeRef.current) {
-      await wakeRef.current.release();
-      wakeRef.current = null;
-    }
-  }, []);
-
-  /**
-   * Prevent the screen from sleeping
-   */
-  const acquireWakeLock = useCallback(async () => {
-    try {
-      if (navigator.wakeLock) {
-        wakeRef.current = await navigator.wakeLock.request("screen");
-        wakeRef.current.addEventListener("release", () => undefined);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
   /**
    *
@@ -247,17 +223,16 @@ function App() {
             scrollToGame(details.id, "smooth");
             const game = data.games.find((g) => g.id === +details.id);
             if (game) updateLiveGame(game);
-            acquireWakeLock();
+
             document.body.classList.add("game-open");
           } else {
             setOpenGame(undefined);
-            releaseWakeLock();
             document.body.classList.remove("game-open");
           }
         });
       }
     },
-    [data.games, acquireWakeLock, releaseWakeLock, updateLiveGame, scrollToGame]
+    [data.games, updateLiveGame, scrollToGame]
   );
 
   /**
@@ -311,8 +286,13 @@ function App() {
    * Initialize data
    */
   useEffect(() => {
-    if (!data.date) {
-      getData().then((d) => d && setData(d));
+    if (!data.date || !initRef.current) {
+      getData().then((d) => {
+        if (d) {
+          setData(d);
+          initRef.current = true;
+        }
+      });
     }
   }, [getData, data]);
 
