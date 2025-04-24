@@ -70,7 +70,7 @@ export const PlayEvents: FC<PlayEventsProps> = (props) => {
                       {event.pitchData?.startSpeed} mph{" "}
                     </span>
                     <span className="type">
-                      {event.details?.type.description}
+                      {event.details?.type?.description}
                     </span>
                   </span>
                 )}

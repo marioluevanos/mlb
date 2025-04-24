@@ -40,9 +40,11 @@ export const BoxPlayer: FC<BoxPlayerProps> = (props) => {
     { label: "WHIP", value: season?.pitching?.whip.slice(0, 4) },
   ];
 
+  console.log(player);
+
   return (
     player && (
-      <div className={cn("box-player", className)}>
+      <div className={cn("box-player", className)} data-player-id={player.id}>
         <header>
           <img src={player.avatar} />
           <div className="text">

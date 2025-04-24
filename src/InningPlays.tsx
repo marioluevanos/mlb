@@ -15,16 +15,12 @@ type InningPlaysProps = {
 export const InningPlays: FC<InningPlaysProps> = (props) => {
   const { className, game, onPlayerClick } = props;
   const isFinal = game.status === "Final" || game.status === "Game Over";
+  const isPreGame = game.status === "Pre-Game";
+  const isScheduled = game.status === "Scheduled";
+  const isWarmup = game.status === "Warmup";
 
-  console.log(game, isFinal);
-  if (isFinal) {
-    return (
-      <ScoringPlays
-        title="Scoring Plays"
-        scoringPlays={game.scoringPlays}
-        onPlayerClick={onPlayerClick}
-      />
-    );
+  if (isFinal || isPreGame || isScheduled || isWarmup) {
+    return null;
   }
 
   const tabs = [

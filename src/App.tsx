@@ -139,7 +139,6 @@ function App() {
       }
     } else {
       document.body.classList.remove("game-open");
-      setData(loadingData());
       const d = await getData();
       if (d) setData(d);
     }

@@ -15,11 +15,11 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
 
   return playsByInning.length > 0 ? (
     <section className={cn("plays-by-inning", className)}>
-      {/* <h3>Plays By Inning </h3> */}
       <ol>
         {playsByInning.map(
           (event, i) =>
-            event.result?.description && (
+            event.result?.description &&
+            !["game_advisory"].includes(event.result.eventType) && (
               <li
                 className={cn(
                   "play-event-by-inning",
@@ -33,6 +33,7 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
                     <span className="event">{event.result?.event}</span>
                   </span>
                 )}
+
                 <Player
                   onClick={onPlayerClick}
                   player={{
@@ -45,6 +46,7 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
                       : "",
                   }}
                 />
+
                 <span className="description">{event.result?.description}</span>
               </li>
             )

@@ -20,10 +20,8 @@
   &:has(.vertical) .current-game-highlight {
     background: var(--bg);
     border-bottom: 1px solid var(--bg2);
-    // backdrop-filter: blur(16px) brightness(100%);
     position: sticky;
-    /* 48px - header, 104px - summary */
-    top: calc(48px);
+    top: 0;
     z-index: 10;
     padding-bottom: 1.5rem;
   }

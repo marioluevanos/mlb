@@ -81,11 +81,11 @@ body {
 }
 
 body.game-open {
-  // overflow: hidden;
+  overflow: hidden;
 
   details[open] {
-    // height: calc(100svh - 48px);
-    // overflow: hidden scroll;
+    height: calc(100svh - 48px);
+    overflow: hidden auto;
   }
 }
 
@@ -448,7 +448,7 @@ details[open] {
 
 details[open] summary {
   position: sticky;
-  top: 48px;
+  top: 0;
   z-index: 10;
   transition: none;
   background: var(--bg);
@@ -459,10 +459,6 @@ details[open] summary {
   @media (prefers-color-scheme: dark) {
     box-shadow: 0 1px 0 hsl(0deg 0% 100%/8%);
   }
-}
-
-body:has([data-state="open"]) details[open] summary {
-  z-index: 0;
 }
 
 details summary * {
@@ -722,7 +718,7 @@ summary:not(.final) .home.BOT .inning:last-child {
 
 .game-box-score .tabs-actions {
   position: sticky;
-  top: calc(48px + 104px);
+  top: calc(104px);
   border-bottom: 1px dotted var(--bg2);
 }
 
@@ -775,7 +771,7 @@ summary:not(.final) .home.BOT .inning:last-child {
 
 .tabs.inning-plays .tabs-actions {
   position: sticky;
-  top: calc(48px + 104px);
+  top: calc(104px);
   background: var(--bg);
   z-index: 9;
   border-bottom: 1px dotted var(--bg2);
@@ -794,6 +790,7 @@ summary:not(.final) .home.BOT .inning:last-child {
   position: fixed;
   inset: 0;
   background: hsl(0deg 0% 0%/66%);
+  z-index: 100;
 }
 
 .drawer-content .drawer-handle {

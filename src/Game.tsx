@@ -17,6 +17,7 @@ import { GameToday } from "./types";
 import { GameBoxScore, GameBoxScoreProps } from "./GameBoxScore";
 import { TeamCompare } from "./TeamCompare";
 import { InningPlays } from "./InningPlays";
+import { ScoringPlays } from "./ScoringPlays";
 
 export type GameProps = {
   className?: string;
@@ -134,7 +135,7 @@ export const Game: FC<GameProps> = (props) => {
           </GameMatchup>
         )}
 
-        <InningPlays game={game} />
+        <InningPlays game={game} onPlayerClick={onPlayerClick} />
 
         {!isPre && !isPostponed && (
           <TeamCompare away={game.away} home={game.home} />
@@ -159,6 +160,14 @@ export const Game: FC<GameProps> = (props) => {
             onPlayerClick={onPlayerClick}
           />
         ) : null}
+
+        {isFinal && (
+          <ScoringPlays
+            title="Scoring Plays"
+            scoringPlays={game.scoringPlays}
+            onPlayerClick={onPlayerClick}
+          />
+        )}
 
         <GameHighlights
           title={isPre ? "Preview" : "Highlights"}
