@@ -50,10 +50,6 @@ export const Game: FC<GameProps> = (props) => {
   const isPre = isPreGame || isScheduled || isWarmup;
   const winner = isWinner(home, away);
 
-  if (game.id === 778038) {
-    console.log(JSON.stringify(game));
-  }
-
   return (
     <details
       ref={ref}

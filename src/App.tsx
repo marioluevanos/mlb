@@ -102,8 +102,6 @@ function App() {
    * Get data from API or cache
    */
   const getData = useCallback(async (): Promise<GameData | undefined> => {
-    // setIsLoading(true);
-
     try {
       const url = import.meta.env.VITE_API_URL;
       const response = await fetch(url);
@@ -120,8 +118,6 @@ function App() {
     } catch (error) {
       console.log(error);
       return { date: "", games: [] };
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
@@ -139,8 +135,10 @@ function App() {
       }
     } else {
       document.body.classList.remove("game-open");
+      setIsLoading(true);
       const d = await getData();
       if (d) setData(d);
+      setIsLoading(false);
     }
   }, [getData]);
 
@@ -221,7 +219,9 @@ function App() {
             setOpenGame(Number(details.id));
             scrollToGame(details.id, "smooth");
             const game = data.games.find((g) => g.id === +details.id);
-            if (game) updateLiveGame(game);
+            if (game) {
+              updateLiveGame(game);
+            }
 
             document.body.classList.add("game-open");
           } else {
