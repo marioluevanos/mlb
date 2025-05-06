@@ -102,7 +102,7 @@ function App() {
    * Get data from API or cache
    */
   const getData = useCallback(async (): Promise<GameData | undefined> => {
-    setIsLoading(true);
+    // setIsLoading(true);
 
     try {
       const url = import.meta.env.VITE_API_URL;

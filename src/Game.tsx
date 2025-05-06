@@ -20,13 +20,13 @@ import { InningPlays } from "./InningPlays";
 import { ScoringPlays } from "./ScoringPlays";
 
 export type GameProps = {
+  game: GameToday;
+  isOpen?: boolean;
   className?: string;
   isLoading?: boolean;
-  game: GameToday;
-  onClick?: (event: BaseSyntheticEvent) => void;
   ref?: Ref<HTMLDetailsElement | null> | null;
   onFullscreenChange?: () => void;
-  isOpen?: boolean;
+  onClick?: (event: BaseSyntheticEvent) => void;
   onPlayerClick?: GameBoxScoreProps["onPlayerClick"];
 };
 
@@ -49,6 +49,10 @@ export const Game: FC<GameProps> = (props) => {
   const isWarmup = game.status === "Warmup";
   const isPre = isPreGame || isScheduled || isWarmup;
   const winner = isWinner(home, away);
+
+  if (game.id === 778038) {
+    console.log(JSON.stringify(game));
+  }
 
   return (
     <details
@@ -168,15 +172,13 @@ export const Game: FC<GameProps> = (props) => {
             onPlayerClick={onPlayerClick}
           />
         )}
-
+        {!isFinal && <GameStreams streams={game.streams} />}
         <GameHighlights
           title={isPre ? "Preview" : "Highlights"}
           highlights={game.highlights}
           onFullscreenChange={onFullscreenChange}
           isOpen={isOpen}
         />
-
-        {!isFinal && <GameStreams streams={game.streams} />}
       </footer>
     </details>
   );
